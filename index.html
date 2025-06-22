@@ -10,7 +10,7 @@
     
     <meta property="og:title" content="마음의 나침반 - AI 심층 심리 분석">
     <meta property="og:description" content="AI가 당신의 답변을 통해 섬세한 마음 지도를 그려드립니다. 당신의 영혼은 어떤 풍경을 담고 있을까요?">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1506880018603-c0e3582f0668?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzOTAwNXwwfDF8c2VhcmNofDEzfHxjb21wYXNzJTIwbmVidWxhaGVhcnR8ZW58MHx8fHwxNzE4OTk0NjU0fDA&ixlib=rb-4.0.3&q=80&w=1200">
+    <meta property="og:image" content="https://i.ibb.co/3k5JqB4/og-image-compass.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,14 +18,13 @@
     
     <style>
         :root {
-            /* 가독성을 높인 컬러 팔레트 */
-            --bg-primary: #121826;
-            --bg-gradient: linear-gradient(180deg, #1d283d 0%, #121826 100%);
+            --bg-primary: #0a0e1a;
+            --bg-gradient: linear-gradient(180deg, #141a2e 0%, #0a0e1a 100%);
             --surface-glass: rgba(255, 255, 255, 0.07);
             --surface-glass-hover: rgba(255, 255, 255, 0.12);
             --border-glass: 1px solid rgba(255, 255, 255, 0.15);
             --text-primary: #F0F4F8;
-            --text-secondary: #a7b4c4; /* 밝기 상향 조정 */
+            --text-secondary: #a7b4c4;
             --text-accent: #61AFFF;
             --accent-glow: #388bfd;
             --accent-warm: #ff8ab4;
@@ -45,12 +44,43 @@
             color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.8;
-            overflow-x: hidden;
+            overflow: hidden; /* 별똥별이 화면 밖으로 나갈 수 있도록 */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* 별똥별 애니메이션 */
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(-45deg, rgba(97, 175, 255, 1), rgba(97, 175, 255, 0));
+            border-radius: 999px;
+            filter: drop-shadow(0 0 6px rgba(121, 183, 255, 1));
+            animation: tail 3s ease-in-out infinite, shooting 3s ease-in-out infinite;
+        }
+        @keyframes tail {
+            0% { width: 0; } 30% { width: 100px; } 100% { width: 0; }
+        }
+        @keyframes shooting {
+            0% { transform: translateX(0); } 100% { transform: translateX(300px); }
+        }
+
+        .shooting-star:nth-child(1) { top: 20%; right: 0; animation-delay: 3s; }
+        .shooting-star:nth-child(2) { top: 50%; right: 0; animation-delay: 5s; animation-duration: 2s; }
+        .shooting-star:nth-child(3) { top: 80%; right: 0; animation-delay: 8s; }
+
+        #particles-js { position: absolute; width: 100%; height: 100%; }
+
         #app { max-width: 520px; margin: 0 auto; padding: 24px; position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
         .glass-card {
             background: var(--surface-glass);
@@ -61,88 +91,53 @@
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* 자동 전환으로 인해 Navigation 영역 변경 */
+        .navigation {
+            display: flex;
+            justify-content: flex-start; /* 이전 버튼만 있으므로 왼쪽 정렬 */
+            align-items: center;
+            margin-top: auto;
+            padding-top: 24px;
+            height: 70px; /* 버튼이 없을 때도 높이 유지 */
+        }
+        
+        /* 이전 답변과 거의 동일한 나머지 스타일 */
         .header { text-align: center; padding: 32px; margin-bottom: 24px; }
         .header h1 { font-family: 'Noto Serif KR', serif; font-size: 30px; font-weight: 700; color: var(--text-primary); text-shadow: 0 0 8px rgba(255,255,255,0.3); margin-bottom: 8px; }
         .header .subtitle { font-size: 16px; color: var(--text-secondary); }
         .content { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
-        
-        /* --- 질문 UI 개선 --- */
-        #question-box { font-family: 'Noto Serif KR', serif; font-size: 22px; font-weight: 600; }
-        .choice-option { background: var(--surface-card, rgba(0,0,0,0.2)); border: var(--border-glass); border-radius: 12px; padding: 18px; cursor: pointer; transition: all 0.3s ease; }
-        .choice-option.selected {
-            background: var(--text-accent); color: var(--bg-primary);
-            border-color: var(--accent-glow); box-shadow: var(--shadow-glow);
-            transform: scale(1.02);
-        }
-
-        /* --- 로딩 화면 --- */
         .loading-screen, .welcome-screen { text-align: center; margin: auto; animation: fadeIn 1s ease-out; }
         .loading-text { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--text-accent); }
         .loading-subtext { font-size: 14px; color: var(--text-secondary); }
-        
-        /* --- 결과 페이지 --- */
         .result-container { animation: resultFadeIn 1s ease-out; }
         @keyframes resultFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
-        /* 결과 페이지 나침반 애니메이션 */
         .result-header { text-align: center; padding: 32px 24px; margin-bottom: 24px; }
-        .animated-compass {
-            width: 150px; height: 150px;
-            margin: 0 auto 24px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--surface-glass) 0%, transparent 70%);
-            border: 1px solid var(--border-glass);
-            position: relative;
-            display: flex; align-items: center; justify-content: center;
-        }
+        .animated-compass { width: 150px; height: 150px; margin: 0 auto 24px; border-radius: 50%; background: radial-gradient(circle, var(--surface-glass) 0%, transparent 70%); border: 1px solid var(--border-glass); position: relative; display: flex; align-items: center; justify-content: center; }
         .compass-ticks { width: 90%; height: 90%; position: absolute; border-radius: 50%; }
-        .compass-ticks::before, .compass-ticks::after {
-            content: ''; position: absolute; width: 100%; height: 100%;
-            background: repeating-conic-gradient(var(--text-secondary) 0 0.5deg, transparent 0.5deg 10deg);
-            animation: rotate 20s linear infinite;
-        }
+        .compass-ticks::before, .compass-ticks::after { content: ''; position: absolute; width: 100%; height: 100%; background: repeating-conic-gradient(var(--text-secondary) 0 0.5deg, transparent 0.5deg 10deg); animation: rotate 20s linear infinite; }
         .compass-ticks::after { animation-direction: reverse; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .compass-inner { width: 80%; height: 80%; background: var(--bg-primary); border-radius: 50%; border: var(--border-glass); }
-        .compass-needle {
-            width: 2px; height: 45%;
-            background: var(--accent-warm);
-            position: absolute; top: 5%; left: 50%;
-            transform-origin: bottom center; transform: translateX(-50%);
-            box-shadow: 0 0 10px var(--accent-warm);
-            animation: gentle-sway 5s infinite ease-in-out;
-        }
+        .compass-needle { width: 2px; height: 45%; background: var(--accent-warm); position: absolute; top: 5%; left: 50%; transform-origin: bottom center; box-shadow: 0 0 10px var(--accent-warm); animation: gentle-sway 5s infinite ease-in-out; }
         @keyframes gentle-sway { 0%, 100% { transform: translateX(-50%) rotate(-5deg); } 50% { transform: translateX(-50%) rotate(5deg); } }
         .compass-center { width: 10px; height: 10px; background: var(--accent-warm); border-radius: 50%; position: absolute; }
-
         .result-title { font-family: 'Noto Serif KR', serif; font-size: 26px; font-weight: 700; margin-bottom: 12px; }
         .result-metaphor { font-size: 17px; font-style: italic; color: var(--text-secondary); max-width: 90%; margin: 0 auto; }
-        
-        /* 성향 % 표시 강화 */
         .result-summary { margin-top: 24px; padding: 0 16px; }
         .trait-bar { display: flex; align-items: center; margin-bottom: 12px; font-size: 14px; }
         .trait-name { width: 120px; color: var(--text-secondary); white-space: nowrap; }
         .trait-progress-bg { flex-grow: 1; height: 10px; background: var(--surface-glass); border-radius: 5px; }
         .trait-progress-fill { height: 100%; background: linear-gradient(90deg, var(--text-accent), var(--accent-warm)); border-radius: 5px; transition: width 1.5s ease-out; }
         .trait-percentage { width: 40px; text-align: right; color: var(--text-primary); font-weight: 500; }
-
-        /* 아코디언 가독성 개선 */
         .accordion-item { background: var(--surface-glass); border-radius: var(--border-radius); margin-bottom: 12px; border: var(--border-glass); }
         .accordion-header { padding: 18px 24px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .accordion-header h3 { font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 600; color: var(--text-accent); }
-        .accordion-content-inner {
-            padding: 0 24px 24px; font-size: 16px; /* 폰트 사이즈 키움 */
-            color: var(--text-secondary); line-height: 1.8; text-align: justify; word-break: keep-all;
-        }
-        .keywords-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-        .keyword { background: rgba(255, 255, 255, 0.1); color: var(--text-secondary); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; }
-
-        /* 기타 UI 요소 */
+        .accordion-content-inner { padding: 0 24px 24px; font-size: 16px; color: var(--text-secondary); line-height: 1.8; text-align: justify; word-break: keep-all; }
+        .ai-generated-image { width: 100%; height: 120px; border-radius: 12px; margin-bottom: 16px; background-size: cover; background-position: center; opacity: 0.7; }
+        .keyword-sentence { font-style: italic; color: var(--text-primary); background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin-top: 16px; border-left: 3px solid var(--text-accent); }
         .btn { background: var(--text-accent); color: var(--bg-primary); border: none; padding: 14px 28px; font-size: 16px; font-weight: 700; border-radius: 30px; cursor: pointer; transition: var(--transition-smooth); box-shadow: var(--shadow-soft); }
         .btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-glow); }
         .btn-secondary { background: transparent; color: var(--text-secondary); border: 1px solid var(--text-secondary); }
-        
-        /* 아래는 기존 스타일과 거의 동일 */
         #main-content { transition: opacity 0.5s ease-in-out; }
         .progress-container { margin-bottom: 32px; }
         .progress-bar { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
@@ -150,12 +145,12 @@
         #progress-text { text-align: right; margin-top: 8px; font-size: 12px; color: var(--text-secondary); }
         .question-container { text-align: center; margin-bottom: 24px; }
         #question-number { font-size: 14px; color: var(--text-accent); margin-bottom: 12px; font-weight: 600; }
+        #question-box { font-family: 'Noto Serif KR', serif; font-size: 22px; font-weight: 600; }
         #question-description { font-size: 15px; color: var(--text-secondary); font-style: italic; }
         .choice-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+        .choice-option { background: rgba(0,0,0,0.2); border: var(--border-glass); border-radius: 12px; padding: 18px; cursor: pointer; transition: all 0.3s ease; }
+        .choice-option.selected { background: var(--text-accent); color: var(--bg-primary); border-color: var(--accent-glow); box-shadow: var(--shadow-glow); transform: scale(1.02); }
         .option-text { font-size: 16px; font-weight: 500; word-break: keep-all; }
-        textarea { width: 100%; min-height: 120px; padding: 16px; font-size: 16px; font-family: 'Noto Serif KR', serif; border: var(--border-glass); border-radius: 12px; background: rgba(0,0,0,0.2); color: var(--text-primary); resize: vertical; transition: var(--transition-smooth); }
-        textarea:focus { outline: none; background: var(--surface-glass-hover); border-color: var(--text-accent); box-shadow: var(--shadow-glow); }
-        .navigation { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 24px; }
         .accordion-arrow { transition: transform 0.4s ease; font-size: 20px; }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, padding 0.5s ease-out; }
         .accordion-item.active .accordion-arrow { transform: rotate(180deg); }
@@ -167,7 +162,13 @@
 </head>
 
 <body>
-    <div id="particles-js"></div>
+    <div class="background-container">
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div class="shooting-star"></div>
+        <div id="particles-js"></div>
+    </div>
+    
     <div id="app">
         <header class="header glass-card">
             <h1>🧭 마음의 나침반</h1>
@@ -187,15 +188,12 @@
             { id: 1, type: "choice", question: "밤하늘의 별을 바라볼 때, 당신의 마음에 가장 먼저 스며드는 감정은?", description: "별빛이 당신의 영혼에 닿는 그 순간을 떠올려보세요", options: [{ text: "무한한 우주 앞에서 느끼는 경이로움과 전율", keywords: ["영혼의탐험가", "우주적감수성", "경이로운시선"], weight: "cosmic_wonder" }, { text: "자신의 존재가 한없이 작게 느껴지는 겸손함", keywords: ["심연의지혜", "겸손한영혼", "존재적성찰"], weight: "humble_depth" }, { text: "어디론가 떠나고 싶은 자유로운 충동", keywords: ["바람의아이", "무한자유", "떠남의미학"], weight: "wandering_soul" }, { text: "고요함 속에서 찾는 마음의 평화로움", keywords: ["달빛명상", "고요한치유", "내면의정원"], weight: "serene_peace" }]},
             { id: 2, type: "choice", question: "어린 시절, 당신이 가장 안전하다고 느꼈던 순간의 향기나 소리는?", description: "그 기억 속 감각이 지금도 당신을 어떻게 위로하는지 느껴보세요", options: [{ text: "엄마의 품에서 맡았던 따뜻한 향과 심장소리", keywords: ["모성의품", "원초적안전", "심장의리듬"], weight: "deep_connection" }, { text: "비 오는 날 창가에서 들었던 빗소리와 책 냄새", keywords: ["빗소리치유", "책의마법", "창가의꿈"], weight: "contemplative_solitude" }, { text: "할머니 손에서 풍기던 꽃향기와 자장가", keywords: ["세대의지혜", "꽃향기기억", "자장가의마법"], weight: "ancestral_comfort" }, { text: "혼자만의 비밀공간에서 느꼈던 고요함", keywords: ["비밀의성", "혼자만의세계", "고독의달콤함"], weight: "serene_peace" }]},
             { id: 3, type: "choice", question: "당신이 가장 깊이 몰입할 수 있는 순간은 언제인가요?", description: "시간이 멈춘 듯 느껴지는 그 마법같은 순간들", options: [{ text: "창작이나 예술 작업에 완전히 빠져들 때", keywords: ["창조의불꽃", "예술혼", "영감의순간"], weight: "creative_flow" }, { text: "사랑하는 사람과 진솔한 대화를 나눌 때", keywords: ["영혼의대화", "진심의교류", "마음의공명"], weight: "deep_connection" }, { text: "자연 속에서 고요히 사색에 잠길 때", keywords: ["자연의속삭임", "사색의깊이", "영적교감"], weight: "humble_depth" }, { text: "새로운 지식을 탐구하고 깨달음을 얻을 때", keywords: ["지식의탐험", "깨달음의순간", "학문적열정"], weight: "cosmic_wonder" }]},
-            { id: 4, type: "text", question: "지금까지 당신을 가장 크게 변화시킨 한 순간이 있다면, 그때의 감정을 한 문장으로 표현해주세요.", description: "그 순간이 지금의 당신에게 어떤 의미인지 진솔하게 적어보세요", keywords: ["변화의순간", "성장의기억", "인생전환점"], analysis_focus: "transformation_moment" },
-            { id: 5, type: "choice", question: "꿈속에서 자주 나타나는 공간이나 상황은?", description: "무의식 깊은 곳에서 올라오는 이미지들의 의미를 탐구해보세요", options: [{ text: "끝없이 펼쳐진 바다나 무한한 하늘", keywords: ["무한의꿈", "자유의바다", "하늘의아이"], weight: "wandering_soul" }, { text: "복잡한 미로나 알 수 없는 건물들", keywords: ["미로의심리", "복잡성탐구", "숨겨진문"], weight: "existential_inquiry" }, { text: "따뜻하고 포근한 집이나 안전한 공간", keywords: ["안전의꿈", "포근한귀환", "집의의미"], weight: "deep_connection" }, { text: "꿈을 잘 기억하지 못하거나 현실적인 꿈", keywords: ["현실의무게", "실용적영혼", "땅의아이"], weight: "serene_peace" }]},
+            { id: 4, type: "choice", question: "당신의 마음이 가장 평온해지는 풍경은 무엇인가요?", description: "눈을 감고 당신만의 안식처를 그려보세요.", options: [{ text: "별이 가득한 밤의 사막", keywords: ["별밤사막", "고요속의웅장함", "우주적평온"], weight: "cosmic_wonder" }, { text: "안개 낀 새벽의 숲속", keywords: ["새벽숲", "신비로운정적", "자연의숨결"], weight: "humble_depth" }, { text: "햇살 좋은 오후의 바닷가", keywords: ["오후바다", "자유로운물결", "따스한해방감"], weight: "wandering_soul" }, { text: "작은 촛불 하나 켜진 아늑한 방", keywords: ["촛불하나", "내면의빛", "안전한공간"], weight: "serene_peace" }] },
+            { id: 5, type: "choice", question: "꿈속에서 자주 나타나는 공간이나 상황은?", description: "무의식 깊은 곳에서 올라오는 이미지들의 의미를 탐구해보세요", options: [{ text: "끝없이 펼쳐진 바다나 무한한 하늘", keywords: ["무한의꿈", "자유의바다", "하늘의아이"], weight: "wandering_soul" }, { text: "복잡한 미로나 알 수 없는 건물들", keywords: ["미로의심리", "복잡성탐구", "숨겨진문"], weight: "existential_inquiry" }, { text: "따뜻하고 포근한 집이나 안전한 공간", keywords: ["안전의꿈", "포근한귀환", "집의의미"], weight: "deep_connection" }, { text: "오래된 고향 집이나 그리운 장소", keywords: ["고향의꿈", "그리운기억", "뿌리의중요성"], weight: "ancestral_comfort" }] },
             { id: 6, type: "choice", question: "깊은 상처를 받았을 때, 당신의 마음은 어떤 색깔과 질감을 갖나요?", description: "고통의 순간에 느끼는 당신만의 감정의 색채와 촉감", options: [{ text: "짙은 바다색 - 깊고 차가운 슬픔의 무게", keywords: ["깊은바다", "슬픔의무게", "침묵의깊이"], weight: "humble_depth" }, { text: "회색 안개 - 모든 것이 흐릿하고 무기력함", keywords: ["안개의마음", "무기력의회색", "흐린의식"], weight: "contemplative_solitude" }, { text: "붉은 불꽃 - 분노와 격정이 타오름", keywords: ["분노의불꽃", "격정의붉음", "열정의역설"], weight: "creative_flow" }, { text: "검은 구멍 - 빛이 닿지 않는 완전한 어둠", keywords: ["어둠의깊이", "절망의검정", "침묵의구멍"], weight: "existential_inquiry" }]},
             { id: 7, type: "choice", question: "혼자만의 시간에 가장 자주 떠올리는 생각의 방향은?", description: "고요한 순간에 마음 깊은 곳에서 올라오는 생각들의 흐름", options: [{ text: "지나간 시간들과 그때의 감정들을 되새김", keywords: ["시간의강", "추억의보석", "과거의향수"], weight: "contemplative_solitude" }, { text: "앞으로의 가능성과 꿈들을 그려봄", keywords: ["미래의씨앗", "꿈의설계도", "희망의지평"], weight: "wandering_soul" }, { text: "현재의 문제들과 해결방법을 모색함", keywords: ["현실의해답", "문제의실타래", "실용적지혜"], weight: "serene_peace" }, { text: "존재의 의미와 삶의 본질을 탐구함", keywords: ["존재의질문", "철학의길", "의미의탐구"], weight: "existential_inquiry" }]},
-            { id: 8, type: "text", question: "당신에게 '용서'란 무엇인가요? 한 문장으로 정의해주세요.", description: "용서에 대한 당신만의 철학을 진솔하게 표현해보세요", keywords: ["용서의철학", "치유의지혜", "마음의자유"], analysis_focus: "forgiveness_philosophy" },
-            { id: 9, type: "choice", question: "당신이 가장 깊이 두려워하는 것은 무엇인가요?", description: "마음 깊은 곳에 숨어있는 근본적인 두려움을 마주해보세요", options: [{ text: "사랑하는 사람들과의 영원한 이별", keywords: ["이별의공포", "사랑의상실", "영원한작별"], weight: "deep_connection" }, { text: "자신의 진정한 가능성을 발견하지 못하는 것", keywords: ["잠재력의묘지", "미완성의인생", "가능성의상실"], weight: "creative_flow" }, { text: "완전히 혼자가 되어 버려지는 것", keywords: ["고독의심연", "버림받음", "존재의소거"], weight: "contemplative_solitude" }, { text: "모든 통제력을 잃고 무력해지는 것", keywords: ["통제의상실", "무력감의늪", "카오스의공포"], weight: "existential_inquiry" }]},
-            { id: 10, type: "choice", question: "마지막으로, 지금 이 순간 당신의 마음이 가장 간절히 원하는 것은?", description: "솔직한 마음으로 현재 가장 필요로 하는 것을 선택해주세요", options: [{ text: "진정한 이해와 깊은 공감을 받는 것", keywords: ["영혼의공감", "진정한이해", "마음의공명"], weight: "deep_connection" }, { text: "내면의 평화와 마음의 안정을 찾는 것", keywords: ["내면평화", "마음의안식", "영혼의휴식"], weight: "serene_peace" }, { text: "새로운 도전과 성장의 기회를 만나는 것", keywords: ["성장의기회", "도전의용기", "새로운시작"], weight: "wandering_soul" }, { text: "자신만의 특별한 의미와 목적을 발견하는 것", keywords: ["삶의목적", "존재의의미", "나만의길"], weight: "existential_inquiry" }]}
+            { id: 8, type: "choice", question: "마지막으로, 지금 이 순간 당신의 마음이 가장 간절히 원하는 것은?", description: "솔직한 마음으로 현재 가장 필요로 하는 것을 선택해주세요", options: [{ text: "진정한 이해와 깊은 공감을 받는 것", keywords: ["영혼의공감", "진정한이해", "마음의공명"], weight: "deep_connection" }, { text: "내면의 평화와 마음의 안정을 찾는 것", keywords: ["내면평화", "마음의안식", "영혼의휴식"], weight: "serene_peace" }, { text: "새로운 도전과 성장의 기회를 만나는 것", keywords: ["성장의기회", "도전의용기", "새로운시작"], weight: "wandering_soul" }, { text: "자신만의 특별한 의미와 목적을 발견하는 것", keywords: ["삶의목적", "존재의의미", "나만의길"], weight: "existential_inquiry" }]}
         ],
-        // (나머지 JS 코드는 이전 답변과 동일하게 유지됩니다.)
         personalityTypes: {
              cosmic_wonder: { name: "영혼의 탐험가", description: "당신의 마음은 광활한 우주를 닮아, 늘 경이로움과 지적 호기심으로 빛납니다. 평범함 속에서 비범함을 발견하며, 존재의 근원을 탐구하는 여정 자체를 즐깁니다." },
              humble_depth: { name: "고요한 현자", description: "깊은 바다처럼 겉으로는 잔잔하지만, 내면에는 지혜와 성찰의 보물들을 품고 있습니다. 화려함보다는 진실됨을, 말보다는 침묵의 무게를 아는 깊이 있는 영혼입니다." },
@@ -207,7 +205,13 @@
              contemplative_solitude: { name: "사색하는 은둔자", description: "혼자 있는 시간 속에서 당신은 가장 깊은 충만함을 느낍니다. 고독은 당신에게 외로움이 아닌, 내면과 온전히 만나는 신성한 순간입니다." },
              ancestral_comfort: { name: "기억의 수호자", description: "과거로부터 이어진 따뜻한 기억과 지혜를 소중히 간직하는 사람입니다. 당신은 뿌리의 힘을 믿으며, 세대를 넘어 흐르는 사랑 속에서 안정감을 찾습니다." },
         },
-        state: { currentQuestionIndex: 0, answers: {}, personalityScores: {}, userKeywords: new Set(), },
+        state: {
+            currentQuestionIndex: 0,
+            answers: {},
+            personalityScores: {},
+            userKeywords: new Set(),
+            isNavigating: false // 중복 클릭 방지 플래그
+        },
         dom: { mainContent: null, },
         init() {
             this.dom.mainContent = document.getElementById('main-content');
@@ -215,20 +219,16 @@
             this.resetState();
             this.showWelcome();
         },
-        resetState() { this.state.currentQuestionIndex = 0; this.state.answers = {}; this.state.personalityScores = {}; this.state.userKeywords.clear(); },
+        resetState() {
+            this.state.currentQuestionIndex = 0;
+            this.state.answers = {};
+            this.state.personalityScores = {};
+            this.state.userKeywords.clear();
+            this.state.isNavigating = false;
+        },
         initParticles() { if (typeof particlesJS !== 'undefined') { particlesJS('particles-js', { "particles": { "number": { "value": 50, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#ffffff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.3, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false } }, "size": { "value": 2, "random": true }, "line_linked": { "enable": false }, "move": { "enable": true, "speed": 0.5, "direction": "none", "random": true, "straight": false, "out_mode": "out" } }, "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": false }, "onclick": { "enable": false }, "resize": true } }, "retina_detect": true }); } },
         showWelcome() {
-            this.dom.mainContent.innerHTML = `
-                <div class="welcome-screen">
-                    <p style="font-family: 'Noto Serif KR', serif; font-size: 20px; line-height: 1.6; margin-bottom: 24px;">
-                        당신의 마음 깊은 곳에는<br>어떤 이야기가 숨어있을까요?
-                    </p>
-                    <p style="color: var(--text-secondary); margin-bottom: 32px;">
-                        잠시 시간을 내어 당신의 내면을 들여다보는<br>고요한 여정을 시작합니다.
-                    </p>
-                    <button class="btn" id="start-btn">여정 시작하기</button>
-                </div>
-            `;
+            this.dom.mainContent.innerHTML = `<div class="welcome-screen"><p style="font-family: 'Noto Serif KR', serif; font-size: 20px; line-height: 1.6; margin-bottom: 24px;">당신의 마음 깊은 곳에는<br>어떤 이야기가 숨어있을까요?</p><p style="color: var(--text-secondary); margin-bottom: 32px;">잠시 시간을 내어 당신의 내면을 들여다보는<br>고요한 여정을 시작합니다.</p><button class="btn" id="start-btn">여정 시작하기</button></div>`;
             document.getElementById('start-btn').addEventListener('click', () => this.showQuestion(0));
         },
         showQuestion(index) {
@@ -236,21 +236,9 @@
             setTimeout(() => {
                 const question = this.questions[index];
                 const progress = (index / this.questions.length) * 100;
-
-                this.dom.mainContent.innerHTML = `
-                    <div class="progress-container"><div class="progress-bar"><div id="progress-fill" style="width: ${progress}%"></div></div><div id="progress-text">질문 ${index + 1} / ${this.questions.length}</div></div>
-                    <div class="question-container"><div id="question-number">Question ${String(index + 1).padStart(2, '0')}</div><h2 id="question-box">${question.question}</h2><p id="question-description">${question.description}</p></div>
-                    <div id="answer-box"></div>
-                    <div class="navigation">
-                        <button class="btn btn-secondary" id="prev-btn" style="visibility: ${index > 0 ? 'visible' : 'hidden'}">이전</button>
-                        <button class="btn" id="next-btn">${index === this.questions.length - 1 ? '결과 분석하기' : '다음'}</button>
-                    </div>`;
-                
+                this.dom.mainContent.innerHTML = `<div class="progress-container"><div class="progress-bar"><div id="progress-fill" style="width: ${progress}%"></div></div><div id="progress-text">질문 ${index + 1} / ${this.questions.length}</div></div><div class="question-container"><div id="question-number">Question ${String(index + 1).padStart(2, '0')}</div><h2 id="question-box">${question.question}</h2><p id="question-description">${question.description}</p></div><div id="answer-box"></div><div class="navigation"><button class="btn btn-secondary" id="prev-btn" style="visibility: ${index > 0 ? 'visible' : 'hidden'}">이전</button></div>`;
                 const answerBox = document.getElementById('answer-box');
-                if (question.type === 'choice') { this.createChoiceOptions(question, answerBox); } 
-                else if (question.type === 'text') { this.createTextAnswer(question, answerBox); }
-                
-                document.getElementById('next-btn').addEventListener('click', () => this.navigateNext());
+                this.createChoiceOptions(question, answerBox);
                 document.getElementById('prev-btn').addEventListener('click', () => this.navigatePrev());
                 this.dom.mainContent.style.opacity = 1;
             }, 300);
@@ -269,28 +257,10 @@
             });
             container.appendChild(optionsContainer);
         },
-        createTextAnswer(question, container) {
-            const textarea = document.createElement('textarea');
-            textarea.placeholder = '당신의 진솔한 이야기를 들려주세요...';
-            const currentAnswer = this.state.answers[question.id];
-            textarea.value = currentAnswer ? currentAnswer.answer : '';
-            textarea.addEventListener('input', () => { this.state.answers[question.id] = { type: 'text', answer: textarea.value, keywords: question.keywords }; });
-            container.appendChild(textarea);
-        },
         showLoading() {
             this.dom.mainContent.style.opacity = 0;
             setTimeout(() => {
-                this.dom.mainContent.innerHTML = `
-                <div class="loading-screen">
-                    <div class="animated-compass" style="width: 120px; height: 120px;">
-                        <div class="compass-ticks"></div>
-                        <div class="compass-inner"></div>
-                        <div class="compass-needle"></div>
-                        <div class="compass-center"></div>
-                    </div>
-                    <div class="loading-text">당신의 마음 지도를 그리고 있습니다...</div>
-                    <p class="loading-subtext">AI가 당신의 답변을 섬세하게 분석하여<br>개인화된 결과를 창조합니다.</p>
-                </div>`;
+                this.dom.mainContent.innerHTML = `<div class="loading-screen"><div class="animated-compass" style="width: 120px; height: 120px;"><div class="compass-ticks"></div><div class="compass-inner"></div><div class="compass-needle"></div><div class="compass-center"></div></div><div class="loading-text">당신의 마음 지도를 그리고 있습니다...</div><p class="loading-subtext">AI가 당신의 답변을 섬세하게 분석하여<br>개인화된 결과를 창조합니다.</p></div>`;
                 this.dom.mainContent.style.opacity = 1;
                 setTimeout(() => this.showResults(), 4000);
             }, 500);
@@ -302,29 +272,15 @@
                 this.dom.mainContent.innerHTML = `
                 <div class="result-container">
                     <div class="result-header">
-                         <div class="animated-compass">
-                            <div class="compass-ticks"></div>
-                            <div class="compass-inner"></div>
-                            <div class="compass-needle"></div>
-                            <div class="compass-center"></div>
-                        </div>
+                         <div class="animated-compass"><div class="compass-ticks"></div><div class="compass-inner"></div><div class="compass-needle"></div><div class="compass-center"></div></div>
                         <h2 class="result-title">${analysis.title}</h2>
                         <p class="result-metaphor">"${analysis.metaphor}"</p>
                     </div>
-                    <div class="result-summary">
-                        ${analysis.sortedTraits.map(trait => `
-                            <div class="trait-bar">
-                                <span class="trait-name">${this.personalityTypes[trait.trait]?.name || trait.trait}</span>
-                                <div class="trait-progress-bg">
-                                    <div class="trait-progress-fill" style="width: 0%;" data-width="${trait.percentage}%"></div>
-                                </div>
-                                <span class="trait-percentage">${trait.percentage}%</span>
-                            </div>`).join('')}
-                    </div>
+                    <div class="result-summary">${analysis.sortedTraits.map(trait => `<div class="trait-bar"><span class="trait-name">${this.personalityTypes[trait.trait]?.name || trait.trait}</span><div class="trait-progress-bg"><div class="trait-progress-fill" style="width: 0%;" data-width="${trait.percentage}%"></div></div><span class="trait-percentage">${trait.percentage}%</span></div>`).join('')}</div>
                     <div id="accordion-container" style="margin-top: 32px;">
-                        <div class="accordion-item"><div class="accordion-header"><h3>🗺️ 당신의 마음 지도</h3><span class="accordion-arrow">▼</span></div><div class="accordion-content"><div class="accordion-content-inner">${analysis.mindscape}<div class="keywords-container">${[...this.state.userKeywords].slice(0, 7).map(k => `<span class="keyword">#${k}</span>`).join('')}</div></div></div></div>
-                        <div class="accordion-item"><div class="accordion-header"><h3>🗣️ 내면의 목소리</h3><span class="accordion-arrow">▼</span></div><div class="accordion-content"><div class="accordion-content-inner">${analysis.deepAnalysis}</div></div></div>
-                        <div class="accordion-item"><div class="accordion-header"><h3>🌱 성장의 여정</h3><span class="accordion-arrow">▼</span></div><div class="accordion-content"><div class="accordion-content-inner">${analysis.growthGuidance}</div></div></div>
+                        <div class="accordion-item"><div class="accordion-header"><h3>🗺️ 당신의 마음 지도</h3><span class="accordion-arrow">▼</span></div><div class="accordion-content"><div class="accordion-content-inner"><div class="ai-generated-image" style="background-image: url('https://i.ibb.co/Yd4B6Jg/mindscape.gif');"></div>${analysis.mindscape}<p class="keyword-sentence">${analysis.keywordSentences.mindscape}</p></div></div></div>
+                        <div class="accordion-item"><div class="accordion-header"><h3>🗣️ 내면의 목소리</h3><span class="accordion-arrow">▼</span></div><div class="accordion-content"><div class="accordion-content-inner"><div class="ai-generated-image" style="background-image: url('https://i.ibb.co/SRYdVLf/deep-voice.gif');"></div>${analysis.deepAnalysis}<p class="keyword-sentence">${analysis.keywordSentences.deepAnalysis}</p></div></div></div>
+                        <div class="accordion-item"><div class="accordion-header"><h3>🌱 성장의 여정</h3><span class="accordion-arrow">▼</span></div><div class="accordion-content"><div class="accordion-content-inner"><div class="ai-generated-image" style="background-image: url('https://i.ibb.co/hK8vX5k/growth.gif');"></div>${analysis.growthGuidance}<p class="keyword-sentence">${analysis.keywordSentences.growthGuidance}</p></div></div></div>
                     </div>
                     <div class="share-section"><h4>이 여정을 친구와 함께 나누어보세요</h4><div class="share-buttons"><button class="btn kakao-btn">카카오톡으로 공유하기</button><button class="btn btn-secondary" onclick="MindCompassApp.restartSurvey()">다시 진단받기</button></div></div>
                 </div>`;
@@ -333,12 +289,33 @@
             }, 500);
         },
         handleChoiceSelection(question, option, element) {
+            if (this.state.isNavigating) return; // 이미 화면 전환 중이면 무시
+            this.state.isNavigating = true;
+
             document.querySelectorAll('.choice-option.selected').forEach(el => el.classList.remove('selected'));
             element.classList.add('selected');
             this.state.answers[question.id] = { type: 'choice', answer: option.text, weight: option.weight, keywords: option.keywords };
+
+            setTimeout(() => {
+                this.navigateNext();
+            }, 500); // 0.5초 후 다음 질문으로 자동 전환
         },
-        navigateNext() { if (!this.state.answers[this.questions[this.state.currentQuestionIndex].id]) { alert('답변을 선택하거나 입력해주세요.'); return; } if (this.state.currentQuestionIndex < this.questions.length - 1) { this.state.currentQuestionIndex++; this.showQuestion(this.state.currentQuestionIndex); } else { this.showLoading(); } },
-        navigatePrev() { if (this.state.currentQuestionIndex > 0) { this.state.currentQuestionIndex--; this.showQuestion(this.state.currentQuestionIndex); } },
+        navigateNext() {
+            if (this.state.currentQuestionIndex < this.questions.length - 1) {
+                this.state.currentQuestionIndex++;
+                this.showQuestion(this.state.currentQuestionIndex);
+            } else {
+                this.showLoading();
+            }
+            this.state.isNavigating = false; // 플래그 리셋
+        },
+        navigatePrev() {
+            if (this.state.isNavigating) return;
+            if (this.state.currentQuestionIndex > 0) {
+                this.state.currentQuestionIndex--;
+                this.showQuestion(this.state.currentQuestionIndex);
+            }
+        },
         setupResultInteractions() {
             document.querySelectorAll('.trait-progress-fill').forEach(el => { setTimeout(() => { el.style.width = el.dataset.width; }, 300); });
             const accordionItems = document.querySelectorAll('.accordion-item');
@@ -355,7 +332,6 @@
         },
         restartSurvey() { if(confirm("새로운 마음의 여정을 시작하시겠습니까?")) { this.resetState(); this.dom.mainContent.style.opacity = '0'; setTimeout(() => { this.showWelcome(); this.dom.mainContent.style.opacity = '1'; }, 500); } },
         
-        // --- 7. ANALYSIS LOGIC (The "AI" Core) ---
         generatePersonalizedAnalysis() {
             this.state.personalityScores = {};
             this.state.userKeywords.clear();
@@ -381,7 +357,8 @@
                 mindscape: this.generateMindscape(primaryTraitKey, secondaryTraitKey),
                 deepAnalysis: this.generateDeepAnalysis(primaryTraitKey, secondaryTraitKey),
                 growthGuidance: this.generateGrowthGuidance(primaryTraitKey),
-                sortedTraits: sortedTraits.slice(0, 3)
+                sortedTraits: sortedTraits.slice(0, 3),
+                keywordSentences: this.generateKeywordSentences()
             };
         },
         generateMetaphor(pKey, sKey) {
@@ -427,12 +404,20 @@
             return guidances[pKey] || "스스로의 속도를 믿고 꾸준히 나아가세요. 당신의 여정은 그 자체로 의미 있습니다.";
         },
         getSynergyText(pKey, sKey) {
-            const synergyMap = {
-                "cosmic_wonder-humble_depth": "우주적 사유를 하면서도 내면의 깊이를 잃지 않는 균형 잡힌 모습을 보입니다",
-                "wandering_soul-creative_flow": "자유로운 영혼으로 세상을 탐험하며 얻은 영감을 독창적인 예술로 승화시키는 능력이 탁월합니다",
-                "serene_peace-deep_connection": "내면의 평화를 바탕으로 다른 사람들과 깊고 안정적인 관계를 맺는 데 뛰어납니다"
-            };
+            const synergyMap = { "cosmic_wonder-humble_depth": "우주적 사유를 하면서도 내면의 깊이를 잃지 않는 균형 잡힌 모습을 보입니다", "wandering_soul-creative_flow": "자유로운 영혼으로 세상을 탐험하며 얻은 영감을 독창적인 예술로 승화시키는 능력이 탁월합니다", "serene_peace-deep_connection": "내면의 평화를 바탕으로 다른 사람들과 깊고 안정적인 관계를 맺는 데 뛰어납니다" };
             return synergyMap[`${pKey}-${sKey}`] || synergyMap[`${sKey}-${pKey}`] || "복합적인 매력을 지닌 사람입니다";
+        },
+        generateKeywordSentences() {
+            const keywords = Array.from(this.state.userKeywords);
+            const choice = (arr) => arr[Math.floor(Math.random() * arr.length)];
+            const k1 = choice(keywords) || "마음";
+            const k2 = choice(keywords.filter(k => k !== k1)) || "영혼";
+
+            return {
+                mindscape: `'${k1}' 속에서 당신은 우주의 광활함을 느끼고, '${k2}'을/를 통해 세상의 숨겨진 아름다움을 발견합니다.`,
+                deepAnalysis: `당신이 선택한 '${k1}'과(와) 같은 길 위에서, 당신의 내면은 더욱 단단하게 여물어 갑니다.`,
+                growthGuidance: `'${k1}'을(를) 향한 당신의 열망과 '${k2}'에 대한 탐구는, 당신을 더욱 빛나는 존재로 이끌어 줄 것입니다.`
+            };
         }
     };
 
