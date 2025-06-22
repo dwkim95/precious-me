@@ -3,150 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>마음의 나침반 | 당신의 영혼은 어떤 맛인가요?</title>
-    <meta name="description" content="AI 심해 탐사선 '아스트라'와 함께 당신의 마음 가장 깊은 곳을 탐험하고, 당신의 영혼을 상징하는 단 하나의 '맛'을 발견하세요.">
+    <title>마음의 나침반 | 당신의 속마음 발견</title>
+    <meta name="description" content="AI 잠수함 '아스트라'와 함께 떠나는 마음속 깊은 곳 탐험. 당신의 숨겨진 성향과 좋아하는 것을 발견하세요.">
     <meta property="og:title" content="마음의 나침반 - AI 심층 심리 분석">
-    <meta property="og:description" content="AI가 당신의 답변을 통해 섬세한 마음 지도를 그려드립니다. 당신의 영혼은 어떤 맛과 향을 품고 있을까요?">
+    <meta property="og:description" content="AI가 당신의 답변을 바탕으로 당신의 성향, 좋아하는 것, 싫어하는 것 등을 쉽고 재미있게 알려드립니다.">
     <meta property="og:image" content="https://i.ibb.co/3k5JqB4/og-image-compass.png">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Maru+Buri:wght@400;600&family=IBM+Plex+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --font-serif: 'Maru Buri', serif;
-            --font-sans: 'IBM Plex Sans KR', sans-serif;
-            --surface-color-1: #1E2940; /* 표면 */
-            --surface-color-2: #141D34; /* 어스름 */
-            --surface-color-3: #0A1122; /* 심연 */
+            --font-primary: 'Noto Sans KR', sans-serif;
+            --surface-color-1: #1E2940;
+            --surface-color-2: #141D34;
+            --surface-color-3: #0A1122;
             --text-primary: #E6EEFF;
             --text-secondary: #BCC8E0;
             --text-accent: #90BFFF;
             --accent-glow: #82B8FF;
             --accent-warm: #FFC0CB;
-            --border-radius: 20px;
-            --transition-smooth: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            --border-radius: 15px;
+            --transition-smooth: all 0.5s ease-in-out;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: var(--font-sans);
+            font-family: var(--font-primary);
             font-weight: 400;
             background-color: var(--surface-color-1);
             color: var(--text-primary);
-            line-height: 1.8;
+            line-height: 1.7;
             overflow-x: hidden;
-            transition: background-color 1s ease;
+            transition: background-color 0.8s ease;
         }
 
-        #app { max-width: 640px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 1; min-height: 100vh; }
-        
-        .fade-in { animation: fadeIn 1.2s ease-out both; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        #app { max-width: 600px; margin: 0 auto; padding: 30px 20px; position: relative; z-index: 1; min-height: 100vh; }
 
-        .header { text-align: center; margin: 8vh 0; }
-        .header h1 { font-family: var(--font-serif); font-size: 40px; font-weight: 600; letter-spacing: -0.02em; }
-        .header .subtitle { font-size: 18px; color: var(--text-secondary); line-height: 1.7; margin-top: 16px; }
+        .fade-in { animation: fadeIn 1s ease-out both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { text-align: center; margin: 6vh 0; }
+        .header h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.01em; }
+        .header .subtitle { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-top: 12px; }
         .header .start-button {
-            margin-top: 40px; padding: 16px 40px;
-            font-family: var(--font-sans); font-size: 18px; font-weight: 500;
+            margin-top: 30px; padding: 14px 36px;
+            font-family: var(--font-primary); font-size: 16px; font-weight: 500;
             background-color: var(--text-accent); color: var(--surface-color-3);
-            border: none; border-radius: 50px; cursor: pointer;
-            transition: all 0.3s ease;
+            border: none; border-radius: 30px; cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
-        .header .start-button:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent-glow); }
+        .header .start-button:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); }
 
-        .journey-container { transition: opacity 0.5s ease-out; }
-        .progress-container { margin-bottom: 24px; width: 100%; padding: 0 10%; }
-        .progress-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
-        #progress-fill { height: 100%; background: var(--text-accent); border-radius: 2px; transition: width 0.5s ease; }
-        #phase-title { font-family: var(--font-serif); font-size: 22px; text-align: center; margin-bottom: 40px; color: var(--text-accent); opacity: 0.8; }
+        .journey-container { transition: opacity 0.4s ease-out; }
+        .progress-container { margin-bottom: 20px; width: 100%; }
+        .progress-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.1); border-radius: 1.5px; }
+        #progress-fill { height: 100%; background: var(--text-accent); border-radius: 1.5px; transition: width 0.3s ease; }
+        #phase-title { font-size: 18px; text-align: center; margin-bottom: 30px; color: var(--text-accent); opacity: 0.7; font-weight: 500; }
 
-        .question-card { padding: 32px; }
-        #question-box { font-family: var(--font-serif); font-size: 26px; font-weight: 600; text-align: center; margin-bottom: 32px; }
-        .choice-options { display: flex; flex-direction: column; gap: 16px; }
+        .question-card { padding: 28px; background: rgba(0,0,0,0.1); border-radius: var(--border-radius); margin-bottom: 20px; }
+        #question-box { font-size: 20px; font-weight: 600; text-align: center; margin-bottom: 24px; }
+        .choice-options { display: flex; flex-direction: column; gap: 12px; }
         .choice-option {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px; padding: 20px; cursor: pointer;
-            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 16px; cursor: pointer;
+            transition: all 0.2s ease-in-out;
         }
-        .choice-option:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
-        .option-text { font-size: 17px; font-weight: 400; font-family: var(--font-sans); }
+        .choice-option:hover { background: rgba(255,255,255,0.06); transform: scale(1.02); }
+        .option-text { font-size: 15px; font-weight: 400; }
 
-        .loading-screen { text-align: center; padding: 15vh 0; }
-        .loading-text { font-family: var(--font-serif); font-size: 24px; margin-bottom: 16px; }
+        .loading-screen { text-align: center; padding: 12vh 0; }
+        .loading-text { font-size: 20px; margin-bottom: 12px; font-weight: 500; }
+        .loading-graphic { font-size: 3em; margin-bottom: 20px; color: var(--text-accent); animation: spin 1.5s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         /* --- 결과 페이지 디자인 --- */
-        .result-container { padding-top: 5vh; }
+        .result-container { padding-top: 4vh; }
         .result-card {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.05);
             border-radius: var(--border-radius);
-            padding: 32px 40px;
-            margin-bottom: 32px;
-            transform: translateZ(0);
-        }
-        .result-card h2 {
-            font-family: var(--font-serif); font-size: 26px; font-weight: 600;
-            color: var(--text-accent); margin-bottom: 20px;
-            display: flex; align-items: center;
-        }
-        .result-card h2 .icon { margin-right: 16px; font-size: 24px; }
-        .result-card p, .result-card .text-block { font-size: 18px; line-height: 1.9; color: var(--text-secondary); font-weight: 400; }
-        
-        .flavor-card-header { text-align: center; padding-bottom: 32px; }
-        .flavor-title { font-family: var(--font-serif); font-size: 32px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
-        .flavor-subtitle { font-family: var(--font-serif); font-size: 20px; color: var(--accent-warm); font-style: italic; margin-bottom: 24px; }
-        
-        .strength-growth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px; }
-        .strength-growth-box h3 { font-family: var(--font-serif); font-size: 22px; margin-bottom: 12px; display: flex; align-items: center; }
-        .strength-growth-box .strength h3 { color: #A7D7C5; }
-        .strength-growth-box .growth h3 { color: #DAB894; }
-        .strength-growth-box p { font-size: 17px; }
-
-        .letter-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 3px solid var(--text-accent);
-            padding: 40px;
-        }
-        .letter-card p {
-            font-family: var(--font-serif);
-            font-size: 19px;
-            line-height: 2;
-            text-align: center;
-        }
-        .letter-card p:not(:last-child) {
+            padding: 24px 30px;
             margin-bottom: 24px;
         }
-        
+        .result-card h2 {
+            font-size: 22px; font-weight: 700;
+            color: var(--text-accent); margin-bottom: 16px;
+            display: flex; align-items: center;
+        }
+        .result-card h2 .icon { margin-right: 12px; font-size: 20px; }
+        .result-card p, .result-card .text-block { font-size: 15px; line-height: 1.8; color: var(--text-secondary); font-weight: 400; }
+
+        .flavor-card-header { text-align: center; padding-bottom: 24px; }
+        .flavor-title { font-size: 26px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+        .flavor-subtitle { font-size: 18px; color: var(--accent-warm); font-style: italic; margin-bottom: 18px; }
+        .flavor-keywords { font-size: 14px; color: var(--text-accent); margin-bottom: 10px; font-weight: 500; }
+
+        .preference-card { margin-top: 18px; padding: 18px 24px; background: rgba(0,0,0,0.1); border-radius: var(--border-radius); }
+        .preference-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary); }
+        .preference-list { font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin-left: 16px; list-style-type: disc; }
+
+        .strength-growth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 18px; }
+        .strength-growth-box h3 { font-size: 18px; margin-bottom: 10px; display: flex; align-items: center; font-weight: 600; }
+        .strength-growth-box .strength h3 { color: #A7D7C5; }
+        .strength-growth-box .growth h3 { color: #DAB894; }
+        .strength-growth-box p { font-size: 14px; }
+
+        .letter-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 2px solid var(--text-accent);
+            padding: 30px;
+            border-radius: 5px;
+        }
+        .letter-card p {
+            font-size: 16px;
+            line-height: 1.7;
+            text-align: center;
+            font-weight: 300;
+        }
+        .letter-card p:not(:last-child) {
+            margin-bottom: 18px;
+        }
+
         .final-word-card {
             text-align: center;
             background: transparent;
             border: none;
-            padding: 48px;
+            padding: 36px 0;
         }
         .final-word-text {
-            font-family: var(--font-serif); font-size: 22px; font-weight: 600;
-            line-height: 1.8; color: var(--text-primary);
+            font-size: 18px; font-weight: 600;
+            line-height: 1.7; color: var(--text-primary);
         }
 
         .restart-button {
-            display: block; width: fit-content; margin: 40px auto 0;
-            padding: 16px 40px; font-size: 18px; font-weight: 500;
+            display: block; width: fit-content; margin: 30px auto 0;
+            padding: 12px 30px; font-size: 16px; font-weight: 500;
             background: transparent; color: var(--text-secondary);
-            border: 1px solid var(--text-secondary); border-radius: 50px;
-            cursor: pointer; transition: all 0.3s ease;
+            border: 1px solid var(--text-secondary); border-radius: 30px;
+            cursor: pointer; transition: all 0.2s ease-in-out;
         }
         .restart-button:hover { background: var(--text-secondary); color: var(--surface-color-3); }
 
-        @media (max-width: 600px) {
-            #app { padding: 24px 16px; }
-            .header h1 { font-size: 32px; }
-            #question-box { font-size: 22px; }
+        /* --- 애니메이션 스타일 --- */
+        .submarine-container {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80px; height: 40px; opacity: 0;
+        }
+
+        @keyframes sub-move {
+            0% { transform: translate(-50%, -30%) scale(0.8); opacity: 0; }
+            50% { transform: translate(-50%, -60%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -90%) scale(0.6); opacity: 0; }
+        }
+
+        .star-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;
+        }
+
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            animation: twinkle 1s infinite alternate, fall 5s linear forwards;
+            opacity: 0;
+        }
+
+        @keyframes twinkle { from { opacity: 0.6; } to { opacity: 1; } }
+        @keyframes fall { to { transform: translateY(120vh); opacity: 0; } }
+
+        @media (max-width: 480px) {
+            #app { padding: 20px 15px; }
+            .header h1 { font-size: 28px; }
+            .subtitle { font-size: 15px; }
+            .start-button { padding: 12px 30px; font-size: 15px; }
+            #question-box { font-size: 18px; }
+            .choice-option { padding: 14px; font-size: 14px; }
+            .result-card { padding: 20px; }
+            .flavor-title { font-size: 24px; }
+            .flavor-subtitle { font-size: 16px; }
             .strength-growth-container { grid-template-columns: 1fr; }
-            .result-card { padding: 24px; }
+            .final-word-text { font-size: 17px; }
         }
     </style>
 </head>
@@ -155,136 +193,95 @@
     <div id="app">
         </div>
 
+    <div id="submarine-animation" class="submarine-container">
+        <svg viewBox="0 0 100 50" fill="currentColor" color="#90BFFF">
+            <path d="M10 25 a10 10 0 0 1 20 0 h40 a10 10 0 0 1 20 0 h10 v25 h-90 z M30 15 a5 5 0 1 1 10 0 a5 5 0 1 1 -10 0 M60 15 a5 5 0 1 1 10 0 a5 5 0 1 1 -10 0"/>
+        </svg>
+    </div>
+
+    <div id="star-shower" class="star-container">
+    </div>
+
     <script>
-    //<![CDATA[
-    const MindJourneyApp = {
-        state: { currentQuestionIndex: 0, answers: {}, scores: {}, isNavigating: false, },
-        
-        questions: [
-            { phase: "Phase 1. 표면의 바다", question: "낯선 도시에 혼자 도착한 첫날,<br>당신이 가장 먼저 할 일은 무엇인가요?", options: [ { text: "발길 닿는 대로, 정처 없이 도시를 헤맨다.", weight: "lime_wind" }, { text: "가장 높은 곳에 올라 도시의 전체 모습을 조망한다.", weight: "smoky_whiskey" }, { text: "마음이 끌리는 카페에 들어가 사람들을 구경한다.", weight: "honey_tea" }, { text: "이 도시의 역사가 담긴 박물관이나 서점을 찾는다.", weight: "midnight_espresso" } ]},
-            { question: "당신에게 '집'이란 어떤 의미에<br>가장 가까운가요?", options: [ { text: "세상의 소음으로부터 나를 지키는 유일한 성역", weight: "warm_bread" }, { text: "사랑하는 사람들과의 기억이 깃든 따뜻한 공간", weight: "honey_tea" }, { text: "새로운 여정을 떠나기 위해 잠시 머무는 정거장", weight: "lime_wind" }, { text: "내 안의 생각을 자유롭게 펼치는 작업실", weight: "ozone_scent" } ]},
-            { question: "오래된 물건을 볼 때<br>가장 먼저 드는 생각은 무엇인가요?", options: [ { text: "이 물건에 어떤 이야기가 담겨 있을까?", weight: "honey_tea" }, { text: "시간이 흘러도 변치 않는 아름다움이 있구나.", weight: "midnight_espresso" }, { text: "나만의 감성으로 새롭게 꾸며보고 싶다.", weight: "ozone_scent" }, { text: "참 잘 만들어져서 오래도록 제 역할을 해냈구나.", weight: "smoky_whiskey" } ]},
-            { question: "당신의 서재에 단 한 종류의 책만<br>꽂을 수 있다면 무엇을 선택하겠어요?", options: [ { text: "세상의 지혜와 지식을 담은 역사서나 과학책", weight: "midnight_espresso" }, { text: "가슴 뛰는 모험과 탐험에 대한 여행기", weight: "lime_wind" }, { text: "사람과 사람의 마음을 섬세하게 그린 소설", weight: "honey_tea" }, { text: "영감을 주는 사진이나 그림이 담긴 예술 서적", weight: "ozone_scent" } ]},
-            { phase: "Phase 2. 어스름의 바다", question: "길을 잃은 밤, 당신 손에 들린 등불은<br>어떤 빛을 내고 있나요?", options: [ { text: "나아갈 길을 멀리까지 비추는 단단하고 밝은 빛", weight: "smoky_whiskey" }, { text: "길의 끝이 아닌, 바로 발밑을 비추는 작은 온기", weight: "warm_bread" }, { text: "주변의 어둠까지 아름답게 만드는 은은한 빛", weight: "ozone_scent" }, { text: "함께 길을 잃은 다른 이를 찾기 위한 신호의 빛", weight: "honey_tea" } ]},
-            { question: "아무도 없는 텅 빈 무대 위에<br>홀로 서 있다면 무엇을 하시겠어요?", options: [ { text: "세상을 향해 나의 비전과 계획을 선포한다.", weight: "smoky_whiskey" }, { text: "떠오르는 영감을 따라 즉흥적인 춤을 춘다.", weight: "ozone_scent" }, { text: "아무도 없기에 느낄 수 있는 완전한 평화를 만끽한다.", weight: "warm_bread" }, { text: "그리운 사람의 이름을 허공에 불러본다.", weight: "honey_tea" } ]},
-            { question: "깊은 상실감을 마주했을 때,<br>당신은 어떻게 반응하나요?", options: [ { text: "이 경험이 내게 어떤 의미인지 차분히 생각한다", weight: "midnight_espresso" }, { text: "슬픔을 이겨내기 위해 무언가에 더욱 몰두한다", weight: "ozone_scent" }, { text: "훌쩍 다른 곳으로 떠나 기분을 전환한다", weight: "lime_wind" }, { text: "충분히 슬퍼하며, 혼자만의 시간을 갖는다", weight: "warm_bread" } ]},
-            { question: "당신의 가장 오랜 기억은<br>어떤 감각으로 남아있나요?", options: [ { text: "누군가의 따뜻한 손길과 체온", weight: "honey_tea" }, { text: "세상을 처음 발견했을 때의 놀라움과 경이", weight: "lime_wind" }, { text: "고요한 안정감 속에서 들려오던 심장 박동 소리", weight: "warm_bread" }, { text: "세상의 이치를 처음 깨달았을 때의 명료함", weight: "midnight_espresso" } ]},
-            { phase: "Phase 3. 심연의 바다", question: "세상의 모든 규칙 중 단 하나를<br>없앨 수 있다면 무엇을 없애겠어요?", options: [ { text: "사람과 사람을 가로막는 모든 종류의 차별", weight: "honey_tea" }, { text: "진실을 가리는 거짓과 위선", weight: "midnight_espresso" }, { text: "영혼의 자유를 속박하는 사회적 관습", weight: "lime_wind" }, { text: "세상을 혼란에 빠뜨리는 무질서 그 자체", weight: "smoky_whiskey" } ]},
-            { question: "당신의 가장 깊은 곳에 숨겨진<br>두려움은 무엇인가요?", options: [ { text: "사랑하는 모든 것을 잃고 완전히 혼자가 되는 것", weight: "honey_tea" }, { text: "나의 가능성을 전부 펼치지 못하고 잊혀지는 것", weight: "ozone_scent" }, { text: "나의 삶을 통제할 수 없게 되는 무력감", weight: "smoky_whiskey" }, { text: "삶의 의미를 끝내 발견하지 못하는 것", weight: "midnight_espresso" } ]},
-            { question: "당신이 잠든 사이, 신이 당신에게<br>단 하나의 능력을 준다면 무엇을 바라나요?", options: [ { text: "모든 사람의 마음을 진심으로 이해하는 능력", weight: "honey_tea" }, { text: "상상하는 모든 것을 현실로 만드는 능력", weight: "ozone_scent" }, { text: "세상의 모든 지식과 지혜를 습득하는 능력", weight: "midnight_espresso" }, { text: "내가 원하는 어디로든 순간이동하는 능력", weight: "lime_wind" } ]},
-            { question: "당신이 세상에 남기고 싶은<br>궁극적인 흔적은 무엇인가요?", options: [ { text: "더 나은 세상을 만드는 데 기여한 나의 역할", weight: "smoky_whiskey" }, { text: "사람들의 마음속에 영원히 남을 감동적인 이야기", weight: "ozone_scent" }, { text: "내가 걸어온 용감하고 자유로웠던 발자국 그 자체", weight: "lime_wind" }, { text: "나로 인해 더 행복해진 단 한 사람의 미소", weight: "honey_tea" } ]}
-        ],
-        soulFlavors: {
-            midnight_espresso: { title: "비 내리는 자정의 에스프레소", subtitle: "깊고 씁쓸하지만, 그 끝에 남는 명료한 각성", description: "당신의 영혼은 비 내리는 자정, 홀로 마시는 에스프레소의 맛을 닮았습니다. 세상의 복잡한 문제들을 마주하며 때로 씁쓸함을 느끼지만, 그 깊은 사색의 끝에서 누구보다 명료한 지혜와 통찰을 얻어냅니다.", strength_keyword: "핵심 파악", strength: "당신은 여러 정보와 감정의 홍수 속에서도 길을 잃지 않고, 문제의 본질을 정확히 꿰뚫어 봅니다. 당신의 한마디는 흩어진 생각들을 정리하는 기준점이 됩니다.", growth_keyword: "마음의 거리감", growth: "너무 깊은 생각은 때로 타인과 세상으로부터 당신을 멀어지게 만듭니다. 가끔은 정답을 찾는 대신, 그저 함께 비를 맞아주는 따뜻함을 선택해 보세요.", identity_phrase: "세상의 진리를 탐구하는 지적인 사람", struggle_phrase: "모든 것을 이해해야 한다는 고독한 무게감", social_phrase: "혼란 속에서 명쾌한 길을 알려주는 등대 같은 존재", final_advice: "가끔은 머리가 아닌, 마음의 소리에 귀 기울여 보세요.", final_comfort: "모든 것을 이해하지 못해도 당신의 존재는 충분히 지혜롭습니다." },
-            lime_wind: { title: "지중해의 바람에 실려온 라임", subtitle: "짜릿하고 상쾌하며, 예측할 수 없는 자유의 향기", description: "당신의 영혼은 지중해의 작열하는 태양 아래, 바람을 타고 온 라임의 향기처럼 상쾌하고 자유롭습니다. 당신은 정해진 길을 따르기보다, 새로운 경험과 예측 불가능한 모험 속으로 기꺼이 몸을 던집니다.", strength_keyword: "자유로운 실행력", strength: "당신은 '언젠가'가 아닌 '지금 당장'을 외치는 사람입니다. 당신의 즉흥적인 용기와 실행력은 다른 사람들에게 새로운 가능성과 영감을 줍니다.", growth_keyword: "지루함에 대한 공포", growth: "일상의 평온함과 반복을 견디기 힘들어할 수 있습니다. 하지만 기억하세요. 때로는 잔잔한 바다 위에서만 볼 수 있는 아름다운 노을도 있답니다.", identity_phrase: "경계 없는 세상을 꿈꾸는 자유로운 사람", struggle_phrase: "혹시나 한곳에 얽매여 나 자신을 잃게 될지 모른다는 불안감", social_phrase: "일상에 안주한 사람들에게 새로운 세상을 보여주는 창문", final_advice: "가장 위대한 탐험은 때로 자기 자신을 향한 여정입니다.", final_comfort: "당신이 머무는 모든 곳이 당신의 집이 될 수 있습니다." },
-            honey_tea: { title: "오래된 편지지의 꿀차", subtitle: "시간과 함께 깊어진, 달콤하고 따뜻한 위로의 맛", description: "당신의 영혼은 빛바랜 편지지를 펼쳐놓고 마시는 따뜻한 꿀차의 맛을 닮았습니다. 사람과 사람 사이의 이야기, 시간과 함께 쌓인 기억들을 무엇보다 소중히 여기며, 그 안에서 깊은 위로와 삶의 의미를 찾습니다.", strength_keyword: "따뜻한 연결", strength: "당신은 사람들의 이야기를 진심으로 들어주고, 그들의 마음에 깊이 공감할 줄 압니다. 당신과의 대화는 지친 마음을 녹이는 힘을 가지고 있습니다.", growth_keyword: "거절에 대한 어려움", growth: "다른 사람의 감정을 너무 먼저 생각한 나머지, 자신의 마음을 돌보지 못하고 지칠 때가 있습니다. 나의 찻잔이 비어있다면, 남에게 꿀차를 따라주기 어렵다는 사실을 잊지마세요.", identity_phrase: "사랑과 관계를 무엇보다 소중히 여기는 사람", struggle_phrase: "소중한 사람들을 실망시키거나 그들을 잃게 될지 모른다는 두려움", social_phrase: "차가운 세상 속에서 서로 기댈 수 있는 포근한 안식처", final_advice: "자신을 사랑으로 채우는 것이 가장 위대한 공감의 시작입니다.", final_comfort: "당신은 이미 누군가의 세상에 가장 따뜻한 이야기를 선물하고 있습니다." },
-            ozone_scent: { title: "한여름 소나기의 오존 냄새", subtitle: "세상을 바꾸는 영감이 번뜩이는, 낯설고 신선한 공기", description: "당신의 영혼은 뜨거운 아스팔트 위로 한여름 소나기가 쏟아질 때 피어오르는, 낯설지만 신선한 '오존 냄새'를 닮았습니다. 당신의 번뜩이는 영감과 상상력은 평범한 일상을 한순간에 특별한 순간으로 바꾸는 마법을 부립니다.", strength_keyword: "창의적인 발상", strength: "당신은 남들이 보지 못하는 방식으로 세상을 보고, 세상에 없던 새로운 아이디어를 떠올립니다. 당신의 생각은 굳어있는 세상에 내리는 시원한 소나기와 같습니다.", growth_keyword: "현실과의 불화", growth: "당신의 이상은 때로 너무 높아, 현실의 벽에 부딪혀 쉽게 좌절할 수 있습니다. 당신의 위대한 상상력이 땅에 뿌리내릴 수 있도록, 아주 작은 것부터 시작해보는 건 어떨까요?", identity_phrase: "세상에 없던 아름다움을 만드는 예술가 같은 사람", struggle_phrase: "나의 내면 세계를 세상이 이해해주지 못할 것이라는 외로움", social_phrase: "무미건조한 일상에 영감과 생명력을 불어넣는 존재", final_advice: "가장 위대한 작품은 바로 당신의 삶 그 자체입니다.", final_comfort: "당신의 존재만으로도 세상은 이미 더 신선해졌습니다." },
-            smoky_whiskey: { title: "잘 익은 위스키의 스모키한 향", subtitle: "오랜 시간 쌓아 올린, 단단하고 신뢰감 있는 무게감", description: "당신의 영혼은 오크통 속에서 오랜 시간 숙성된 위스키처럼, 깊고 스모키한 향을 품고 있습니다. 숱한 경험과 인내의 시간이 당신을 단단하게 만들었고, 그 무게감은 주변 사람들에게 깊은 신뢰와 안정감을 줍니다.", strength_keyword: "신뢰감 있는 리더십", strength: "당신은 어려운 상황에서도 쉽게 흔들리지 않고, 현실적인 판단으로 최선의 결정을 내립니다. 사람들은 당신의 묵직한 존재감에 기대어 안정을 찾습니다.", growth_keyword: "변화에 대한 저항", growth: "자신만의 방식과 신념이 너무 강한 나머지, 새로운 변화나 다른 의견을 받아들이기 어려워할 수 있습니다. 최고의 위스키도 때로는 다른 재료와 섞여 멋진 칵테일이 된답니다.", identity_phrase: "자신만의 왕국을 책임감 있게 이끌어가는 사람", struggle_phrase: "상황을 통제하지 못하고 무력해질 수 있다는 깊은 불안감", social_phrase: "거친 폭풍우 속에서 모두가 기댈 수 있는 견고한 기둥", final_advice: "진정한 힘은 모든 것을 통제하는 것이 아닌, 조화를 이루는 데 있습니다.", final_comfort: "당신의 어깨에 놓인 책임감의 무게를 이제는 조금 내려놓아도 괜찮습니다." },
-            warm_bread: { title: "갓 구운 빵의 고소한 온기", subtitle: "세상을 살아갈 힘을 주는, 순수하고 근원적인 생명의 맛", description: "당신의 영혼은 오븐에서 막 꺼낸 빵처럼, 따뜻하고 고소한 생명의 온기를 품고 있습니다. 당신은 세상의 복잡함 속에서도 가장 기본적이고 순수한 가치를 믿으며, 당신의 존재는 그 자체로 주변에 안락함과 위로를 줍니다.", strength_keyword: "긍정적인 위로", strength: "당신은 지치고 상처받은 사람들에게 아무런 조건 없이 따뜻한 빵 한 조각을 건네는 사람입니다. 당신 곁에 있으면, 사람들은 다시 살아갈 힘을 얻습니다.", growth_keyword: "쓴맛에 대한 거부감", growth: "세상의 차갑고 쓴맛을 마주하는 것을 힘들어할 수 있습니다. 하지만 때로는 쌉쌀한 잼이 빵의 고소함을 더 돋보이게 한다는 사실을 기억해주세요. 모든 경험은 당신을 더 풍요롭게 합니다.", identity_phrase: "세상의 선한 본질을 믿는 순수한 사람", struggle_phrase: "나의 믿음이 결국 상처로 돌아올지 모른다는 여린 마음", social_phrase: "각박한 세상 속에서 잠시 숨을 고를 수 있는 작은 집", final_advice: "당신의 순수함은 약점이 아닌, 세상을 바꾸는 가장 큰 힘입니다.", final_comfort: "이미 충분히 따뜻하니, 억지로 뜨거워지려 애쓰지 않아도 괜찮습니다." }
-        },
+    //<!CDATA[(function() {
+        const MindJourneyApp = {
+            state: { currentQuestionIndex: 0, answers: {}, scores: {}, isNavigating: false, },
 
-        initDOM() { this.app = document.getElementById('app'); this.renderWelcome(); },
-        renderWelcome() { this.app.innerHTML = `<div class="header fade-in"><h1>마음의 나침반</h1><p class="subtitle">AI 심해 탐사선 '아스트라'와 함께<br>당신의 마음 가장 깊은 곳을 향한<br>여정을 시작합니다.</p><button class="header start-button">탐사 시작</button></div>`; this.app.querySelector('.start-button').addEventListener('click', () => this.startJourney()); },
-        startJourney() { this.resetState(); this.renderQuestion(); },
-        resetState() { this.state.currentQuestionIndex = 0; this.state.answers = {}; this.state.scores = {}; this.state.isNavigating = false; },
-        renderQuestion() {
-            const index = this.state.currentQuestionIndex;
-            const q = this.questions[index];
-            const progress = ((index + 1) / this.questions.length) * 100;
-            const phaseIndex = Math.floor(index / 4);
-            document.body.style.backgroundColor = `var(--surface-color-${phaseIndex + 1})`;
-            this.app.innerHTML = `<div class="journey-container fade-in"><div class="progress-container"><div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div></div>${q.phase ? `<h2 id="phase-title">${q.phase}</h2>` : ''}<div class="question-card"><h3 id="question-box">${q.question}</h3><div class="choice-options">${q.options.map((opt, i) => `<div class="choice-option" data-weight="${opt.weight}" data-answer-index="${i}"><span class="option-text">${opt.text}</span></div>`).join('')}</div></div></div>`;
-            this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(q, el.dataset.weight, parseInt(el.dataset.answerIndex))); });
-        },
-        handleSelection(question, weight, answerIndex) {
-            if (this.state.isNavigating) return;
-            this.state.isNavigating = true;
-            this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
-            if(question.answerKey) { this.state.answers[question.answerKey] = question.options[answerIndex].text; }
-            this.app.querySelector('.journey-container').style.animation = 'fadeOut 0.5s ease-in both';
-            setTimeout(() => {
-                if (this.state.currentQuestionIndex < this.questions.length - 1) {
-                    this.state.currentQuestionIndex++;
-                    this.renderQuestion();
-                    this.state.isNavigating = false;
-                } else { this.renderLoading(); }
-            }, 500);
-        },
-        renderLoading() {
-            document.body.style.backgroundColor = `var(--surface-color-3)`;
-            this.app.innerHTML = `<div class="loading-screen fade-in"><h2 class="loading-text">심해 탐사 기록을 분석 중입니다...</h2><p class="subtitle">AI '아스트라'가 당신의 영혼에서<br>어떤 맛과 향을 발견했을까요?</p></div>`;
-            setTimeout(() => this.renderResults(), 4000);
-        },
-        renderResults() {
-            const analysis = this.analyze();
-            const artifact = this.soulFlavors[analysis.primary] || this.soulFlavors.warm_bread;
-            const card_animation_delay = 0.5;
-            this.app.innerHTML = `
-                <div class="result-container">
-                    <div class="result-card" style="animation: fadeIn 1s ease-out ${card_animation_delay}s both;">
-                        <div class="flavor-card-header">
-                             <p style="font-size:16px; color: var(--text-secondary);">당신의 영혼의 맛은...</p>
-                            <h2 class="flavor-title">${artifact.title}</h2>
-                            <p class="flavor-subtitle">${artifact.subtitle}</p>
-                        </div>
-                        <p>${artifact.description}</p>
+            questions: [
+                { phase: "Phase 1. 당신의 시작", question: "새로운 도전을 시작할 때 당신은 어떤 모습인가요?", options: [ { text: "계획을 꼼꼼히 세우고 시작한다.", weight: "leader" }, { text: "일단 부딪혀보면서 알아간다.", weight: "pioneer" }, { text: "주변 사람들과 함께 협력하며 나아간다.", weight: "connector" }, { text: "혼자 조용히 생각하고 준비한다.", weight: "thinker" } ]},
+                { question: "힘든 하루를 보낸 당신에게 가장 필요한 것은?", options: [ { text: "따뜻한 위로와 격려", weight: "connector" }, { text: "혼자만의 조용한 휴식", weight: "thinker" }, { text: "맛있는 음식과 즐거움", weight: "optimist" }, { text: "새로운 목표를 향한 자극", weight: "pioneer" } ]},
+                { question: "당신이 가장 중요하게 생각하는 가치는 무엇인가요?", options: [ { text: "정직과 신뢰", weight: "loyalist" }, { text: "새로운 아이디어와 변화", weight: "innovator" }, { text: "조화와 균형", weight: "mediator" }, { text: "자유와 독립", weight: "individualist" } ]},
+                { question: "좋아하는 취미 활동은 무엇인가요?", options: [ { text: "책 읽기, 영화 감상 등 혼자 집중하는 활동", weight: "thinker" }, { text: "여행, 운동 등 활동적인 취미", weight: "pioneer" }, { text: "요리, 그림 그리기 등 창작 활동", weight: "creator" }, { text: "친구들과 만나 대화하기", weight: "connector" } ]},
+                { phase: "Phase 2. 당신의 inner self", question: "당신을 가장 잘 나타내는 색깔은 무엇인가요?", options: [ { text: "밝고 활기찬 노란색", weight: "optimist" }, { text: "차분하고 신뢰감을 주는 파란색", weight: "leader" }, { text: "따뜻하고 포근한 분홍색", weight: "connector" }, { text: "신비롭고 깊은 보라색", weight: "individualist" } ]},
+                { question: "가장 좋아하는 자연의 소리는 무엇인가요?", options: [ { text: "잔잔한 파도 소리", weight: "mediator" }, { text: "시원한 바람 소리", weight: "individualist" }, { text: "새들의 지저<0xEC><0x9B><0xA8>", weight: "optimist" }, { text: "고요한 숲 속의 침묵", weight: "thinker" } ]},
+                { question: "당신이 생각하는 '성공'이란 무엇인가요?", options: [ { text: "사회적으로 인정받고 높은 지위에 오르는 것", weight: "achiever" }, { text: "자신이 하고 싶은 일을 하며 만족하는 삶", weight: "individualist" }, { text: "주변 사람들과 행복하게 살아가는 것", weight: "connector" }, { text: "끊임없이 배우고 성장하는 것", weight: "innovator" } ]},
+                { question: "스트레스를 해소하는 당신만의 방법은?", options: [ { text: "혼자만의 공간에서 휴식하기", weight: "thinker" }, { text: "친구들과 신나게 웃고 떠들기", weight: "connector" }, { text: "운동이나 취미 활동에 집중하기", weight: "pioneer" }, { text: "맛있는 음식을 먹거나 쇼핑하기", weight: "optimist" } ]},
+                { phase: "Phase 3. 당신의 potential", question: "어떤 분야에 가장 큰 흥미를 느끼나요?", options: [ { text: "과학 기술, 새로운 발견", weight: "innovator" }, { text: "예술, 음악, 문학", weight: "creator" }, { text: "사람들과의 관계, 상담", weight: "helper" }, { text: "리더십, 조직 관리", weight: "leader" } ]},
+                { question: "10년 후 당신은 어떤 모습일 것이라고 상상하나요?", options: [ { text: "전문가로서 인정받고 영향력을 행사하는 사람", weight: "achiever" }, { text: "사랑하는 사람들과 안정적인 삶을 사는 사람", weight: "loyalist" }, { text: "끊임없이 새로운 것을 배우고 도전하는 사람", weight: "pioneer" }, { text: "자신만의 독창적인 분야를 개척하는 사람", weight: "individualist" } ]},
+                { question: "세상을 더 나은 곳으로 만들기 위해 당신이 할 수 있는 일은?", options: [ { text: "소외된 사람들을 돕고 봉사한다.", weight: "helper" }, { text: "환경 보호를 위해 노력한다.", weight: "mediator" }, { text: "새로운 아이디어를 통해 사회 문제를 해결한다.", weight: "innovator" }, { text: "정의롭고 공정한 사회를 만든다.", weight: "leader" } ]},
+                { question: "가장 듣기 좋아하는 칭찬은 무엇인가요?", options: [ { text: "당신은 정말 똑똑하고 논리적이에요.", weight: "thinker" }, { text: "당신은 활기차고 긍정적인 에너지를 줘요.", weight: "optimist" }, { text: "당신은 주변 사람들을 편안하게 해줘요.", weight: "connector" }, { text: "당신은 결단력 있고 믿음직스러워요.", weight: "leader" } ]}
+            ],
+
+            soulTendencies: {
+                thinker: { title: "심사숙고하는 지혜로운 사람", keywords: ["논리적", "분석적", "신중함", "지적 호기심"], likes: ["혼자만의 시간", "깊이 있는 대화", "책 읽기", "조용한 공간"], dislikes: ["피상적인 관계", "시끄러운 환경", "비논리적인 주장", "갑작스러운 변화"], description: "당신은 조용히 생각에 잠겨 세상을 이해하려는 탐구자입니다. 깊이 있는 통찰력과 분석적인 사고를 바탕으로 신중하게 판단하며, 지적인 호기심을 충족시키는 것을 좋아합니다. 혼자만의 시간을 통해 에너지를 얻고, 피상적인 관계보다는 진솔한 소통을 선호합니다."},
+                pioneer: { title: "새로운 길을 개척하는 도전적인 사람", keywords: ["활동적", "용감함", "도전 정신", "자유로움"], likes: ["새로운 경험", "여행과 탐험", "운동", "변화"], dislikes: ["지루함", "반복적인 일상", "속박", "안정"], description: "당신은 틀에 얽매이지 않고 새로운 것을 찾아 나서는 모험가입니다. 용감하게 도전을 즐기며, 자유로운 영혼으로 세상을 탐험합니다. 반복적인 일상보다는 늘 새로운 경험을 추구하며, 변화를 두려워하지 않습니다."},
+                connector: { title: "따뜻한 마음으로 사람들을 연결하는 사람", keywords: ["공감 능력", "배려심", "협력적", "사교적"], likes: ["사람들과의 관계", "팀워크", "나눔", "따뜻한 분위기"], dislikes: ["갈등", "소외감", "차가운 분위기", "경쟁적인 상황"], description: "당신은 주변 사람들과의 관계를 소중히 여기며, 따뜻한 마음으로 소통하고 공감하는 능력이 뛰어납니다. 협력적인 태도를 좋아하며, 함께하는 즐거움 속에서 에너지를 얻습니다. 갈등을 싫어하며, 조화로운 관계를 중요하게 생각합니다."},
+                optimist: { title: "긍정적인 에너지로 주변을 밝히는 사람", keywords: ["낙천적", "유쾌함", "긍정적", "사교적"], likes: ["즐거운 분위기", "맛있는 음식", "유머", "다양한 활동"], dislikes: ["부정적인 분위기", "심각한 이야기", "따분함", "혼자 있는 시간"], description: "당신은 밝고 긍정적인 에너지로 주변 사람들에게 즐거움을 주는 사람입니다. 낙천적인 태도로 어려움을 극복하고, 유쾌한 유머 감각으로 분위기를 밝게 만듭니다. 다양한 활동을 즐기며, 혼자 있는 시간보다는 사람들과 함께하는 것을 좋아합니다."},
+                leader: { title: "주변을 이끌고 방향을 제시하는 사람", keywords: ["결단력", "책임감", "통솔력", "주도적"], likes: ["목표 달성", "계획적인 활동", "인정", "질서"], dislikes: ["비효율적인 일", "혼란", "미루는 행동", "간섭"], description: "당신은 목표를 설정하고 이끄는 리더십이 있는 사람입니다. 결단력과 책임감을 바탕으로 계획적으로 일을 추진하며, 주변 사람들에게 방향을 제시하고 이끌어 나갑니다. 비효율적인 것을 싫어하며, 질서 있는 환경을 선호합니다."},
+                loyalist: { title: "신뢰를 중요시하고 안정감을 추구하는 사람", keywords: ["성실함", "헌신적", "안정감", "신뢰"], likes: ["안정적인 관계", "익숙한 환경", "약속", " predictability"], dislikes: ["배신", "불확실성", "갑작스러운 변화", "무책임함"], description: "당신은 신뢰를 가장 중요하게 생각하며, 안정적이고 예측 가능한 것을 선호합니다. 성실하고 헌신적인 태도로 주변 사람들에게 믿음을 주며, 익숙한 환경에서 편안함을 느낍니다. 약속을 중요하게 생각하며, 불확실한 상황을 싫어합니다."},
+                innovator: { title: "새로운 아이디어로 세상을 바꾸는 사람", keywords: ["창의적", "혁신적", "호기심", "비전"], likes: ["새로운 아이디어", "변화", "토론", "가능성"], dislikes: ["고정관념", "변화에 대한 저항", "지루한 반복", "획일성"], description: "당신은 끊임없이 새로운 아이디어를 떠올리고 혁신을 추구하는 창조적인 사람입니다. 호기심이 많고 비전을 제시하며, 기존의 틀을 벗어난 새로운 가능성을 탐색하는 것을 즐깁니다. 고정관념을 싫어하며, 변화를 통해 성장하는 것을 선호합니다."},
+                mediator: { title: "조화와 균형을 추구하는 평화주의자", keywords: ["균형 감각", "조정 능력", "평화로움", "이해심"], likes: ["조화로운 관계", "협상", "중립적인 입장", "안정"], dislikes: ["갈등", "극단적인 주장", "불안정", "불공정"], description: "당신은 갈등을 싫어하고 조화와 균형을 중요하게 생각하는 평화주의자입니다. 뛰어난 조정 능력과 이해심으로 주변 사람들의 의견을 조율하고, 안정적인 환경을 조성하는 것을 선호합니다. 극단적인 주장보다는 중립적인 입장을 취하며, 공정함을 추구합니다."},
+                individualist: { title: "자신만의 개성을 존중하는 독립적인 사람", keywords: ["독립적", "개성 존중", "자율성", "내면의 성찰"], likes: ["자신만의 공간", "자유로운 사고", "개성 표현", "자기 성찰"], dislikes: ["집단주의", "획일적인 사고", "간섭", "겉치레"], description: "당신은 자신만의 개성과 독립성을 중요하게 생각하며, 스스로의 생각과 판단에 따라 자유롭게 행동하는 것을 선호합니다. 간섭받는 것을 싫어하며, 자신만의 공간에서 내면을 성찰하는 시간을 소중히 여깁니다."},
+                helper: { title: "따뜻한 마음으로 다른 사람을 돕는 사람", keywords: ["이타적", "헌신적", "공감", "봉사"], likes: ["다른 사람 돕기", "봉사 활동", "따뜻한 마음", "의미 있는 일"], dislikes: ["외면", "이기심", "무관심", "불의"], description: "당신은 타인의 어려움을 외면하지 않고, 따뜻한 마음으로 도움을 주는 이타적인 사람입니다. 봉사하는 것에 보람을 느끼며, 주변 사람들의 행복을 위해 헌신합니다. 무관심이나 불의를 싫어하며, 의미 있는 일을 통해 세상에 기여하고자 합니다."},
+                achiever: { title: "목표를 향해 끊임없이 나아가는 성취자", keywords: ["성취욕", "능력 중심", "노력", "인정"], likes: ["목표 달성", "성공 경험", "경쟁", "능력 인정"], dislikes: ["실패", "무능력함", "노력 부족", "안정적인 상태"], description: "당신은 높은 목표를 설정하고 끊임없이 노력하여 성취를 이루어내는 사람입니다. 자신의 능력을 발휘하여 결과를 만들어내는 것을 중요하게 생각하며, 노력과 성과에 대한 인정을 바랍니다. 안주하는 것을 싫어하며, 늘 더 높은 곳을 향해 나아갑니다."},
+                creator: { title: "새로운 아이디어와 아름다움을 창조하는 사람", keywords: ["상상력", "예술적 감각", "독창성", "표현"], likes: ["새로운 아이디어 구상", "예술 활동", "독특한 표현", "영감"], dislikes: ["획일적인 사고", "틀에 갇힌 것", "무미건조함", "비판"], description: "당신은 풍부한 상상력과 예술적인 감각으로 세상에 새로운 아름다움을 창조하는 사람입니다. 독창적인 아이디어를 통해 자신을 표현하고, 세상에 영감을 불어넣는 것을 좋아합니다. 획일적인 사고나 틀에 갇히는 것을 싫어합니다."},
+            },
+
+            initDOM() {
+                this.app = document.getElementById('app');
+                this.starContainer = document.getElementById('star-shower');
+                this.renderWelcome();
+            },
+
+            renderWelcome() {
+                this.app.innerHTML = `
+                    <div class="header fade-in">
+                        <h1>마음의 나침반</h1>
+                        <p class="subtitle">AI 잠수함 '아스트라'와 함께<br>당신의 속마음을 탐험해보세요.</p>
+                        <button class="header start-button">탐험 시작</button>
                     </div>
-                    <div class="result-card" style="animation: fadeIn 1s ease-out ${card_animation_delay + 0.3}s both;">
-                        <h2>✨ 당신의 강점 & 🌱 성장의 기회</h2>
-                        <div class="strength-growth-container">
-                            <div class="strength-growth-box strength"><h3>${artifact.strength_keyword}</h3><p>${artifact.strength}</p></div>
-                            <div class="strength-growth-box growth"><h3>${artifact.growth_keyword}</h3><p>${artifact.growth}</p></div>
-                        </div>
-                    </div>
-                    <div class="result-card letter-card" style="animation: fadeIn 1s ease-out ${card_animation_delay + 0.6}s both;">
-                        <h2><span class="icon">💌</span>당신의 마음에게</h2>
-                        ${this.getComfortMessage(analysis)}
-                    </div>
-                    <div class="result-card final-word-card" style="animation: fadeIn 1s ease-out ${card_animation_delay + 0.9}s both;">
-                        <p class="final-word-text">${this.getFinalWord(analysis)}</p>
-                    </div>
-                    <button class="restart-button" onclick="MindJourneyApp.initDOM()">다시 탐사하기</button>
-                </div>`;
-            document.body.style.backgroundColor = `var(--surface-color-1)`;
-        },
-        
-        analyze() {
-            const sorted = Object.entries(this.state.scores).sort((a,b) => b[1] - a[1]);
-            return {
-                primary: sorted.length > 0 ? sorted[0][0] : "warm_bread",
-                secondary: sorted.length > 1 ? sorted[1][0] : null,
-            };
-        },
-        getComfortMessage(analysis) {
-            const p = this.soulFlavors[analysis.primary] || this.soulFlavors.warm_bread;
-            const s = analysis.secondary ? this.soulFlavors[analysis.secondary] : null;
+                `;
+                const startButton = this.app.querySelector('.start-button');
+                startButton.addEventListener('click', () => {
+                    this.startJourney();
+                    this.animateSubmarine(startButton.offsetTop);
+                });
+            },
 
-            const identity = `<p>당신은 **${p.identity_phrase}**입니다.</p>`;
-            
-            let struggle = `<p>말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을지 모릅니다. 바로 '${p.struggle_phrase}' 때문에 말이죠.`;
-            if (s) {
-                struggle += ` 때로는 '${s.struggle_phrase}'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.</p>`;
-            } else {
-                struggle += ` 그 마음을 누구에게도 쉽게 털어놓지 못했을 겁니다.</p>`;
-            }
-            
-            const social = `<p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 **${p.social_phrase}**입니다. 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.</p>`;
-            
-            return identity + struggle + social;
-        },
-        getFinalWord(analysis) {
-            const p = this.soulFlavors[analysis.primary] || this.soulFlavors.warm_bread;
-            const s = analysis.secondary ? this.soulFlavors[analysis.secondary] : null;
+            animateSubmarine(startTop) {
+                const submarine = document.getElementById('submarine-animation');
+                submarine.style.top = `${startTop + 50}px`;
+                submarine.classList.add('fade-in');
+                submarine.style.animation = 'sub-move 2s ease-in-out forwards';
+                setTimeout(() => {
+                    submarine.classList.remove('fade-in');
+                    submarine.style.animation = '';
+                    submarine.style.opacity = 0;
+                }, 2000);
+            },
 
-            const advice = p.final_advice;
-            const comfort = s ? s.final_comfort : p.final_comfort;
+            startJourney() {
+                this.resetState();
+                this.renderQuestion();
+            },
 
-            return `${advice}<br>${comfort}`;
-        }
-    };
+            resetState() {
+                this.state.currentQuestionIndex = 0;
+                this.state.answers = {};
+                this.state.scores = {};
+                this.state.isNavigating = false;
+            },
 
-    document.addEventListener('DOMContentLoaded', () => { MindJourneyApp.initDOM(); });
-    //]]>
-    </script>
-</body>
-</html>
+            renderQuestion() {
+                const index = this.state.currentQuestionIndex;
+                const q = this.questions
