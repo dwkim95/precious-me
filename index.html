@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>마음의 나침반 | 당신의 영혼은 어떤 모습인가요?</title>
-    <meta name="description" content="AI 심해 탐사선 '아스트라'와 함께 당신의 마음 가장 깊은 곳을 탐험하고, 당신의 영혼을 상징하는 단 하나의 사물을 발견하세요.">
+    <title>마음의 나침반 | 당신의 영혼은 어떤 맛인가요?</title>
+    <meta name="description" content="AI 심해 탐사선 '아스트라'와 함께 당신의 마음 가장 깊은 곳을 탐험하고, 당신의 영혼을 상징하는 단 하나의 '맛'을 발견하세요.">
     <meta property="og:title" content="마음의 나침반 - AI 심층 심리 분석">
-    <meta property="og:description" content="AI가 당신의 답변을 통해 섬세한 마음 지도를 그려드립니다. 당신의 영혼은 어떤 풍경을 담고 있을까요?">
+    <meta property="og:description" content="AI가 당신의 답변을 통해 섬세한 마음 지도를 그려드립니다. 당신의 영혼은 어떤 맛과 향을 품고 있을까요?">
     <meta property="og:image" content="https://i.ibb.co/3k5JqB4/og-image-compass.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,9 +96,9 @@
         .result-card h2 .icon { margin-right: 16px; font-size: 24px; }
         .result-card p, .result-card .text-block { font-size: 18px; line-height: 1.9; color: var(--text-secondary); font-weight: 400; }
         
-        .artifact-card-header { text-align: center; padding-bottom: 32px; }
-        .artifact-title { font-family: var(--font-serif); font-size: 32px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
-        .artifact-subtitle { font-family: var(--font-serif); font-size: 20px; color: var(--accent-warm); font-style: italic; margin-bottom: 24px; }
+        .flavor-card-header { text-align: center; padding-bottom: 32px; }
+        .flavor-title { font-family: var(--font-serif); font-size: 32px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+        .flavor-subtitle { font-family: var(--font-serif); font-size: 20px; color: var(--accent-warm); font-style: italic; margin-bottom: 24px; }
         
         .strength-growth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px; }
         .strength-growth-box h3 { font-family: var(--font-serif); font-size: 22px; margin-bottom: 12px; display: flex; align-items: center; }
@@ -161,26 +161,26 @@
         state: { currentQuestionIndex: 0, answers: {}, scores: {}, isNavigating: false, },
         
         questions: [
-            { phase: "Phase 1. 표면의 바다", question: "낯선 도시에 혼자 도착한 첫날,<br>당신이 가장 먼저 할 일은 무엇인가요?", options: [ { text: "발길 닿는 대로, 정처 없이 도시를 헤맨다.", weight: "explorer" }, { text: "가장 높은 곳에 올라 도시의 전체 모습을 조망한다.", weight: "ruler" }, { text: "마음이 끌리는 카페에 들어가 사람들을 구경한다.", weight: "lover" }, { text: "이 도시의 역사가 담긴 박물관이나 서점을 찾는다.", weight: "sage" } ], answerKey: "city" },
-            { question: "당신에게 '집'이란 어떤 의미에<br>가장 가까운가요?", options: [ { text: "세상의 소음으로부터 나를 지키는 유일한 성역", weight: "innocent" }, { text: "사랑하는 사람들과의 기억이 깃든 따뜻한 공간", weight: "lover" }, { text: "새로운 여정을 떠나기 위해 잠시 머무는 정거장", weight: "explorer" }, { text: "내 안의 생각을 자유롭게 펼치는 작업실", weight: "creator" } ], answerKey: "home" },
-            { question: "오래된 물건을 볼 때<br>가장 먼저 드는 생각은 무엇인가요?", options: [ { text: "이 물건에 어떤 이야기가 담겨 있을까?", weight: "lover" }, { text: "시간이 흘러도 변치 않는 아름다움이 있구나.", weight: "sage" }, { text: "나만의 감성으로 새롭게 꾸며보고 싶다.", weight: "creator" }, { text: "참 잘 만들어져서 오래도록 제 역할을 해냈구나.", weight: "ruler" } ], answerKey: "object" },
-            { question: "당신의 서재에 단 한 종류의 책만<br>꽂을 수 있다면 무엇을 선택하겠어요?", options: [ { text: "세상의 지혜와 지식을 담은 역사서나 과학책", weight: "sage" }, { text: "가슴 뛰는 모험과 탐험에 대한 여행기", weight: "explorer" }, { text: "사람과 사람의 마음을 섬세하게 그린 소설", weight: "lover" }, { text: "영감을 주는 사진이나 그림이 담긴 예술 서적", weight: "creator" } ], answerKey: "book" },
-            { phase: "Phase 2. 어스름의 바다", question: "길을 잃은 밤, 당신 손에 들린 등불은<br>어떤 빛을 내고 있나요?", options: [ { text: "나아갈 길을 멀리까지 비추는 단단하고 밝은 빛", weight: "ruler" }, { text: "길의 끝이 아닌, 바로 발밑을 비추는 작은 온기", weight: "innocent" }, { text: "주변의 어둠까지 아름답게 만드는 은은한 빛", weight: "creator" }, { text: "함께 길을 잃은 다른 이를 찾기 위한 신호의 빛", weight: "lover" } ], answerKey: "lantern" },
-            { question: "아무도 없는 텅 빈 무대 위에<br>홀로 서 있다면 무엇을 하시겠어요?", options: [ { text: "세상을 향해 나의 비전과 계획을 선포한다.", weight: "ruler" }, { text: "떠오르는 영감을 따라 즉흥적인 춤을 춘다.", weight: "creator" }, { text: "아무도 없기에 느낄 수 있는 완전한 평화를 만끽한다.", weight: "innocent" }, { text: "그리운 사람의 이름을 허공에 불러본다.", weight: "lover" } ], answerKey: "stage" },
-            { question: "깊은 상실감을 마주했을 때,<br>당신은 어떻게 반응하나요?", options: [ { text: "이 경험이 내게 어떤 의미인지 차분히 생각한다", weight: "sage" }, { text: "슬픔을 이겨내기 위해 무언가에 더욱 몰두한다", weight: "creator" }, { text: "훌쩍 다른 곳으로 떠나 기분을 전환한다", weight: "explorer" }, { text: "충분히 슬퍼하며, 혼자만의 시간을 갖는다", weight: "innocent" } ], answerKey: "loss" },
-            { question: "당신의 가장 오랜 기억은<br>어떤 감각으로 남아있나요?", options: [ { text: "누군가의 따뜻한 손길과 체온", weight: "lover" }, { text: "세상을 처음 발견했을 때의 놀라움과 경이", weight: "explorer" }, { text: "고요한 안정감 속에서 들려오던 심장 박동 소리", weight: "innocent" }, { text: "세상의 이치를 처음 깨달았을 때의 명료함", weight: "sage" } ], answerKey: "memory" },
-            { phase: "Phase 3. 심연의 바다", question: "세상의 모든 규칙 중 단 하나를<br>없앨 수 있다면 무엇을 없애겠어요?", options: [ { text: "사람과 사람을 가로막는 모든 종류의 차별", weight: "lover" }, { text: "진실을 가리는 거짓과 위선", weight: "sage" }, { text: "영혼의 자유를 속박하는 사회적 관습", weight: "explorer" }, { text: "세상을 혼란에 빠뜨리는 무질서 그 자체", weight: "ruler" } ], answerKey: "rule" },
-            { question: "당신의 가장 깊은 곳에 숨겨진<br>두려움은 무엇인가요?", options: [ { text: "사랑하는 모든 것을 잃고 완전히 혼자가 되는 것", weight: "lover" }, { text: "나의 가능성을 전부 펼치지 못하고 잊혀지는 것", weight: "creator" }, { text: "나의 삶을 통제할 수 없게 되는 무력감", weight: "ruler" }, { text: "삶의 의미를 끝내 발견하지 못하는 것", weight: "sage" } ], answerKey: "fear" },
-            { question: "당신이 잠든 사이, 신이 당신에게<br>단 하나의 능력을 준다면 무엇을 바라나요?", options: [ { text: "모든 사람의 마음을 진심으로 이해하는 능력", weight: "lover" }, { text: "상상하는 모든 것을 현실로 만드는 능력", weight: "creator" }, { text: "세상의 모든 지식과 지혜를 습득하는 능력", weight: "sage" }, { text: "내가 원하는 어디로든 순간이동하는 능력", weight: "explorer" } ], answerKey: "power" },
-            { question: "당신이 세상에 남기고 싶은<br>궁극적인 흔적은 무엇인가요?", options: [ { text: "더 나은 세상을 만드는 데 기여한 나의 역할", weight: "ruler" }, { text: "사람들의 마음속에 영원히 남을 감동적인 이야기", weight: "creator" }, { text: "내가 걸어온 용감하고 자유로웠던 발자국 그 자체", weight: "explorer" }, { text: "나로 인해 더 행복해진 단 한 사람의 미소", weight: "lover" } ], answerKey: "legacy" }
+            { phase: "Phase 1. 표면의 바다", question: "낯선 도시에 혼자 도착한 첫날,<br>당신이 가장 먼저 할 일은 무엇인가요?", options: [ { text: "발길 닿는 대로, 정처 없이 도시를 헤맨다.", weight: "lime_wind" }, { text: "가장 높은 곳에 올라 도시의 전체 모습을 조망한다.", weight: "smoky_whiskey" }, { text: "마음이 끌리는 카페에 들어가 사람들을 구경한다.", weight: "honey_tea" }, { text: "이 도시의 역사가 담긴 박물관이나 서점을 찾는다.", weight: "midnight_espresso" } ]},
+            { question: "당신에게 '집'이란 어떤 의미에<br>가장 가까운가요?", options: [ { text: "세상의 소음으로부터 나를 지키는 유일한 성역", weight: "warm_bread" }, { text: "사랑하는 사람들과의 기억이 깃든 따뜻한 공간", weight: "honey_tea" }, { text: "새로운 여정을 떠나기 위해 잠시 머무는 정거장", weight: "lime_wind" }, { text: "내 안의 생각을 자유롭게 펼치는 작업실", weight: "ozone_scent" } ]},
+            { question: "오래된 물건을 볼 때<br>가장 먼저 드는 생각은 무엇인가요?", options: [ { text: "이 물건에 어떤 이야기가 담겨 있을까?", weight: "honey_tea" }, { text: "시간이 흘러도 변치 않는 아름다움이 있구나.", weight: "midnight_espresso" }, { text: "나만의 감성으로 새롭게 꾸며보고 싶다.", weight: "ozone_scent" }, { text: "참 잘 만들어져서 오래도록 제 역할을 해냈구나.", weight: "smoky_whiskey" } ]},
+            { question: "당신의 서재에 단 한 종류의 책만<br>꽂을 수 있다면 무엇을 선택하겠어요?", options: [ { text: "세상의 지혜와 지식을 담은 역사서나 과학책", weight: "midnight_espresso" }, { text: "가슴 뛰는 모험과 탐험에 대한 여행기", weight: "lime_wind" }, { text: "사람과 사람의 마음을 섬세하게 그린 소설", weight: "honey_tea" }, { text: "영감을 주는 사진이나 그림이 담긴 예술 서적", weight: "ozone_scent" } ]},
+            { phase: "Phase 2. 어스름의 바다", question: "길을 잃은 밤, 당신 손에 들린 등불은<br>어떤 빛을 내고 있나요?", options: [ { text: "나아갈 길을 멀리까지 비추는 단단하고 밝은 빛", weight: "smoky_whiskey" }, { text: "길의 끝이 아닌, 바로 발밑을 비추는 작은 온기", weight: "warm_bread" }, { text: "주변의 어둠까지 아름답게 만드는 은은한 빛", weight: "ozone_scent" }, { text: "함께 길을 잃은 다른 이를 찾기 위한 신호의 빛", weight: "honey_tea" } ]},
+            { question: "아무도 없는 텅 빈 무대 위에<br>홀로 서 있다면 무엇을 하시겠어요?", options: [ { text: "세상을 향해 나의 비전과 계획을 선포한다.", weight: "smoky_whiskey" }, { text: "떠오르는 영감을 따라 즉흥적인 춤을 춘다.", weight: "ozone_scent" }, { text: "아무도 없기에 느낄 수 있는 완전한 평화를 만끽한다.", weight: "warm_bread" }, { text: "그리운 사람의 이름을 허공에 불러본다.", weight: "honey_tea" } ]},
+            { question: "깊은 상실감을 마주했을 때,<br>당신은 어떻게 반응하나요?", options: [ { text: "이 경험이 내게 어떤 의미인지 차분히 생각한다", weight: "midnight_espresso" }, { text: "슬픔을 이겨내기 위해 무언가에 더욱 몰두한다", weight: "ozone_scent" }, { text: "훌쩍 다른 곳으로 떠나 기분을 전환한다", weight: "lime_wind" }, { text: "충분히 슬퍼하며, 혼자만의 시간을 갖는다", weight: "warm_bread" } ]},
+            { question: "당신의 가장 오랜 기억은<br>어떤 감각으로 남아있나요?", options: [ { text: "누군가의 따뜻한 손길과 체온", weight: "honey_tea" }, { text: "세상을 처음 발견했을 때의 놀라움과 경이", weight: "lime_wind" }, { text: "고요한 안정감 속에서 들려오던 심장 박동 소리", weight: "warm_bread" }, { text: "세상의 이치를 처음 깨달았을 때의 명료함", weight: "midnight_espresso" } ]},
+            { phase: "Phase 3. 심연의 바다", question: "세상의 모든 규칙 중 단 하나를<br>없앨 수 있다면 무엇을 없애겠어요?", options: [ { text: "사람과 사람을 가로막는 모든 종류의 차별", weight: "honey_tea" }, { text: "진실을 가리는 거짓과 위선", weight: "midnight_espresso" }, { text: "영혼의 자유를 속박하는 사회적 관습", weight: "lime_wind" }, { text: "세상을 혼란에 빠뜨리는 무질서 그 자체", weight: "smoky_whiskey" } ]},
+            { question: "당신의 가장 깊은 곳에 숨겨진<br>두려움은 무엇인가요?", options: [ { text: "사랑하는 모든 것을 잃고 완전히 혼자가 되는 것", weight: "honey_tea" }, { text: "나의 가능성을 전부 펼치지 못하고 잊혀지는 것", weight: "ozone_scent" }, { text: "나의 삶을 통제할 수 없게 되는 무력감", weight: "smoky_whiskey" }, { text: "삶의 의미를 끝내 발견하지 못하는 것", weight: "midnight_espresso" } ]},
+            { question: "당신이 잠든 사이, 신이 당신에게<br>단 하나의 능력을 준다면 무엇을 바라나요?", options: [ { text: "모든 사람의 마음을 진심으로 이해하는 능력", weight: "honey_tea" }, { text: "상상하는 모든 것을 현실로 만드는 능력", weight: "ozone_scent" }, { text: "세상의 모든 지식과 지혜를 습득하는 능력", weight: "midnight_espresso" }, { text: "내가 원하는 어디로든 순간이동하는 능력", weight: "lime_wind" } ]},
+            { question: "당신이 세상에 남기고 싶은<br>궁극적인 흔적은 무엇인가요?", options: [ { text: "더 나은 세상을 만드는 데 기여한 나의 역할", weight: "smoky_whiskey" }, { text: "사람들의 마음속에 영원히 남을 감동적인 이야기", weight: "ozone_scent" }, { text: "내가 걸어온 용감하고 자유로웠던 발자국 그 자체", weight: "lime_wind" }, { text: "나로 인해 더 행복해진 단 한 사람의 미소", weight: "honey_tea" } ]}
         ],
-        artifacts: {
-            sage: { title: "오래된 천문 의기(儀器)", subtitle: "시간과 우주의 비밀을 읽어내는 눈", description: "당신의 영혼은 마치 오래된 천문 의기처럼, 세상의 복잡한 움직임 속에서 숨겨진 질서와 패턴을 읽어냅니다. 당신은 현상 너머의 본질을 꿰뚫어보며, 과거와 미래를 연결하는 지혜를 추구합니다.", strength_keyword: "통찰력", strength: "당신은 별들의 움직임에서 길을 읽어내듯, 혼란스러운 상황 속에서도 남들은 보지 못하는 핵심과 규칙을 발견하는 놀라운 능력이 있습니다.", growth_keyword: "지나친 관조", growth: "때로 하늘만 바라보다 발밑의 돌부리에 걸려 넘어질 수 있습니다. 위대한 진리만큼, 바로 앞의 따뜻한 현실도 소중하다는 것을 기억해주세요.", identity_phrase: "세상의 진리를 탐구하는 지적인 사람", struggle_phrase: "모든 것을 이해해야 한다는 고독한 무게감", social_phrase: "길 잃은 사람들에게 밤하늘의 북극성 같은 길잡이", final_advice: "가끔은 별을 읽는 대신, 곁에 있는 사람의 눈을 읽어보세요.", final_comfort: "당신이 찾아낸 단 하나의 진실만으로도 세상은 더 나아갑니다." },
-            explorer: { title: "어디로든 가는 문", subtitle: "미지의 가능성을 향해 열리는 문", description: "당신의 영혼은 '여기'가 아닌 '저 너머'를 끊임없이 동경하는, 어디로든 갈 수 있는 문과 같습니다. 당신에게 삶이란, 새로운 문을 열고 미지의 풍경을 마주하는 설레는 모험의 연속입니다.", strength_keyword: "자유로운 정신", strength: "당신은 정해진 길을 거부하고 자신만의 지도를 그려나가는 용기가 있습니다. 당신의 자유로운 정신은 낡은 경계를 무너뜨리고 새로운 가능성을 엽니다.", growth_keyword: "정착에 대한 두려움", growth: "새로운 문을 여는 것에 익숙한 나머지, 하나의 공간에 머무는 것을 불안해할 수 있습니다. 하지만 문 안쪽의 공간을 가꾸는 것도 위대한 탐험이 될 수 있습니다.", identity_phrase: "경계 없는 세상을 꿈꾸는 자유로운 사람", struggle_phrase: "혹시나 한곳에 얽매여 나 자신을 잃게 될지 모른다는 불안감", social_phrase: "일상에 안주한 사람들에게 새로운 세상을 보여주는 창문", final_advice: "가장 위대한 탐험은 때로 자기 자신을 향한 여정입니다.", final_comfort: "당신이 머무는 모든 곳이 당신의 집이 될 수 있습니다." },
-            lover: { title: "세상의 모든 소리가 담긴 조개껍질", subtitle: "타인의 마음과 깊이 공명하는 귀", description: "당신의 영혼은 세상의 모든 기쁨과 슬픔이 담긴 조개껍질과 같습니다. 가만히 귀를 기울이면, 당신은 말 없는 존재들의 소리까지 들을 수 있습니다. 당신은 연결과 공감을 통해 세상을 이해합니다.", strength_keyword: "깊은 공감", strength: "당신은 말하지 않아도 상대방의 마음을 느끼고, 그 슬픔을 함께 아파할 줄 압니다. 당신의 따뜻한 공감은 세상의 어떤 상처든 아물게 하는 힘이 있습니다.", growth_keyword: "감정의 무게", growth: "세상의 모든 소리를 듣는 것은 때로 너무 많은 감정에 휩쓸리게 만듭니다. 가끔은 조개껍질을 내려놓고, 오롯이 당신 내면의 소리에만 귀 기울이는 시간이 필요합니다.", identity_phrase: "사랑과 관계를 무엇보다 소중히 여기는 사람", struggle_phrase: "소중한 사람들을 실망시키거나 그들을 잃게 될지 모른다는 두려움", social_phrase: "차가운 세상 속에서 서로 기댈 수 있는 포근한 안식처", final_advice: "자신을 사랑으로 채우는 것이 가장 위대한 공감의 시작입니다.", final_comfort: "당신은 이미 누군가의 세상에 가장 아름다운 소리를 선물하고 있습니다." },
-            creator: { title: "이름 없는 색깔", subtitle: "세상에 없던 아름다움을 빚어내는 손", description: "당신의 영혼은 아직 세상에 이름 붙여지지 않은 새로운 색깔과 같습니다. 당신은 기존의 것들을 조합하는 것을 넘어, 완전히 새로운 아름다움을 상상하고 그것을 현실로 빚어내는 예술가입니다.", strength_keyword: "독창성", strength: "당신은 세상에 없던 새로운 아이디어를 떠올리고, 자신만의 방식으로 그것을 표현해냅니다. 당신의 독창적인 시선은 세상을 더 다채롭게 만듭니다.", growth_keyword: "세상의 평가", growth: "세상이 당신의 새로운 색깔을 즉시 알아주지 않을 때, 쉽게 지치거나 외로워질 수 있습니다. 결과보다는 창조하는 과정의 순수한 기쁨을 더 믿어주세요.", identity_phrase: "세상에 없던 아름다움을 만드는 예술가 같은 사람", struggle_phrase: "나의 내면 세계를 세상이 이해해주지 못할 것이라는 외로움", social_phrase: "무미건조한 일상에 영감과 아름다움을 불어넣는 특별한 존재", final_advice: "가장 위대한 작품은 바로 당신의 삶 그 자체입니다.", final_comfort: "당신의 존재만으로도 세상은 이미 더 다채로워졌습니다." },
-            ruler: { title: "스스로 빛나는 보석의 원석", subtitle: "자신만의 법칙으로 세상을 조각하는 의지", description: "당신의 영혼은 외부의 빛을 반사하는 보석이 아니라, 스스로의 힘으로 빛을 내는 원석과 같습니다. 당신은 내면의 굳건한 신념과 법칙을 통해, 주변의 혼돈을 자신만의 질서로 조화롭게 빚어냅니다.", strength_keyword: "굳건한 신념", strength: "당신은 어려운 상황에서도 자신의 신념을 바탕으로 흔들림 없는 결정을 내립니다. 당신의 굳건함은 주변 사람들에게 깊은 신뢰와 안정감을 줍니다.", growth_keyword: "지나친 자기확신", growth: "스스로의 빛이 너무 강한 나머지, 타인의 좋은 빛을 보지 못할 수 있습니다. 때로는 나의 원석을 다른 보석 옆에 나란히 놓아보세요. 더 아름다운 빛이 날 거예요.", identity_phrase: "자신만의 왕국을 책임감 있게 이끌어가는 사람", struggle_phrase: "상황을 통제하지 못하고 무력해질 수 있다는 깊은 불안감", social_phrase: "거친 폭풍우 속에서 모두가 기댈 수 있는 견고한 등대", final_advice: "진정한 힘은 모든 것을 통제하는 것이 아닌, 조화를 이루는 데 있습니다.", final_comfort: "당신의 어깨에 놓인 책임감의 무게를 이제는 조금 내려놓아도 괜찮습니다." },
-            innocent: { title: "비 온 뒤 갠 숲의 냄새", subtitle: "세상을 정화하고 치유하는 숨결", description: "당신의 영혼은 비가 내린 뒤 맑게 갠 숲의 냄새를 닮았습니다. 상처와 혼돈을 씻어내고, 모든 것을 다시 시작할 수 있는 깨끗하고 순수한 에너지를 가지고 있습니다. 당신의 존재는 그 자체로 치유입니다.", strength_keyword: "치유의 힘", strength: "당신은 어떤 어두운 상황 속에서도 희망의 씨앗을 발견합니다. 당신의 긍정적인 에너지는 주변 사람들의 지친 마음을 어루만지고 다시 일어설 용기를 줍니다.", growth_keyword: "상처에 대한 두려움", growth: "세상의 어두운 면을 마주하는 것을 피하고 싶을 때가 있습니다. 하지만 숲은 비를 맞았기에 더 짙은 향기를 낼 수 있다는 것을 기억하세요. 당신의 상처는 더 깊은 치유의 힘이 됩니다.", identity_phrase: "세상의 선한 본질을 믿는 순수한 사람", struggle_phrase: "나의 믿음이 결국 상처로 돌아올지 모른다는 여린 마음", social_phrase: "각박한 세상 속에서 잠시 숨을 고를 수 있는 작은 숲", final_advice: "당신의 순수함은 약점이 아닌, 세상을 바꾸는 가장 큰 힘입니다.", final_comfort: "이미 충분히 강하니, 억지로 단단해지려 애쓰지 않아도 괜찮습니다." }
+        soulFlavors: {
+            midnight_espresso: { title: "비 내리는 자정의 에스프레소", subtitle: "깊고 씁쓸하지만, 그 끝에 남는 명료한 각성", description: "당신의 영혼은 비 내리는 자정, 홀로 마시는 에스프레소의 맛을 닮았습니다. 세상의 복잡한 문제들을 마주하며 때로 씁쓸함을 느끼지만, 그 깊은 사색의 끝에서 누구보다 명료한 지혜와 통찰을 얻어냅니다.", strength_keyword: "핵심 파악", strength: "당신은 여러 정보와 감정의 홍수 속에서도 길을 잃지 않고, 문제의 본질을 정확히 꿰뚫어 봅니다. 당신의 한마디는 흩어진 생각들을 정리하는 기준점이 됩니다.", growth_keyword: "마음의 거리감", growth: "너무 깊은 생각은 때로 타인과 세상으로부터 당신을 멀어지게 만듭니다. 가끔은 정답을 찾는 대신, 그저 함께 비를 맞아주는 따뜻함을 선택해 보세요.", identity_phrase: "세상의 진리를 탐구하는 지적인 사람", struggle_phrase: "모든 것을 이해해야 한다는 고독한 무게감", social_phrase: "혼란 속에서 명쾌한 길을 알려주는 등대 같은 존재", final_advice: "가끔은 머리가 아닌, 마음의 소리에 귀 기울여 보세요.", final_comfort: "모든 것을 이해하지 못해도 당신의 존재는 충분히 지혜롭습니다." },
+            lime_wind: { title: "지중해의 바람에 실려온 라임", subtitle: "짜릿하고 상쾌하며, 예측할 수 없는 자유의 향기", description: "당신의 영혼은 지중해의 작열하는 태양 아래, 바람을 타고 온 라임의 향기처럼 상쾌하고 자유롭습니다. 당신은 정해진 길을 따르기보다, 새로운 경험과 예측 불가능한 모험 속으로 기꺼이 몸을 던집니다.", strength_keyword: "자유로운 실행력", strength: "당신은 '언젠가'가 아닌 '지금 당장'을 외치는 사람입니다. 당신의 즉흥적인 용기와 실행력은 다른 사람들에게 새로운 가능성과 영감을 줍니다.", growth_keyword: "지루함에 대한 공포", growth: "일상의 평온함과 반복을 견디기 힘들어할 수 있습니다. 하지만 기억하세요. 때로는 잔잔한 바다 위에서만 볼 수 있는 아름다운 노을도 있답니다.", identity_phrase: "경계 없는 세상을 꿈꾸는 자유로운 사람", struggle_phrase: "혹시나 한곳에 얽매여 나 자신을 잃게 될지 모른다는 불안감", social_phrase: "일상에 안주한 사람들에게 새로운 세상을 보여주는 창문", final_advice: "가장 위대한 탐험은 때로 자기 자신을 향한 여정입니다.", final_comfort: "당신이 머무는 모든 곳이 당신의 집이 될 수 있습니다." },
+            honey_tea: { title: "오래된 편지지의 꿀차", subtitle: "시간과 함께 깊어진, 달콤하고 따뜻한 위로의 맛", description: "당신의 영혼은 빛바랜 편지지를 펼쳐놓고 마시는 따뜻한 꿀차의 맛을 닮았습니다. 사람과 사람 사이의 이야기, 시간과 함께 쌓인 기억들을 무엇보다 소중히 여기며, 그 안에서 깊은 위로와 삶의 의미를 찾습니다.", strength_keyword: "따뜻한 연결", strength: "당신은 사람들의 이야기를 진심으로 들어주고, 그들의 마음에 깊이 공감할 줄 압니다. 당신과의 대화는 지친 마음을 녹이는 힘을 가지고 있습니다.", growth_keyword: "거절에 대한 어려움", growth: "다른 사람의 감정을 너무 먼저 생각한 나머지, 자신의 마음을 돌보지 못하고 지칠 때가 있습니다. 나의 찻잔이 비어있다면, 남에게 꿀차를 따라주기 어렵다는 사실을 잊지마세요.", identity_phrase: "사랑과 관계를 무엇보다 소중히 여기는 사람", struggle_phrase: "소중한 사람들을 실망시키거나 그들을 잃게 될지 모른다는 두려움", social_phrase: "차가운 세상 속에서 서로 기댈 수 있는 포근한 안식처", final_advice: "자신을 사랑으로 채우는 것이 가장 위대한 공감의 시작입니다.", final_comfort: "당신은 이미 누군가의 세상에 가장 따뜻한 이야기를 선물하고 있습니다." },
+            ozone_scent: { title: "한여름 소나기의 오존 냄새", subtitle: "세상을 바꾸는 영감이 번뜩이는, 낯설고 신선한 공기", description: "당신의 영혼은 뜨거운 아스팔트 위로 한여름 소나기가 쏟아질 때 피어오르는, 낯설지만 신선한 '오존 냄새'를 닮았습니다. 당신의 번뜩이는 영감과 상상력은 평범한 일상을 한순간에 특별한 순간으로 바꾸는 마법을 부립니다.", strength_keyword: "창의적인 발상", strength: "당신은 남들이 보지 못하는 방식으로 세상을 보고, 세상에 없던 새로운 아이디어를 떠올립니다. 당신의 생각은 굳어있는 세상에 내리는 시원한 소나기와 같습니다.", growth_keyword: "현실과의 불화", growth: "당신의 이상은 때로 너무 높아, 현실의 벽에 부딪혀 쉽게 좌절할 수 있습니다. 당신의 위대한 상상력이 땅에 뿌리내릴 수 있도록, 아주 작은 것부터 시작해보는 건 어떨까요?", identity_phrase: "세상에 없던 아름다움을 만드는 예술가 같은 사람", struggle_phrase: "나의 내면 세계를 세상이 이해해주지 못할 것이라는 외로움", social_phrase: "무미건조한 일상에 영감과 생명력을 불어넣는 존재", final_advice: "가장 위대한 작품은 바로 당신의 삶 그 자체입니다.", final_comfort: "당신의 존재만으로도 세상은 이미 더 신선해졌습니다." },
+            smoky_whiskey: { title: "잘 익은 위스키의 스모키한 향", subtitle: "오랜 시간 쌓아 올린, 단단하고 신뢰감 있는 무게감", description: "당신의 영혼은 오크통 속에서 오랜 시간 숙성된 위스키처럼, 깊고 스모키한 향을 품고 있습니다. 숱한 경험과 인내의 시간이 당신을 단단하게 만들었고, 그 무게감은 주변 사람들에게 깊은 신뢰와 안정감을 줍니다.", strength_keyword: "신뢰감 있는 리더십", strength: "당신은 어려운 상황에서도 쉽게 흔들리지 않고, 현실적인 판단으로 최선의 결정을 내립니다. 사람들은 당신의 묵직한 존재감에 기대어 안정을 찾습니다.", growth_keyword: "변화에 대한 저항", growth: "자신만의 방식과 신념이 너무 강한 나머지, 새로운 변화나 다른 의견을 받아들이기 어려워할 수 있습니다. 최고의 위스키도 때로는 다른 재료와 섞여 멋진 칵테일이 된답니다.", identity_phrase: "자신만의 왕국을 책임감 있게 이끌어가는 사람", struggle_phrase: "상황을 통제하지 못하고 무력해질 수 있다는 깊은 불안감", social_phrase: "거친 폭풍우 속에서 모두가 기댈 수 있는 견고한 기둥", final_advice: "진정한 힘은 모든 것을 통제하는 것이 아닌, 조화를 이루는 데 있습니다.", final_comfort: "당신의 어깨에 놓인 책임감의 무게를 이제는 조금 내려놓아도 괜찮습니다." },
+            warm_bread: { title: "갓 구운 빵의 고소한 온기", subtitle: "세상을 살아갈 힘을 주는, 순수하고 근원적인 생명의 맛", description: "당신의 영혼은 오븐에서 막 꺼낸 빵처럼, 따뜻하고 고소한 생명의 온기를 품고 있습니다. 당신은 세상의 복잡함 속에서도 가장 기본적이고 순수한 가치를 믿으며, 당신의 존재는 그 자체로 주변에 안락함과 위로를 줍니다.", strength_keyword: "긍정적인 위로", strength: "당신은 지치고 상처받은 사람들에게 아무런 조건 없이 따뜻한 빵 한 조각을 건네는 사람입니다. 당신 곁에 있으면, 사람들은 다시 살아갈 힘을 얻습니다.", growth_keyword: "쓴맛에 대한 거부감", growth: "세상의 차갑고 쓴맛을 마주하는 것을 힘들어할 수 있습니다. 하지만 때로는 쌉쌀한 잼이 빵의 고소함을 더 돋보이게 한다는 사실을 기억해주세요. 모든 경험은 당신을 더 풍요롭게 합니다.", identity_phrase: "세상의 선한 본질을 믿는 순수한 사람", struggle_phrase: "나의 믿음이 결국 상처로 돌아올지 모른다는 여린 마음", social_phrase: "각박한 세상 속에서 잠시 숨을 고를 수 있는 작은 집", final_advice: "당신의 순수함은 약점이 아닌, 세상을 바꾸는 가장 큰 힘입니다.", final_comfort: "이미 충분히 따뜻하니, 억지로 뜨거워지려 애쓰지 않아도 괜찮습니다." }
         },
 
         initDOM() { this.app = document.getElementById('app'); this.renderWelcome(); },
@@ -212,20 +212,20 @@
         },
         renderLoading() {
             document.body.style.backgroundColor = `var(--surface-color-3)`;
-            this.app.innerHTML = `<div class="loading-screen fade-in"><h2 class="loading-text">심해 탐사 기록을 분석 중입니다...</h2><p class="subtitle">AI '아스트라'가 당신의 여정에서<br>의미있는 신호들을 해독하고 있습니다.</p></div>`;
+            this.app.innerHTML = `<div class="loading-screen fade-in"><h2 class="loading-text">심해 탐사 기록을 분석 중입니다...</h2><p class="subtitle">AI '아스트라'가 당신의 영혼에서<br>어떤 맛과 향을 발견했을까요?</p></div>`;
             setTimeout(() => this.renderResults(), 4000);
         },
         renderResults() {
             const analysis = this.analyze();
-            const artifact = this.artifacts[analysis.primary] || this.artifacts.innocent;
+            const artifact = this.soulFlavors[analysis.primary] || this.soulFlavors.warm_bread;
             const card_animation_delay = 0.5;
             this.app.innerHTML = `
                 <div class="result-container">
                     <div class="result-card" style="animation: fadeIn 1s ease-out ${card_animation_delay}s both;">
-                        <div class="artifact-card-header">
-                             <p style="font-size:16px; color: var(--text-secondary);">당신의 영혼의 사물함에서 발견된 것은...</p>
-                            <h2 class="artifact-title">${artifact.title}</h2>
-                            <p class="artifact-subtitle">${artifact.subtitle}</p>
+                        <div class="flavor-card-header">
+                             <p style="font-size:16px; color: var(--text-secondary);">당신의 영혼의 맛은...</p>
+                            <h2 class="flavor-title">${artifact.title}</h2>
+                            <p class="flavor-subtitle">${artifact.subtitle}</p>
                         </div>
                         <p>${artifact.description}</p>
                     </div>
@@ -251,14 +251,13 @@
         analyze() {
             const sorted = Object.entries(this.state.scores).sort((a,b) => b[1] - a[1]);
             return {
-                primary: sorted.length > 0 ? sorted[0][0] : "innocent",
+                primary: sorted.length > 0 ? sorted[0][0] : "warm_bread",
                 secondary: sorted.length > 1 ? sorted[1][0] : null,
-                tertiary: sorted.length > 2 ? sorted[2][0] : null,
             };
         },
         getComfortMessage(analysis) {
-            const p = this.artifacts[analysis.primary] || this.artifacts.innocent;
-            const s = analysis.secondary ? this.artifacts[analysis.secondary] : null;
+            const p = this.soulFlavors[analysis.primary] || this.soulFlavors.warm_bread;
+            const s = analysis.secondary ? this.soulFlavors[analysis.secondary] : null;
 
             const identity = `<p>당신은 **${p.identity_phrase}**입니다.</p>`;
             
@@ -274,8 +273,8 @@
             return identity + struggle + social;
         },
         getFinalWord(analysis) {
-            const p = this.artifacts[analysis.primary] || this.artifacts.innocent;
-            const s = analysis.secondary ? this.artifacts[analysis.secondary] : null;
+            const p = this.soulFlavors[analysis.primary] || this.soulFlavors.warm_bread;
+            const s = analysis.secondary ? this.soulFlavors[analysis.secondary] : null;
 
             const advice = p.final_advice;
             const comfort = s ? s.final_comfort : p.final_comfort;
