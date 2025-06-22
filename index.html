@@ -43,17 +43,20 @@
         
         .fade-in { animation: fadeIn 1.2s ease-out both; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-out { animation: fadeOut 0.5s ease-in both; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
-        .header { text-align: center; margin: 10vh 0; }
-        .header h1 { font-family: var(--font-serif); font-size: 36px; font-weight: 600; }
-        .header .subtitle { font-size: 17px; color: var(--text-secondary); margin-top: 16px; line-height: 1.7; }
-        .header .start-button {
-            margin-top: 30px; padding: 14px 36px;
+        .welcome-screen { text-align: center; margin: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
+        .welcome-screen h1 { font-family: var(--font-serif); font-size: 32px; font-weight: 600; animation: fadeIn 1.5s ease-out .5s both; }
+        .welcome-screen .subtitle { font-size: 17px; color: var(--text-secondary); margin-top: 16px; line-height: 1.7; animation: fadeIn 1.5s ease-out 1s both;}
+        .welcome-screen .start-button {
+            margin-top: 40px; padding: 16px 40px;
             font-size: 16px; font-weight: 500;
             background-color: var(--text-accent); color: var(--surface-color-3);
-            border: none; border-radius: 30px; cursor: pointer; transition: all 0.2s ease;
+            border: none; border-radius: 30px; cursor: pointer;
+            transition: all 0.2s ease; animation: fadeIn 1.5s ease-out 1.5s both;
         }
-        .header .start-button:hover { transform: translateY(-2px); }
+        .welcome-screen .start-button:hover { transform: scale(1.05); }
 
         .journey-container { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; opacity: 0; animation: fadeIn 0.5s forwards; }
         .progress-container { margin-bottom: 24px; }
@@ -70,7 +73,6 @@
         .loading-screen { text-align: center; margin: auto; }
         .loading-text { font-family: var(--font-serif); font-size: 20px; font-weight: 500; }
         
-        /* --- 결과 페이지 --- */
         .result-container { padding-top: 5vh; }
         .result-card { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 32px 40px; margin-bottom: 24px; }
         .result-card h2 { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text-accent); margin-bottom: 16px; display: flex; align-items: center; }
@@ -88,6 +90,11 @@
         .preference-list { list-style: none; padding: 0; }
         .preference-list li { font-size: 16px; color: var(--text-secondary); margin-bottom: 8px; }
 
+        .light-shadow-container { margin-top: 24px; }
+        .light-shadow-box h3 { font-family: var(--font-serif); font-size: 20px; margin-bottom: 10px; display: flex; align-items: center; font-weight: 600; }
+        .light-shadow-box .light h3 { color: #A7D7C5; }
+        .light-shadow-box .shadow h3 { color: #DAB894; margin-top: 24px; }
+        
         .letter-card { background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--text-accent); padding: 40px; }
         .letter-card p { font-family: var(--font-serif); font-size: 18px; line-height: 2; }
         .letter-card p:not(:last-child) { margin-bottom: 20px; }
@@ -132,6 +139,10 @@
                     description: "당신의 마음 가장 깊은 곳, 칠흑 같은 어둠 속에서 홀로 빛을 내는 등대가 발견되었습니다. 당신은 세상의 모든 소음이 잠들었을 때, 비로소 자기 자신과 마주하는 사람입니다. 혼란스러운 현상들 속에서 자신만의 리듬으로 숨겨진 질서와 본질을 꿰뚫어 보는 지혜를 가졌습니다.",
                     likes: ["혼자만의 고요한 시간", "하나의 주제를 깊게 파고드는 것", "논리적인 대화", "잘 정리된 공간", "새로운 지식 습득"],
                     dislikes: ["목적 없는 가벼운 수다", "충동적인 결정", "시끄럽고 번잡한 장소", "감정에만 호소하는 상황", "비논리적인 주장"],
+                    light_title: "빛: 통찰",
+                    light_text: "당신은 세상의 복잡한 현상들 속에서 자신만의 리듬으로 질서를 발견하는 사람입니다. 다른 사람들이 쉽게 지나치는 사소한 부분에서도, 당신은 끈질긴 사유를 통해 숨겨진 의미와 패턴을 읽어냅니다. 당신의 깊이 있는 통찰은 혼란스러운 상황에서 방향을 제시하는 빛이 됩니다.",
+                    shadow_title: "그림자: 고독",
+                    shadow_text: "너무 깊은 생각은 때로 당신을 세상과 단절시키고, 차가운 지성의 성에 스스로를 가둡니다. 머리로는 모든 것을 이해하면서도, 정작 마음은 외로움에 시달리곤 합니다. 하지만 괜찮습니다. 그 고독이 있었기에, 당신의 빛은 더욱 단단하고 깊어질 수 있었으니까요.",
                     identity_phrase: "지혜와 통찰로 세상을 이해하는 사람",
                     struggle_phrase: "모든 것을 이해해야 한다는 고독한 무게감",
                     social_phrase: "길 잃은 사람들에게 밤하늘의 북극성 같은 길잡이"
@@ -211,7 +222,6 @@
                 document.body.style.backgroundColor = this.interpolateColor("rgb(30, 41, 64)", "rgb(10, 17, 34)", colorRatio);
             },
             interpolateColor(color1, color2, factor) {
-                let result = color1.slice();
                 const c1 = color1.match(/\d+/g).map(Number);
                 const c2 = color2.match(/\d+/g).map(Number);
                 const r = Math.round(c1[0] + factor * (c2[0] - c1[0]));
@@ -239,7 +249,7 @@
             },
             renderResults() {
                 const analysis = this.analyze();
-                const artifact = this.soulArtifacts[analysis.primary];
+                const artifact = this.soulArtifacts[analysis.primary] || this.soulArtifacts.lamp;
                 this.app.innerHTML = `
                     <div class="result-container fade-in">
                         <div class="result-card" style="animation-delay: 0.5s;">
@@ -295,20 +305,21 @@
                 const s = analysis.secondary ? this.soulArtifacts[analysis.secondary] : null;
                 const t = analysis.tertiary ? this.soulArtifacts[analysis.tertiary] : null;
 
-                if (!p) return "<p>분석 결과를 불러오는 데 실패했습니다.</p>";
+                // undefined 방지를 위한 안전 장치
+                if (!p) return "<p>분석 결과를 불러오는 중입니다. 잠시만 기다려주세요.</p>";
 
-                const identity = `<p>탐사 결과, 당신은 <strong>${p.identity_phrase}</strong>입니다.</p>`;
+                const identity = `<p>탐사 결과, 당신은 <strong>${p.identity_phrase || ''}</strong>입니다.</p>`;
                 
-                let struggle = `<p>그래서였을 겁니다. 말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을지 모릅니다. 바로 '<strong>${p.struggle_phrase}</strong>' 때문이죠.`;
+                let struggle = `<p>말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을 겁니다. 바로 '<strong>${p.struggle_phrase || ''}</strong>' 때문이죠.`;
                 if (s && s.struggle_phrase) {
-                    struggle += ` 때로는 '<strong>${s.struggle_phrase}</strong>'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.</p>`;
+                    struggle += ` 때로는 '<strong>${s.struggle_phrase || ''}</strong>'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.</p>`;
                 } else {
                     struggle += ` 그 마음을 누구에게도 쉽게 털어놓지 못했을 겁니다.</p>`;
                 }
                 
-                let social = `<p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 <strong>${p.social_phrase}</strong>입니다.`;
+                let social = `<p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 <strong>${p.social_phrase || ''}</strong>입니다.`;
                 if (t && t.social_phrase) {
-                    social += ` 동시에 <strong>${t.social_phrase}</strong>이기도 합니다. 당신의 존재는 이미 여러 모습으로 누군가에게 큰 힘이 되고 있습니다.</p>`;
+                    social += ` 동시에 <strong>${t.social_phrase || ''}</strong>이기도 합니다. 당신의 존재는 이미 여러 모습으로 누군가에게 큰 힘이 되고 있습니다.</p>`;
                 } else {
                      social += ` 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.</p>`;
                 }
