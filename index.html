@@ -36,12 +36,14 @@
             background-color: var(--surface-color-3);
             color: var(--text-primary);
             line-height: 1.8;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        #app { max-width: 640px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
+        #app { max-width: 640px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
         
-        /* --- 인트로 화면 스타일 --- */
+        .fade-in { animation: fadeIn 1.2s ease-out both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .welcome-screen { text-align: center; margin: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 2; }
         .prologue { font-family: var(--font-serif); font-size: 20px; color: var(--text-secondary); line-height: 2; margin-bottom: 40px; }
         .prologue p { opacity: 0; transition: opacity 1.5s ease-in-out; }
@@ -55,7 +57,6 @@
         .welcome-screen .start-button.visible { opacity: 1; transition: opacity 1.5s ease-in-out, transform 0.2s ease; }
         .welcome-screen .start-button:hover { transform: scale(1.05); }
 
-        /* --- 인트로 애니메이션 (모닥불 & 별똥별) --- */
         #intro-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; overflow: hidden; }
         .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: fall 5s linear infinite; }
         @keyframes fall { from { transform: translate(-10vw, -10vh); opacity: 1; } to { transform: translate(110vw, 110vh); opacity: 0; } }
@@ -65,7 +66,6 @@
         .flame:nth-child(3) { animation-delay: 1s; width: 18px; height: 90%; right: 20px; background-color: #ff6600; }
         @keyframes flicker { 0%, 100% { transform: scaleY(1) rotate(-1deg); } 50% { transform: scaleY(1.2) rotate(1deg); } }
 
-        /* --- 질문 화면 스타일 --- */
         .journey-container { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; opacity: 0; }
         .journey-container.visible { opacity: 1; transition: opacity 1s ease-in-out; }
         .progress-container { margin-bottom: 24px; }
@@ -82,7 +82,6 @@
         .loading-screen { text-align: center; margin: auto; }
         .loading-text { font-family: var(--font-serif); font-size: 20px; font-weight: 500; }
         
-        /* --- 결과 페이지 스타일 --- */
         .result-container { padding-top: 5vh; }
         .result-card { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 32px 40px; margin-bottom: 24px; }
         .result-card h2 { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text-accent); margin-bottom: 16px; display: flex; align-items: center; }
@@ -95,12 +94,6 @@
         .artifact-title { font-family: var(--font-serif); font-size: 28px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
         .artifact-subtitle { font-family: var(--font-serif); font-size: 18px; color: var(--accent-point); }
         
-        .preference-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .preference-box h3 { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-bottom: 12px; }
-        .preference-list { list-style: none; padding: 0; }
-        .preference-list li { font-size: 16px; color: var(--text-secondary); margin-bottom: 8px; }
-        .preference-list li::before { content: '· '; font-weight: 600; margin-right: 6px; }
-
         .light-shadow-container { margin-top: 16px; }
         .light-shadow-box h3 { font-family: var(--font-serif); font-size: 20px; margin-bottom: 10px; display: flex; align-items: center; font-weight: 600; }
         .light-shadow-box .light h3 { color: #A7D7C5; }
@@ -118,7 +111,7 @@
         .restart-button { display: block; width: fit-content; margin: 24px auto 0; padding: 12px 30px; font-size: 16px; font-weight: 500; background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.2s ease-in-out; }
         .restart-button:hover { background: var(--text-secondary); color: var(--bg-deep-blue); }
 
-        @media (max-width: 480px) { #app { padding: 0 15px; } .welcome-screen h1 { font-size: 28px; } .prologue { font-size: 18px; } .result-card { padding: 24px; } .artifact-title { font-size: 24px; } .preference-container { grid-template-columns: 1fr; gap: 24px; } }
+        @media (max-width: 480px) { #app { padding: 0 15px; } .welcome-screen h1 { font-size: 28px; } .prologue { font-size: 18px; } .result-card { padding: 24px; } .artifact-title { font-size: 24px; } }
     </style>
 </head>
  
@@ -149,11 +142,9 @@
                     subtitle: "고요 속에서 길을 비추는",
                     icon: "💡",
                     description: "당신의 마음 가장 깊은 곳, 칠흑 같은 어둠 속에서 홀로 빛을 내는 등대가 발견되었습니다. 당신은 세상의 모든 소음이 잠들었을 때, 비로소 자기 자신과 마주하는 사람입니다. 혼란스러운 현상들 속에서 자신만의 리듬으로 숨겨진 질서와 본질을 꿰뚫어 보는 지혜를 가졌습니다.",
-                    likes: ["혼자만의 고요한 시간", "하나의 주제를 깊게 파고드는 것", "논리적인 대화", "잘 정리된 공간", "새로운 지식 습득"],
-                    dislikes: ["목적 없는 가벼운 수다", "충동적인 결정", "시끄럽고 번잡한 장소", "감정에만 호소하는 상황", "비논리적인 주장"],
-                    light_title: "빛: 통찰력",
+                    light_title: "빛: 통찰",
                     light_text: "당신은 세상의 복잡한 현상들 속에서 자신만의 리듬으로 질서를 발견하는 사람입니다. 다른 사람들이 쉽게 지나치는 사소한 부분에서도, 당신은 끈질긴 사유를 통해 숨겨진 의미와 패턴을 읽어냅니다. 당신의 깊이 있는 통찰은 혼란스러운 상황에서 방향을 제시하는 빛이 됩니다.",
-                    shadow_title: "그림자: 고독감",
+                    shadow_title: "그림자: 고독",
                     shadow_text: "너무 깊은 생각은 때로 당신을 세상과 단절시키고, 차가운 지성의 성에 스스로를 가둡니다. 머리로는 모든 것을 이해하면서도, 정작 마음은 외로움에 시달리곤 합니다. 하지만 괜찮습니다. 그 고독이 있었기에, 당신의 빛은 더욱 단단하고 깊어질 수 있었으니까요.",
                     identity_phrase: "지혜와 통찰로 세상을 이해하는 사람",
                     struggle_phrase: "모든 것을 이해해야 한다는 고독한 무게감",
@@ -164,8 +155,6 @@
                     subtitle: "절망 속에서도 온기를 나누는",
                     icon: "🔥",
                     description: "당신의 마음속에는, 부서진 난파선 안에서 여전히 타오르는 모닥불이 있습니다. 당신은 어려운 상황 속에서도 희망을 잃지 않고, 주변 사람들을 모아 온기를 나누는 사람입니다. 강한 책임감과 굳건함으로 흔들리지 않는 중심을 지키며, 사람들은 당신 곁에서 위로와 용기를 얻습니다.",
-                    likes: ["사람들을 챙기고 이끌어주기", "꼼꼼하게 계획을 세우고 실행하기", "다른 사람에게 신뢰를 얻는 것", "안정적이고 예측 가능한 상황", "목표를 정하고 성취해내는 과정"],
-                    dislikes: ["무질서하고 즉흥적인 상황", "무책임한 태도와 변명", "불확실하고 애매한 상태", "약속을 지키지 않는 것", "계획이 틀어지는 돌발 상황"],
                     light_title: "빛: 책임감",
                     light_text: "당신은 마치 추운 겨울밤의 벽난로처럼, 주변 사람들에게 따뜻함과 안정감을 주는 존재입니다. 강한 책임감과 굳건함으로 흔들리지 않는 중심을 지키며, 사람들은 당신 곁에 모여들어 위로와 용기를 얻습니다.",
                     shadow_title: "그림자: 부담감",
@@ -179,8 +168,6 @@
                     subtitle: "세상에 없던 멜로디를 연주하는",
                     icon: "🎶",
                     description: "당신의 마음 깊은 곳에는, 시간의 흐름이 만들어낸 아름다운 산호초 위에 저절로 새겨진 듯한 신비로운 악보가 있습니다. 당신은 세상에 없던 새로운 아름다움을 상상하고, 자신만의 독창적인 방식으로 그것을 현실에 펼쳐내는 예술가와 같은 영혼을 지녔습니다.",
-                    likes: ["새로운 아이디어를 떠올리는 것", "나만의 방식으로 자유롭게 표현하기", "반짝이는 영감을 얻는 순간", "아름다운 것을 보고 감상하기", "나만의 개성이 담긴 물건들"],
-                    dislikes: ["틀에 박힌 규칙과 제약", "지루하고 반복적인 일상", "창의성을 억압하는 분위기", "나의 감각을 이해받지 못하는 것", "상상력이 제한되는 상황"],
                     light_title: "빛: 창의성",
                     light_text: "당신의 영혼은 무한한 가능성으로 가득한 새하얀 스케치북과 같습니다. 세상에 없던 새로운 아이디어를 떠올리고, 자신만의 방식으로 그것을 표현해내는 비범한 재능을 지녔습니다. 당신의 상상력은 밋밋한 현실에 다채로운 색을 입힙니다.",
                     shadow_title: "그림자: 자기 의심",
@@ -193,252 +180,4 @@
                     title: "유령선장의 항해일지",
                     subtitle: "자유와 경험으로 채워진",
                     icon: "🧭",
-                    description: "당신의 마음속에는, 수많은 파도를 넘어온 유령선장의 낡은 항해일지가 잠들어 있습니다. 그 속에는 미지의 바다를 향한 지도와, 폭풍우를 견뎌낸 기록들이 가득합니다. 당신에게 삶이란, 새로운 경험을 통해 자신만의 항해일지를 채워나가는 설레는 모험입니다.",
-                    likes: ["낯선 장소로 떠나는 여행", "계획 없는 즉흥적인 모험", "새로운 것을 배우고 도전하는 것", "누구에게도 구속받지 않는 자유", "다양한 문화를 경험하는 것"],
-                    dislikes: ["정체되고 지루한 일상", "나를 옭아매는 규칙과 제약", "한곳에 오래 머무르는 것", "모든 것이 예측 가능한 미래", "너무 깊은 소속감과 책임"],
-                    light_title: "빛: 자유로운 영혼",
-                    light_text: "당신의 영혼은 수많은 여행의 흔적이 담긴 오래된 가방을 닮았습니다. 당신은 하나의 장소, 하나의 정체성에 얽매이는 것을 거부합니다. 새로운 경험과 예측 불가능한 모험 속으로 기꺼이 몸을 던지며, 그 과정을 통해 삶을 배워나갑니다.",
-                    shadow_title: "그림자: 공허감",
-                    shadow_text: "수많은 장소를 스쳐 지나온 만큼, 그 어느 곳에도 깊이 뿌리내리지 못했다는 공허함이 문득 당신을 찾아올 때가 있습니다. 하지만 괜찮습니다. 당신의 마음속에는, 스쳐 온 모든 풍경과 사람들이 보석처럼 남아있으니까요.",
-                    identity_phrase: "익숙한 곳을 떠나 새로운 세상을 탐험하는 사람",
-                    struggle_phrase: "한곳에 정착하지 못하고, 마음 한편이 늘 공허했던 날들",
-                    social_phrase: "주변에 새로운 바람과 활기를 불어넣는 존재"
-                },
-                clam: {
-                    title: "진주를 품은 조개",
-                    subtitle: "상처를 감싸 안아 보석으로 만드는",
-                    icon: "🦪",
-                    description: "당신의 마음은 단단한 껍질 속에서 고요히 진주를 키워내는 조개를 닮았습니다. 당신은 타인의 아픔에 깊이 공감하고, 그들의 상처를 자신의 것처럼 보듬어 안습니다. 당신 곁에서 사람들은 비로소 안심하고, 자신의 가장 연약한 부분을 드러내며 치유 받습니다.",
-                    likes: ["안정적이고 편안한 관계", "따뜻한 분위기에서 나누는 대화", "다른 사람의 이야기를 들어주는 것", "갈등 없이 평화로운 상태", "사소한 것이라도 나누는 기쁨"],
-                    dislikes: ["불편하고 어색한 분위기", "날카로운 비판과 지적", "과도한 경쟁과 갈등", "가식적이고 피상적인 관계", "누군가를 실망시키는 것"],
-                    light_title: "빛: 공감과 수용",
-                    light_text: "당신은 지친 사람들이 아무런 조건 없이 몸을 기댈 수 있는 푹신한 소파 같은 사람입니다. 당신은 타인의 잘잘못을 따지기 전에, 그 사람의 존재 자체를 따뜻하게 받아들입니다. 당신 곁에서 사람들은 비로소 안심하고 상처를 회복합니다.",
-                    shadow_title: "그림자: 자기희생",
-                    shadow_text: "모두가 편안히 기댈 수 있도록, 당신은 언제나 그 자리를 지켜야 했습니다. 정작 자기 자신이 기댈 곳이 필요할 때, 누구에게도 쉽게 손 내밀지 못하고 혼자 삭이곤 합니다. 하지만 괜찮습니다. 당신이 내어준 자리만큼, 세상도 당신의 자리를 마련해 둘 겁니다.",
-                    identity_phrase: "다른 사람의 이야기를 가만히 들어주고 감싸 안아주는 사람",
-                    struggle_phrase: "모든 사람에게 좋은 사람이 되려다 보니, 정작 내 마음을 돌보지 못했던 시간들",
-                    social_phrase: "누구나 지쳤을 때 아무 말 없이 기댈 수 있는 쉼터"
-                },
-                anchor: {
-                    title: "떠다니는 주점의 닻",
-                    subtitle: "즐거운 연결의 중심점",
-                    icon: "⚓",
-                    description: "당신의 마음속에는, 드넓은 바다 위를 떠다니는 유쾌한 주점을 한자리에 머물게 하는 닻이 있습니다. 당신은 사람과 사람을 연결하고 즐거운 순간을 만들어내는 특별한 재능을 가졌습니다. 당신이 닻을 내린 곳은, 언제나 즐거운 파티가 열리는 유쾌한 사교의 장이 됩니다.",
-                    likes: ["친구들과의 즐거운 만남", "맛있는 음식을 함께 나누기", "유쾌하고 재미있는 대화", "새로운 사람들을 만나는 것", "다른 사람들을 즐겁게 해주는 일"],
-                    dislikes: ["오랫동안 혼자 있는 것", "어색하고 조용한 분위기", "너무 진지하고 무거운 이야기", "사람들로부터 소외되는 기분", "다른 사람의 슬픔에 깊이 빠지는 것"],
-                    light_title: "빛: 사교성과 유쾌함",
-                    light_text: "당신은 맛있는 음식을 나누어 먹는 식탁처럼, 사람과 사람을 연결하고 즐거운 순간을 만들어내는 사람입니다. 당신 곁에는 늘 유쾌한 웃음과 따뜻한 대화가 가득합니다. 당신은 혼자일 때보다 함께일 때 더욱 빛나는 존재입니다.",
-                    shadow_title: "그림자: 외로움",
-                    shadow_text: "늘 사람들 속에서 즐거움을 찾다 보니, 문득 혼자가 되었을 때의 정적을 견디기 힘들어합니다. 식탁이 비어있을 때의 그 허전함이 당신을 불안하게 만듭니다. 하지만 괜찮습니다. 혼자만의 시간은, 더 즐거운 다음 식탁을 차리기 위한 소중한 준비 시간이니까요.",
-                    identity_phrase: "사람들을 연결하고 즐거운 순간을 만들어내는 사람",
-                    struggle_phrase: "가끔은 혼자가 되는 것을 견디기 힘들어했던 외로움",
-                    social_phrase: "모두를 하나로 모으는 즐거운 파티의 주최자"
-                }
-            },
-
-            initDOM() { this.app = document.getElementById('app'); this.renderWelcome(); },
-            renderWelcome() {
-                const introBg = document.getElementById('intro-background');
-                introBg.innerHTML = ''; 
-                for(let i=0; i<3; i++) {
-                    const flame = document.createElement('div');
-                    flame.className = 'flame';
-                    introBg.appendChild(flame);
-                }
-                for(let i=0; i<15; i++) {
-                    const star = document.createElement('div');
-                    star.className = 'star';
-                    star.style.left = `${Math.random() * 100}%`;
-                    star.style.top = `${Math.random() * 50}%`;
-                    star.style.animationDelay = `${Math.random() * 5}s`;
-                    introBg.appendChild(star);
-                }
-                
-                this.app.innerHTML = `<div class="welcome-screen">
-                    <div class="prologue">
-                        <p>오래된 전설에 따르면,</p>
-                        <p>모든 사람의 마음속에는 자신만의 바다가 존재한다.</p>
-                        <p>AI 심해 탐사선 '아스트라'가 그 깊은 곳으로 당신을 안내합니다.</p>
-                        <p>당신의 마음 심해에 잠들어 있는, 단 하나의 유물을 발견하기 위해.</p>
-                    </div>
-                    <button class="welcome-screen start-button">심해로 잠수하기</button>
-                </div>`;
-
-                const prologueLines = this.app.querySelectorAll('.prologue p');
-                prologueLines.forEach((line, index) => {
-                    setTimeout(() => line.classList.add('visible'), index * 2000);
-                });
-                setTimeout(() => this.app.querySelector('.start-button').classList.add('visible'), prologueLines.length * 2000);
-
-                this.app.querySelector('.start-button').addEventListener('click', () => { 
-                    this.app.querySelector('.welcome-screen').style.opacity = 0;
-                    this.app.querySelector('.welcome-screen').style.transition = 'opacity 1s ease-out';
-                    introBg.style.opacity = 0;
-                    introBg.style.transition = 'opacity 1s ease-out';
-                    setTimeout(() => this.startJourney(), 1000);
-                }); 
-            },
-            startJourney() { this.resetState(); this.renderQuestion(); },
-            resetState() { this.state.currentQuestionIndex = 0; this.state.scores = {}; this.state.isNavigating = false; this.state.answers = {}; document.body.style.backgroundColor = 'var(--surface-color-1)'; },
-            renderQuestion() {
-                const index = this.state.currentQuestionIndex;
-                const q = this.questions[index];
-                if (!q) return;
-
-                const progress = ((index + 1) / this.questions.length) * 100;
-                this.app.innerHTML = `<div class="journey-container">
-                    <div class="progress-container">
-                        <div id="progress-text">탐사 심도 ${Math.round(progress * 10)}m</div>
-                        <div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div>
-                    </div>
-                    <div id="question-box">${q.question}</div>
-                    <div class="choice-options">${q.options.map((opt, i) => `<div class="choice-option" data-weight="${opt.weight}" data-answer-index="${i}"><span class="option-text">${opt.text}</span></div>`).join('')}</div>
-                </div>`;
-                
-                this.app.querySelector('.journey-container').classList.add('visible');
-                this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(q, el.dataset.weight, parseInt(el.dataset.answerIndex))); });
-                
-                const colorRatio = index / (this.questions.length - 1);
-                document.body.style.transition = 'background-color 1.2s ease';
-                document.body.style.backgroundColor = this.interpolateColor("rgb(30, 41, 64)", "rgb(10, 17, 34)", colorRatio);
-            },
-            interpolateColor(color1, color2, factor) {
-                const c1 = color1.match(/\d+/g).map(Number);
-                const c2 = color2.match(/\d+/g).map(Number);
-                const r = Math.round(c1[0] + factor * (c2[0] - c1[0]));
-                const g = Math.round(c1[1] + factor * (c2[1] - c1[1]));
-                const b = Math.round(c1[2] + factor * (c2[2] - c1[2]));
-                return `rgb(${r}, ${g}, ${b})`;
-            },
-            handleSelection(question, weight, answerIndex) {
-                if (this.state.isNavigating) return;
-                this.state.isNavigating = true;
-                this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
-                if(question.key) { this.state.answers[question.key] = question.options[answerIndex].text; }
-                this.app.querySelector('.journey-container').style.opacity = 0;
-                this.app.querySelector('.journey-container').style.transition = 'opacity 0.4s ease-out';
-                setTimeout(() => {
-                    if (this.state.currentQuestionIndex < this.questions.length - 1) {
-                        this.state.currentQuestionIndex++;
-                        this.renderQuestion();
-                        this.state.isNavigating = false;
-                    } else { this.renderLoading(); }
-                }, 400);
-            },
-            renderLoading() {
-                this.app.innerHTML = `<div class="loading-screen fade-in"><h2>마음의 심해를 분석하며<br>당신을 닮은 유물을 찾고 있어요...</h2></div>`;
-                setTimeout(() => { this.renderResults(); }, 3000);
-            },
-            renderResults() {
-                const analysis = this.analyze();
-                const artifact = this.soulArtifacts[analysis.primary];
-                if (!artifact) { this.app.innerHTML = `<p>오류: 분석 결과를 불러올 수 없습니다.</p>`; return; }
-                this.app.innerHTML = `
-                    <div class="result-container fade-in">
-                        <div class="result-card" style="animation-delay: 0.5s;">
-                            <div class="artifact-header">
-                                <p style="font-size:16px; color: var(--text-secondary);">당신의 마음 심해에서 발견된 유물은...</p>
-                                <div class="artifact-icon">${artifact.icon}</div>
-                                <h2 class="artifact-title" style="color:var(--text-primary); margin:0;">${artifact.title}</h2>
-                                <p class="artifact-subtitle">${artifact.subtitle}</p>
-                            </div>
-                        </div>
-                        <div class="result-card" style="animation-delay: 0.7s;">
-                            <h2><span class="icon">🔍</span>유물 해설서</h2>
-                            <p>${artifact.description || ''}</p>
-                            <div class="preference-container" style="margin-top:20px;">
-                                <div class="preference-box">
-                                    <h3>👍 이런 걸 좋아해요</h3>
-                                    <ul class="preference-list">${(artifact.likes || []).map(like => `<li>${like}</li>`).join('')}</ul>
-                                </div>
-                                <div class="preference-box">
-                                    <h3>👎 조금 힘들어요</h3>
-                                    <ul class="preference-list">${(artifact.dislikes || []).map(dislike => `<li>${dislike}</li>`).join('')}</ul>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="result-card" style="animation-delay: 0.9s;">
-                            <h2><span class="icon">✨</span>당신의 강점과 숨겨진 마음</h2>
-                            <p>누구나 밝게 빛나는 강점과, 스스로도 잘 몰랐던 숨겨진 마음이 공존합니다. 아스트라가 발견한 당신의 두 가지 모습을 들여다보세요.</p>
-                            <div class="light-shadow-container">
-                                <div class="light-shadow-box light"><h3>${artifact.light_title || ''}</h3><p>${artifact.light_text || ''}</p></div>
-                                <div class="light-shadow-box shadow"><h3>${artifact.shadow_title || ''}</h3><p>${artifact.shadow_text || ''}</p></div>
-                            </div>
-                        </div>
-                        <div class="result-card letter-card" style="animation-delay: 1.1s;">
-                            <h2><span class="icon">💌</span>아스트라의 마지막 통신</h2>
-                            ${this.getComfortMessage(analysis)}
-                        </div>
-                        <div class="share-buttons fade-in" style="animation-delay: 1.3s;">
-                            <button class="share-btn" id="share-action">결과 공유하기</button>
-                            <button class="share-btn" id="copy-link">링크 복사</button>
-                        </div>
-                        <button class="restart-button fade-in" style="animation-delay: 1.3s;" onclick="MindJourneyApp.initDOM()">다시 탐험하기</button>
-                    </div>`;
-                this.addShareEventListeners(artifact.title);
-            },
-            
-            analyze() {
-                const sorted = Object.entries(this.state.scores).sort((a,b) => b[1] - a[1]);
-                return {
-                    primary: sorted.length > 0 ? sorted[0][0] : "lighthouse",
-                    secondary: sorted.length > 1 ? sorted[1][0] : null,
-                    tertiary: sorted.length > 2 ? sorted[2][0] : null,
-                };
-            },
-            getComfortMessage(analysis) {
-                const p = this.soulArtifacts[analysis.primary];
-                const s = analysis.secondary ? this.soulArtifacts[analysis.secondary] : null;
-                const t = analysis.tertiary ? this.soulArtifacts[analysis.tertiary] : null;
-
-                if (!p) return "<p>분석 결과를 불러오는 데 실패했습니다.</p>";
-
-                const identity = `<p>탐사 결과, 당신은 <strong>${p.identity_phrase || ''}</strong>입니다.</p>`;
-                
-                let struggle = `<p>그래서였을 겁니다. 말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을지 모릅니다. 바로 '<strong>${p.struggle_phrase || ''}</strong>' 때문이죠.`;
-                if (s && s.struggle_phrase) {
-                    struggle += ` 때로는 '<strong>${s.struggle_phrase}</strong>'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.</p>`;
-                } else {
-                    struggle += ` 그 마음을 누구에게도 쉽게 털어놓지 못했을 겁니다.</p>`;
-                }
-                
-                let social = `<p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 <strong>${p.social_phrase || ''}</strong>입니다.`;
-                if (t && t.social_phrase) {
-                    social += ` 동시에 <strong>${t.social_phrase}</strong>이기도 합니다. 당신의 존재는 이미 여러 모습으로 누군가에게 큰 힘이 되고 있습니다.</p>`;
-                } else {
-                     social += ` 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.</p>`;
-                }
-                
-                return identity + struggle + social;
-            },
-            addShareEventListeners(resultTitle) {
-                const shareText = `AI가 내 마음의 심해에서 발견한 유물은... [${resultTitle}] ✨\n너의 마음 속에는 어떤 유물이 잠들어 있을까?\n\n`;
-                const shareUrl = window.location.href;
-
-                const shareButton = document.getElementById('share-action');
-                const copyButton = document.getElementById('copy-link');
-                
-                if (!shareButton || !copyButton) return;
-
-                if (navigator.share) {
-                    shareButton.addEventListener('click', () => {
-                        navigator.share({ title: '마음의 나침반', text: shareText, url: shareUrl, }).catch(console.error);
-                    });
-                    copyButton.style.display = 'none';
-                } else {
-                    shareButton.style.display = 'none';
-                    copyButton.addEventListener('click', () => {
-                        navigator.clipboard.writeText(shareUrl).then(() => {
-                            alert('링크가 복사되었어요! 친구에게 공유해보세요.');
-                        }).catch(err => alert('링크 복사에 실패했어요.'));
-                    });
-                }
-            }
-        };
- 
-         document.addEventListener('DOMContentLoaded', () => { MindJourneyApp.initDOM(); });
-    })()
-    //]]>
-    </script>
-</body>
-</html>
+                    description: "당신의 마음속
