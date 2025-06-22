@@ -3,361 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>마음의 나침반 | 당신의 속마음 발견</title>
-    <meta name="description" content="AI 잠수함 '아스트라'와 함께 떠나는 마음속 깊은 곳 탐험. 당신의 숨겨진 성향과 좋아하는 것을 발견하세요.">
+    <title>마음의 나침반 | 내 마음 속 물건 찾기</title>
+    <meta name="description" content="AI '아스트라'와 함께 떠나는 마음 탐험. 당신의 마음 속 방에는 어떤 물건이 놓여있을까요? 쉽고 따뜻한 심리 분석을 경험해보세요.">
     <meta property="og:title" content="마음의 나침반 - AI 심층 심리 분석">
-    <meta property="og:description" content="AI가 당신의 답변을 바탕으로 당신의 성향, 좋아하는 것, 싫어하는 것 등을 쉽고 재미있게 알려드립니다.">
+    <meta property="og:description" content="AI가 발견한 내 마음 속 상징은 무엇일까요? 지금 바로 확인해보세요!">
     <meta property="og:image" content="https://i.ibb.co/3k5JqB4/og-image-compass.png">
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+    
     <style>
         :root {
-            --font-primary: 'Noto Sans KR', sans-serif;
-            --surface-color-1: #1E2940;
-            --surface-color-2: #141D34;
-            --surface-color-3: #0A1122;
-            --text-primary: #E6EEFF;
-            --text-secondary: #BCC8E0;
-            --text-accent: #90BFFF;
-            --accent-glow: #82B8FF;
-            --accent-warm: #FFC0CB;
-            --border-radius: 15px;
-            --transition-smooth: all 0.5s ease-in-out;
+            --font-main: 'Noto Sans KR', sans-serif;
+            --bg-deep-blue: #121826;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #E0E6F1;
+            --text-secondary: #94A3B8;
+            --text-accent: #A5B4FC;
+            --accent-point: #F472B6;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-radius: 16px;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: var(--font-primary);
+            font-family: var(--font-main);
             font-weight: 400;
-            background-color: var(--surface-color-1);
+            background-color: var(--bg-deep-blue);
             color: var(--text-primary);
             line-height: 1.7;
             overflow-x: hidden;
-            transition: background-color 0.8s ease;
         }
 
-        #app { max-width: 600px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; min-height: 100vh; }
+        #app { max-width: 500px; margin: 0 auto; padding: 30px 20px; position: relative; z-index: 1; min-height: 100vh; }
         
         .fade-in { animation: fadeIn 1s ease-out both; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header { text-align: center; margin: auto; padding: 20px; }
-        .header h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.01em; }
-        .header .subtitle { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-top: 12px; }
+        .header { text-align: center; margin: 10vh 0; }
+        .header h1 { font-size: 30px; font-weight: 700; }
+        .header .subtitle { font-size: 16px; color: var(--text-secondary); margin-top: 12px; }
         .header .start-button {
             margin-top: 30px; padding: 14px 36px;
-            font-family: var(--font-primary); font-size: 16px; font-weight: 500;
-            background-color: var(--text-accent); color: var(--surface-color-3);
+            font-size: 16px; font-weight: 500;
+            background-color: var(--text-accent); color: var(--bg-deep-blue);
             border: none; border-radius: 30px; cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
         }
-        .header .start-button:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); }
+        .header .start-button:hover { transform: translateY(-2px); }
 
-        .journey-container { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; transition: opacity 0.4s ease-out; }
-        .progress-container { margin-bottom: 20px; width: 100%; }
-        .progress-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
-        #progress-fill { height: 100%; background: var(--text-accent); border-radius: 2px; transition: width 0.3s ease; }
-        #progress-text { text-align: center; font-size: 14px; margin-top: 8px; color: var(--text-secondary); }
-        #phase-title { font-size: 18px; text-align: center; margin-bottom: 20px; color: var(--text-accent); opacity: 0.7; font-weight: 500; }
-
-        .question-card { padding: 20px; }
-        #question-box {
-            font-size: 20px; font-weight: 600;
-            text-align: center; margin-bottom: 24px;
-            word-break: keep-all; /* 자연스러운 줄바꿈 */
-        }
+        .progress-container { margin-bottom: 24px; }
+        #progress-text { text-align: center; font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+        .progress-bar { width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 2.5px; }
+        #progress-fill { height: 100%; background: var(--text-accent); border-radius: 2.5px; transition: width 0.4s ease; }
+        
+        .question-container { text-align: center; margin: auto 0; }
+        #question-box { font-size: 22px; font-weight: 500; word-break: keep-all; margin-bottom: 24px; }
         .choice-options { display: flex; flex-direction: column; gap: 12px; }
         .choice-option {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px; padding: 18px; cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            text-align: center;
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 18px; cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .choice-option:hover { background: rgba(255,255,255,0.06); transform: scale(1.02); }
-        .option-text { font-size: 15px; font-weight: 400; word-break: keep-all; }
-
+        .choice-option:hover { background: rgba(255, 255, 255, 0.1); }
+        .option-text { font-size: 16px; font-weight: 300; }
+        
         .loading-screen { text-align: center; margin: auto; }
-        .loading-text { font-size: 20px; margin-bottom: 12px; font-weight: 500; }
-        .loading-graphic { font-size: 3em; margin-bottom: 20px; color: var(--text-accent); animation: shooting-star-anim 2s ease-in-out infinite; }
-        @keyframes shooting-star-anim {
-            0% { transform: translateY(-50px) translateX(50px) rotate(0deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(50px) translateX(-50px) rotate(10deg); opacity: 0; }
-        }
+        .loading-text { font-size: 20px; font-weight: 500; }
+        #star-shower { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: fall 2s linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh); opacity: 0; } }
 
-        /* --- 결과 페이지 (이전과 동일) --- */
-        .result-container { padding-top: 4vh; animation: fadeIn 1s ease-out; }
-        .result-card { background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--border-radius); padding: 24px 30px; margin-bottom: 24px; }
-        .result-card h2 { font-size: 22px; font-weight: 700; color: var(--text-accent); margin-bottom: 16px; display: flex; align-items: center; }
-        .result-card h2 .icon { margin-right: 12px; font-size: 20px; }
-        .result-card p, .result-card .text-block { font-size: 15px; line-height: 1.8; color: var(--text-secondary); font-weight: 400; }
-        .flavor-card-header { text-align: center; padding-bottom: 24px; }
-        .flavor-title { font-size: 26px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
-        .flavor-subtitle { font-size: 18px; color: var(--accent-warm); font-style: italic; margin-bottom: 18px; }
-        .flavor-keywords { font-size: 14px; color: var(--text-accent); margin-bottom: 10px; font-weight: 500; }
-        .preference-card { margin-top: 18px; padding: 18px 24px; background: rgba(0,0,0,0.1); border-radius: var(--border-radius); }
-        .preference-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary); }
-        .preference-list { font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin-left: 16px; list-style-type: '✓  '; }
-        .strength-growth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 18px; }
-        .strength-growth-box h3 { font-size: 18px; margin-bottom: 10px; display: flex; align-items: center; font-weight: 600; }
-        .strength-growth-box .strength h3 { color: #A7D7C5; }
-        .strength-growth-box .growth h3 { color: #DAB894; }
-        .strength-growth-box p { font-size: 14px; }
-        .letter-card { background: rgba(255, 255, 255, 0.02); border-left: 2px solid var(--text-accent); padding: 30px; border-radius: 5px; }
-        .letter-card p { font-size: 16px; line-height: 1.7; text-align: center; font-weight: 300; }
-        .letter-card p:not(:last-child) { margin-bottom: 18px; }
-        .final-word-card { text-align: center; background: transparent; border: none; padding: 36px 0; }
-        .final-word-text { font-size: 18px; font-weight: 600; line-height: 1.7; color: var(--text-primary); }
-        .restart-button { display: block; width: fit-content; margin: 30px auto 0; padding: 12px 30px; font-size: 16px; font-weight: 500; background: transparent; color: var(--text-secondary); border: 1px solid var(--text-secondary); border-radius: 30px; cursor: pointer; transition: all 0.2s ease-in-out; }
-        .restart-button:hover { background: var(--text-secondary); color: var(--surface-color-3); }
-
-        /* 반응형 */
-        @media (max-width: 480px) {
-            #app { padding: 20px 15px; }
-            .header h1 { font-size: 28px; }
-            #question-box { font-size: 18px; }
-            .choice-option { padding: 16px; }
-            .option-text { font-size: 14px; }
-            .result-card { padding: 20px; }
-            .flavor-title { font-size: 24px; }
-            .flavor-subtitle { font-size: 16px; }
-            .strength-growth-container { grid-template-columns: 1fr; }
-            .final-word-text { font-size: 17px; }
+        /* --- 결과 페이지 --- */
+        .result-container { padding-top: 5vh; }
+        .result-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 24px; margin-bottom: 20px; }
+        .result-card h2 { font-size: 20px; font-weight: 700; color: var(--text-accent); margin-bottom: 12px; display: flex; align-items: center; }
+        .result-card h2 .icon { margin-right: 10px; }
+        .result-card p { font-size: 16px; line-height: 1.8; color: var(--text-secondary); font-weight: 300; }
+        
+        .artifact-header { text-align: center; padding: 16px 0; }
+        .artifact-icon { font-size: 48px; margin-bottom: 16px; }
+        .artifact-title { font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+        .artifact-subtitle { font-size: 16px; color: var(--accent-point); }
+        
+        .preference-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .preference-box h3 { font-size: 16px; font-weight: 500; margin-bottom: 10px; }
+        .preference-list { list-style: none; padding: 0; }
+        .preference-list li { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; }
+        
+        .letter-card p:not(:last-child) { margin-bottom: 16px; }
+        .share-buttons { margin-top: 24px; display: flex; gap: 12px; justify-content: center; }
+        .share-btn {
+            font-size: 15px; font-weight: 500;
+            padding: 12px 24px; border-radius: 30px;
+            border: 1px solid var(--border-color); background: rgba(255,255,255,0.1);
+            color: var(--text-primary); cursor: pointer; transition: all 0.2s ease;
         }
-        /* 세로가 짧은 화면을 위한 추가 반응형 */
-        @media (max-height: 700px) {
-            .header { margin: 4vh 0; }
-            #question-box { margin-bottom: 20px; font-size: 18px; }
-            .choice-option { padding: 14px; }
-            .option-text { font-size: 14px; }
-        }
-
-     </style>
+        .share-btn:hover { background: var(--text-accent); color: var(--bg-deep-blue); border-color: var(--text-accent); }
+    </style>
  </head>
  
  <body>
-     <div id="app">
-         </div>
+    <div id="star-shower"></div>
+    <div id="app"></div>
  
-     <div id="submarine-animation" style="position:fixed; opacity:0; pointer-events:none; z-index: 10;">
-         <svg viewBox="0 0 100 50" fill="currentColor" color="#90BFFF" width="100px">
-             <path d="M10 25 a10 10 0 0 1 20 0 h40 a10 10 0 0 1 20 0 h10 v25 h-90 z M30 15 a5 5 0 1 1 10 0 a5 5 0 1 1 -10 0 M60 15 a5 5 0 1 1 10 0 a5 5 0 1 1 -10 0"/>
-         </svg>
-     </div>
- 
-     <div id="star-shower" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10;">
-     </div>
- 
-     <script>
-     //<![CDATA[(function() {
-         const MindJourneyApp = {
-             state: { currentQuestionIndex: 0, answers: {}, scores: {}, isNavigating: false, },
- 
-             questions: [
-                 { phase: "Phase 1. 당신의 시작", question: "새로운 도전을 시작할 때 당신은 어떤 모습인가요?", options: [ { text: "계획을 꼼꼼히 세우고 시작한다.", weight: "leader" }, { text: "일단 부딪혀보면서 알아간다.", weight: "pioneer" }, { text: "주변 사람들과 함께 협력하며 나아간다.", weight: "connector" }, { text: "혼자 조용히 생각하고 준비한다.", weight: "thinker" } ]},
-                 { question: "힘든 하루를 보낸 당신에게 가장 필요한 것은?", options: [ { text: "따뜻한 위로와 격려", weight: "connector" }, { text: "혼자만의 조용한 휴식", weight: "thinker" }, { text: "맛있는 음식과 즐거움", weight: "optimist" }, { text: "새로운 목표를 향한 자극", weight: "pioneer" } ]},
-                 { question: "당신이 가장 중요하게 생각하는 가치는 무엇인가요?", options: [ { text: "정직과 신뢰", weight: "loyalist" }, { text: "새로운 아이디어와 변화", weight: "innovator" }, { text: "조화와 균형", weight: "mediator" }, { text: "자유와 독립", weight: "individualist" } ]},
-                 { question: "좋아하는 취미 활동은 무엇인가요?", options: [ { text: "책 읽기, 영화 감상 등 혼자 집중하는 활동", weight: "thinker" }, { text: "여행, 운동 등 활동적인 취미", weight: "pioneer" }, { text: "요리, 그림 그리기 등 창작 활동", weight: "creator" }, { text: "친구들과 만나 대화하기", weight: "connector" } ]},
-                 { phase: "Phase 2. 당신의 inner self", question: "당신을 가장 잘 나타내는 색깔은 무엇인가요?", options: [ { text: "밝고 활기찬 노란색", weight: "optimist" }, { text: "차분하고 신뢰감을 주는 파란색", weight: "leader" }, { text: "따뜻하고 포근한 분홍색", weight: "connector" }, { text: "신비롭고 깊은 보라색", weight: "individualist" } ]},
-                 { question: "가장 좋아하는 자연의 소리는 무엇인가요?", options: [ { text: "잔잔한 파도 소리", weight: "mediator" }, { text: "시원한 바람 소리", weight: "individualist" }, { text: "새들의 지저귐", weight: "optimist" }, { text: "고요한 숲 속의 침묵", weight: "thinker" } ]},
-                 { question: "당신이 생각하는 '성공'이란 무엇인가요?", options: [ { text: "사회적으로 인정받고 높은 지위에 오르는 것", weight: "achiever" }, { text: "자신이 하고 싶은 일을 하며 만족하는 삶", weight: "individualist" }, { text: "주변 사람들과 행복하게 살아가는 것", weight: "connector" }, { text: "끊임없이 배우고 성장하는 것", weight: "innovator" } ]},
-                 { question: "스트레스를 해소하는 당신만의 방법은?", options: [ { text: "혼자만의 공간에서 휴식하기", weight: "thinker" }, { text: "친구들과 신나게 웃고 떠들기", weight: "connector" }, { text: "운동이나 취미 활동에 집중하기", weight: "pioneer" }, { text: "맛있는 음식을 먹거나 쇼핑하기", weight: "optimist" } ]},
-                 { phase: "Phase 3. 당신의 potential", question: "어떤 분야에 가장 큰 흥미를 느끼나요?", options: [ { text: "과학 기술, 새로운 발견", weight: "innovator" }, { text: "예술, 음악, 문학", weight: "creator" }, { text: "사람들과의 관계, 상담", weight: "helper" }, { text: "리더십, 조직 관리", weight: "leader" } ]},
-                 { question: "10년 후 당신은 어떤 모습일 것이라고 상상하나요?", options: [ { text: "전문가로서 인정받고 영향력을 행사하는 사람", weight: "achiever" }, { text: "사랑하는 사람들과 안정적인 삶을 사는 사람", weight: "loyalist" }, { text: "끊임없이 새로운 것을 배우고 도전하는 사람", weight: "pioneer" }, { text: "자신만의 독창적인 분야를 개척하는 사람", weight: "individualist" } ]},
-                 { question: "세상을 더 나은 곳으로 만들기 위해 당신이 할 수 있는 일은?", options: [ { text: "소외된 사람들을 돕고 봉사한다.", weight: "helper" }, { text: "환경 보호를 위해 노력한다.", weight: "mediator" }, { text: "새로운 아이디어를 통해 사회 문제를 해결한다.", weight: "innovator" }, { text: "정의롭고 공정한 사회를 만든다.", weight: "leader" } ]},
-                 { question: "가장 듣기 좋아하는 칭찬은 무엇인가요?", options: [ { text: "당신은 정말 똑똑하고 논리적이에요.", weight: "thinker" }, { text: "당신은 활기차고 긍정적인 에너지를 줘요.", weight: "optimist" }, { text: "당신은 주변 사람들을 편안하게 해줘요.", weight: "connector" }, { text: "당신은 결단력 있고 믿음직스러워요.", weight: "leader" } ]}
-             ],
- 
-             soulTendencies: {
-                 thinker: { title: "심사숙고하는 지혜로운 사람", keywords: ["논리적", "분석적", "신중함", "지적 호기심"], likes: ["혼자만의 시간", "깊이 있는 대화", "책 읽기", "조용한 공간"], dislikes: ["피상적인 관계", "시끄러운 환경", "비논리적인 주장", "갑작스러운 변화"], description: "당신은 조용히 생각에 잠겨 세상을 이해하려는 탐구자입니다. 깊이 있는 통찰력과 분석적인 사고를 바탕으로 신중하게 판단하며, 지적인 호기심을 충족시키는 것을 좋아합니다. 혼자만의 시간을 통해 에너지를 얻고, 피상적인 관계보다는 진솔한 소통을 선호합니다."},
-                 pioneer: { title: "새로운 길을 개척하는 도전적인 사람", keywords: ["활동적", "용감함", "도전 정신", "자유로움"], likes: ["새로운 경험", "여행과 탐험", "운동", "변화"], dislikes: ["지루함", "반복적인 일상", "속박", "안정"], description: "당신은 틀에 얽매이지 않고 새로운 것을 찾아 나서는 모험가입니다. 용감하게 도전을 즐기며, 자유로운 영혼으로 세상을 탐험합니다. 반복적인 일상보다는 늘 새로운 경험을 추구하며, 변화를 두려워하지 않습니다."},
-                 connector: { title: "따뜻한 마음으로 사람들을 연결하는 사람", keywords: ["공감 능력", "배려심", "협력적", "사교적"], likes: ["사람들과의 관계", "팀워크", "나눔", "따뜻한 분위기"], dislikes: ["갈등", "소외감", "차가운 분위기", "경쟁적인 상황"], description: "당신은 주변 사람들과의 관계를 소중히 여기며, 따뜻한 마음으로 소통하고 공감하는 능력이 뛰어납니다. 협력적인 태도를 좋아하며, 함께하는 즐거움 속에서 에너지를 얻습니다. 갈등을 싫어하며, 조화로운 관계를 중요하게 생각합니다."},
-                 optimist: { title: "긍정적인 에너지로 주변을 밝히는 사람", keywords: ["낙천적", "유쾌함", "긍정적", "사교적"], likes: ["즐거운 분위기", "맛있는 음식", "유머", "다양한 활동"], dislikes: ["부정적인 분위기", "심각한 이야기", "따분함", "혼자 있는 시간"], description: "당신은 밝고 긍정적인 에너지로 주변 사람들에게 즐거움을 주는 사람입니다. 낙천적인 태도로 어려움을 극복하고, 유쾌한 유머 감각으로 분위기를 밝게 만듭니다. 다양한 활동을 즐기며, 혼자 있는 시간보다는 사람들과 함께하는 것을 좋아합니다."},
-                 leader: { title: "주변을 이끌고 방향을 제시하는 사람", keywords: ["결단력", "책임감", "통솔력", "주도적"], likes: ["목표 달성", "계획적인 활동", "인정", "질서"], dislikes: ["비효율적인 일", "혼란", "미루는 행동", "간섭"], description: "당신은 목표를 설정하고 이끄는 리더십이 있는 사람입니다. 결단력과 책임감을 바탕으로 계획적으로 일을 추진하며, 주변 사람들에게 방향을 제시하고 이끌어 나갑니다. 비효율적인 것을 싫어하며, 질서 있는 환경을 선호합니다."},
-                 loyalist: { title: "신뢰를 중요시하고 안정감을 추구하는 사람", keywords: ["성실함", "헌신적", "안정감", "신뢰"], likes: ["안정적인 관계", "익숙한 환경", "약속", "예측 가능성"], dislikes: ["배신", "불확실성", "갑작스러운 변화", "무책임함"], description: "당신은 신뢰를 가장 중요하게 생각하며, 안정적이고 예측 가능한 것을 선호합니다. 성실하고 헌신적인 태도로 주변 사람들에게 믿음을 주며, 익숙한 환경에서 편안함을 느낍니다. 약속을 중요하게 생각하며, 불확실한 상황을 싫어합니다."},
-                 innovator: { title: "새로운 아이디어로 세상을 바꾸는 사람", keywords: ["창의적", "혁신적", "호기심", "비전"], likes: ["새로운 아이디어", "변화", "토론", "가능성"], dislikes: ["고정관념", "변화에 대한 저항", "지루한 반복", "획일성"], description: "당신은 끊임없이 새로운 아이디어를 떠올리고 혁신을 추구하는 창조적인 사람입니다. 호기심이 많고 비전을 제시하며, 기존의 틀을 벗어난 새로운 가능성을 탐색하는 것을 즐깁니다. 고정관념을 싫어하며, 변화를 통해 성장하는 것을 선호합니다."},
-                 mediator: { title: "조화와 균형을 추구하는 평화주의자", keywords: ["균형 감각", "조정 능력", "평화로움", "이해심"], likes: ["조화로운 관계", "협상", "중립적인 입장", "안정"], dislikes: ["갈등", "극단적인 주장", "불안정", "불공정"], description: "당신은 갈등을 싫어하고 조화와 균형을 중요하게 생각하는 평화주의자입니다. 뛰어난 조정 능력과 이해심으로 주변 사람들의 의견을 조율하고, 안정적인 환경을 조성하는 것을 선호합니다. 극단적인 주장보다는 중립적인 입장을 취하며, 공정함을 추구합니다."},
-                 individualist: { title: "자신만의 개성을 존중하는 독립적인 사람", keywords: ["독립적", "개성 존중", "자율성", "내면의 성찰"], likes: ["자신만의 공간", "자유로운 사고", "개성 표현", "자기 성찰"], dislikes: ["집단주의", "획일적인 사고", "간섭", "겉치레"], description: "당신은 자신만의 개성과 독립성을 중요하게 생각하며, 스스로의 생각과 판단에 따라 자유롭게 행동하는 것을 선호합니다. 간섭받는 것을 싫어하며, 자신만의 공간에서 내면을 성찰하는 시간을 소중히 여깁니다."},
-                 helper: { title: "따뜻한 마음으로 다른 사람을 돕는 사람", keywords: ["이타적", "헌신적", "공감", "봉사"], likes: ["다른 사람 돕기", "봉사 활동", "따뜻한 마음", "의미 있는 일"], dislikes: ["외면", "이기심", "무관심", "불의"], description: "당신은 타인의 어려움을 외면하지 않고, 따뜻한 마음으로 도움을 주는 이타적인 사람입니다. 봉사하는 것에 보람을 느끼며, 주변 사람들의 행복을 위해 헌신합니다. 무관심이나 불의를 싫어하며, 의미 있는 일을 통해 세상에 기여하고자 합니다."},
-                 achiever: { title: "목표를 향해 끊임없이 나아가는 성취자", keywords: ["성취욕", "능력 중심", "노력", "인정"], likes: ["목표 달성", "성공 경험", "경쟁", "능력 인정"], dislikes: ["실패", "무능력함", "노력 부족", "안정적인 상태"], description: "당신은 높은 목표를 설정하고 끊임없이 노력하여 성취를 이루어내는 사람입니다. 자신의 능력을 발휘하여 결과를 만들어내는 것을 중요하게 생각하며, 노력과 성과에 대한 인정을 바랍니다. 안주하는 것을 싫어하며, 늘 더 높은 곳을 향해 나아갑니다."},
-                 creator: { title: "새로운 아이디어와 아름다움을 창조하는 사람", keywords: ["상상력", "예술적 감각", "독창성", "표현"], likes: ["새로운 아이디어 구상", "예술 활동", "독특한 표현", "영감"], dislikes: ["획일적인 사고", "틀에 갇힌 것", "무미건조함", "비판"], description: "당신은 풍부한 상상력과 예술적인 감각으로 세상에 새로운 아름다움을 창조하는 사람입니다. 독창적인 아이디어를 통해 자신을 표현하고, 세상에 영감을 불어넣는 것을 좋아합니다. 획일적인 사고나 틀에 갇히는 것을 싫어합니다."},
-             },
- 
-             initDOM() {
-                 this.app = document.getElementById('app');
-                 this.submarine = document.getElementById('submarine-animation');
-                 this.starShower = document.getElementById('star-shower');
-                 this.renderWelcome();
-             },
- 
-             renderWelcome() {
-                 this.app.innerHTML = `
-                     <div class="header fade-in">
-                         <h1>마음의 나침반</h1>
-                         <p class="subtitle">AI 잠수함 '아스트라'와 함께<br>당신의 속마음을 탐험해보세요.</p>
-                         <button class="header start-button">탐험 시작</button>
-                     </div>
-                 `;
-                 this.app.querySelector('.start-button').addEventListener('click', () => {
-                     this.startJourney();
-                     this.animateSubmarine(this.app.querySelector('.start-button').offsetTop);
-                 });
-             },
- 
-             animateSubmarine(startTop) {
-                 this.submarine.style.top = `${startTop + 20}px`;
-                 this.submarine.style.opacity = 1;
-                 this.submarine.style.animation = 'sub-move 1.5s ease-in-out forwards';
-                 setTimeout(() => {
-                     this.submarine.style.opacity = 0;
-                     this.submarine.style.animation = '';
-                 }, 1500);
-             },
- 
-             createStars() {
-                 this.starShower.innerHTML = '';
-                 for (let i = 0; i < 15; i++) {
-                     const star = document.createElement('div');
-                     star.className = 'star';
-                     star.style.width = `${Math.random() * 2 + 1}px`;
-                     star.style.height = star.style.width;
-                     star.style.left = `${Math.random() * 100}vw`;
-                     star.style.animationDelay = `${Math.random() * 2}s`;
-                     star.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                     this.starShower.appendChild(star);
-                 }
-             },
- 
-             startJourney() {
-                 this.resetState();
-                 this.renderQuestion();
-             },
- 
-             resetState() {
-                 this.state.currentQuestionIndex = 0;
-                 this.state.answers = {};
-                 this.state.scores = {};
-                 this.state.isNavigating = false;
-             },
- 
-             renderQuestion() {
-                 const index = this.state.currentQuestionIndex;
-                 const q = this.questions[index];
-                 const progress = ((index + 1) / this.questions.length) * 100;
-                 const phaseIndex = Math.floor(index / 4);
-                 document.body.style.backgroundColor = `var(--surface-color-${phaseIndex + 1})`;
-                 this.app.innerHTML = `
-                     <div class="journey-container fade-in">
-                         <div class="progress-container">
-                             <div id="progress-text">질문 ${index + 1} / ${this.questions.length}</div>
-                             <div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div>
-                         </div>
-                         ${q.phase ? `<h2 id="phase-title">${q.phase}</h2>` : ''}
-                         <div class="question-card">
-                             <h3 id="question-box">${q.question}</h3>
-                             <div class="choice-options">
-                                 ${q.options.map((opt, i) => `<div class="choice-option" data-weight="${opt.weight}"><span class="option-text">${opt.text}</span></div>`).join('')}
-                             </div>
-                         </div>
-                     </div>
-                 `;
-                 this.app.querySelectorAll('.choice-option').forEach(el => {
-                     el.addEventListener('click', () => this.handleSelection(q, el.dataset.weight));
-                 });
-             },
- 
-             handleSelection(question, weight) {
-                 if (this.state.isNavigating) return;
-                 this.state.isNavigating = true;
-                 this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
-                 this.app.querySelector('.journey-container').style.opacity = 0;
-                 setTimeout(() => {
-                     if (this.state.currentQuestionIndex < this.questions.length - 1) {
-                         this.state.currentQuestionIndex++;
-                         this.renderQuestion();
-                         this.state.isNavigating = false;
-                     } else {
-                         this.renderLoading();
-                     }
-                 }, 400);
-             },
- 
-             renderLoading() {
-                 document.body.style.backgroundColor = `var(--surface-color-3)`;
-                 this.app.innerHTML = `
-                     <div class="loading-screen fade-in">
-                         <div class="loading-graphic">💫</div>
-                         <h2 class="loading-text">밤하늘의 별을 관측 중입니다...</h2>
-                         <p class="subtitle">AI '아스트라'가 당신의 별자리를<br>찾고 있습니다.</p>
-                     </div>
-                 `;
-                 this.createStars();
-                 setTimeout(() => {
-                     this.renderResults();
-                     this.starShower.innerHTML = '';
-                 }, 4000);
-             },
- 
-             renderResults() {
-                 const analysis = this.analyze();
-                 const tendency = this.soulTendencies[analysis.primary] || this.soulTendencies.thinker;
-                 const card_animation_delay = 0.4;
-                 this.app.innerHTML = `
-                     <div class="result-container">
-                         <div class="result-card" style="animation-delay: ${card_animation_delay}s;">
-                             <div class="flavor-card-header">
-                                 <h2 class="flavor-title">${tendency.title}</h2>
-                                 <p class="flavor-keywords">${tendency.keywords.map(k => `#${k}`).join(' ')}</p>
-                             </div>
-                             <p>${tendency.description}</p>
-                             <div class="preference-card">
-                                 <h3>이런 걸 좋아하실 거예요</h3>
-                                 <ul class="preference-list">
-                                     ${tendency.likes.map(like => `<li>${like}</li>`).join('')}
-                                 </ul>
-                             </div>
-                             <div class="preference-card">
-                                 <h3>이런 건 조금 힘들 수 있어요</h3>
-                                 <ul class="preference-list">
-                                     ${tendency.dislikes.map(dislike => `<li>${dislike}</li>`).join('')}
-                                 </ul>
-                             </div>
-                         </div>
-                         <div class="result-card letter-card" style="animation-delay: ${card_animation_delay + 0.3}s;">
-                             <h2><span class="icon">💌</span>당신의 마음에게</h2>
-                             ${this.getComfortMessage(analysis)}
-                         </div>
-                         <button class="restart-button" onclick="MindJourneyApp.initDOM()">다시 탐험하기</button>
-                     </div>
-                 `;
-                 document.body.style.backgroundColor = `var(--surface-color-1)`;
-             },
- 
-             analyze() {
-                 const sorted = Object.entries(this.state.scores).sort((a,b) => b[1] - a[1]);
-                 return {
-                     primary: sorted.length > 0 ? sorted[0][0] : "thinker",
-                     secondary: sorted.length > 1 ? sorted[1][0] : null,
-                 };
-             },
- 
-             getComfortMessage(analysis) {
-                 const p = this.soulTendencies[analysis.primary] || this.soulTendencies.thinker;
-                 const s = analysis.secondary ? this.soulTendencies[analysis.secondary] : null;
- 
-                 let struggle_text = s ? `어쩌면, ${s.title.split(' ')[1]} 당신의 모습 때문에 혼자 힘들어했을지도 몰라요.` : "가끔은 혼자 모든 것을 감당하려 애썼을 거예요.";
- 
-                 const identity = `<p>당신은 **${p.title}**입니다.</p>`;
-                 const struggle = `<p>말은 안 해도, ${struggle_text}</p>`;
-                 const social = `<p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 **'${p.keywords[1]}'** 사람으로 기억되고 있습니다. 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.</p>`;
-                 return identity + struggle + social;
-             }
-         };
+    <script>
+    //<![CDATA[(function() {
+        const MindJourneyApp = {
+            state: { currentQuestionIndex: 0, scores: {}, isNavigating: false },
+            
+            questions: [
+                { question: "주말에 약속이 없다면, 주로 무엇을 하며 보내시나요?", options: [ { text: "평소 가고 싶었던 곳으로 훌쩍 떠나요.", weight: "suitcase" }, { text: "밀린 책을 읽거나 영화를 보며 생각을 정리해요.", weight: "lamp" }, { text: "친구들을 만나 맛있는 음식을 먹고 이야기 나눠요.", weight: "table" }, { text: "그림을 그리거나 악기를 연주하는 등 창작 활동을 해요.", weight: "sketchbook" } ]},
+                { question: "당신에게 '성공'이란 무엇에 가장 가까운가요?", options: [ { text: "많은 경험을 통해 자유롭게 사는 것", weight: "suitcase" }, { text: "내가 하는 일에서 최고의 전문가가 되는 것", weight: "lamp" }, { text: "사랑하는 사람들과 행복하게 사는 것", weight: "sofa" }, { text: "세상에 긍정적인 영향을 주는 것", weight: "fireplace" } ]},
+                { question: "힘들어하는 친구에게 어떤 위로를 건네고 싶으신가요?", options: [ { text: "문제의 원인을 분석하고 현실적인 해결책을 찾아줘요.", weight: "lamp" }, { text: "맛있는 음식을 사주며 기분을 전환시켜 줘요.", weight: "table" }, { text: "아무 말 없이 곁에서 이야기를 들어줘요.", weight: "sofa" }, { text: "함께 새로운 활동을 하며 슬픔을 잊게 도와줘요.", weight: "suitcase" } ]},
+                { question: "새로운 아이디어가 떠올랐을 때, 당신의 첫 반응은?", options: [ { text: "'이게 정말 가능할까?' 실현 가능성부터 따져봐요.", weight: "fireplace" }, { text: "'재밌겠다!' 일단 구체적으로 어떻게 만들지 상상해봐요.", weight: "sketchbook" }, { text: "'다른 사람들은 어떻게 생각할까?' 주변에 물어봐요.", weight: "table" }, { text: "이 아이디어의 원리와 배경에 대해 더 깊이 탐구해요.", weight: "lamp" } ]},
+                { question: "당신이 가장 편안함을 느끼는 공간은 어떤 곳인가요?", options: [ { text: "좋아하는 사람들과 함께하는 따뜻한 거실", weight: "fireplace" }, { text: "언제든 기댈 수 있는 푹신한 소파 위", weight: "sofa" }, { text: "나만의 생각에 집중할 수 있는 조용한 서재", weight: "lamp" }, { text: "새로운 영감이 떠오르는 나만의 작업 공간", weight: "sketchbook" } ]},
+                { question: "다른 사람과 갈등이 생겼을 때, 어떻게 해결하는 편인가요?", options: [ { text: "상황을 주도하여 모두에게 이로운 방향으로 이끌어요.", weight: "fireplace" }, { text: "서로의 입장을 충분히 듣고 타협점을 찾으려 노력해요.", weight: "sofa" }, { text: "갈등 상황을 피하고, 새로운 화제로 분위기를 바꿔요.", weight: "table" }, { text: "잠시 거리를 두고 혼자 이성적으로 상황을 판단해요.", weight: "lamp" } ]},
+                { question: "당신에게 '성장'이란 어떤 의미인가요?", options: [ { text: "다양한 경험을 통해 시야를 넓히는 것", weight: "suitcase" }, { text: "하나의 목표를 향해 꾸준히 나아가는 것", weight: "fireplace" }, { text: "어제보다 더 나은 아이디어를 떠올리는 것", weight: "sketchbook" }, { text: "주변 사람들과 더 깊은 관계를 맺는 것", weight: "table" } ]},
+                { question: "당신이 가장 듣고 싶은 칭찬은 무엇인가요?", options: [ { text: "역시 믿음직스러워, 네 덕분에 든든해.", weight: "fireplace" }, { text: "너랑 있으면 편안하고 마음이 따뜻해져.", weight: "sofa" }, { text: "어떻게 그런 생각을 했어? 정말 독창적이다!", weight: "sketchbook" }, { text: "너의 이야기는 항상 흥미롭고 새로워.", weight: "suitcase" } ]}
+            ],
+            
+            soulObjects: {
+                lamp: { title: "고요한 서재의 램프", subtitle: "지혜와 통찰의 빛", icon: "💡", keywords: ["#지혜로운", "#통찰력있는", "#신중한"], likes: ["혼자만의 시간", "깊이 있는 대화", "지식 탐구"], dislikes: ["가볍고 피상적인 대화", "성급한 결정", "시끄러운 장소"], identity: "세상의 이치를 차분히 들여다보는 사람", struggle: "너무 많은 생각에 빠져 행동하기 어려웠던 순간들", social: "다른 사람의 길을 밝혀주는 등대" },
+                fireplace: { title: "모두를 위한 벽난로", subtitle: "따뜻한 중심", icon: "🔥", keywords: ["#책임감있는", "#안정적인", "#리더"], likes: ["사람들을 챙겨주기", "계획 세우기", "신뢰받는 것"], dislikes: ["무질서하고 즉흥적인 상황", "무책임한 태도", "불확실함"], identity: "공동체의 중심을 지키는 든든한 사람", struggle: "모두를 책임져야 한다는 부담감과 무게", social: "모두가 기댈 수 있는 따뜻하고 견고한 벽" },
+                sketchbook: { title: "새하얀 스케치북", subtitle: "무한한 가능성", icon: "🎨", keywords: ["#창의적인", "#상상력이 풍부한", "#독창적인"], likes: ["새로운 아이디어", "자유로운 표현", "나만의 방식으로 만들기"], dislikes: ["틀에 박힌 규칙", "반복적인 일상", "창의성을 억압하는 것"], identity: "세상에 없던 것을 상상하고 만드는 사람", struggle: "나의 독특한 세계를 남들이 이해해주지 못할까 봐 느끼는 불안함", social: "일상에 새로운 영감을 주는 예술가" },
+                suitcase: { title: "오래된 여행 가방", subtitle: "자유와 경험의 기록", icon: "✈️", keywords: ["#자유로운", "#도전적인", "#경험을 중시하는"], likes: ["새로운 장소와 경험", "예측 불가능한 모험", "자유"], dislikes: ["정체되고 지루한 일상", "규칙과 제약", "깊은 소속감"], identity: "익숙한 곳을 떠나 새로운 세상을 탐험하는 사람", struggle: "한곳에 정착하지 못하고 마음 한편이 늘 공허했던 날들", social: "주변에 새로운 바람과 활기를 불어넣는 존재" },
+                sofa: { title: "푹신한 소파", subtitle: "편안한 위로와 안식", icon: "🛋️", keywords: ["#편안한", "#다정한", "#수용적인"], likes: ["안정적인 관계", "편안한 분위기", "다른 사람의 이야기 들어주기"], dislikes: ["불편하고 어색한 관계", "날카로운 비판", "과도한 경쟁"], identity: "다른 사람의 이야기를 가만히 들어주고 감싸 안아주는 사람", struggle: "모든 사람에게 좋은 사람이 되려다 보니, 정작 내 마음을 돌보지 못했던 시간들", social: "누구나 지쳤을 때 아무 말 없이 기댈 수 있는 쉼터" },
+                table: { title: "모두의 식탁", subtitle: "나눔과 연결의 즐거움", icon: "🍽️", keywords: ["#사교적인", "#즐거움을 추구하는", "#연결자"], likes: ["친구들과의 만남", "맛있는 음식 나누기", "유쾌한 대화"], dislikes: ["혼자 있는 것", "어색하고 조용한 분위기", "진지하고 무거운 이야기"], identity: "사람들을 연결하고 즐거운 순간을 만들어내는 사람", struggle: "가끔은 혼자가 되는 것을 견디기 힘들어했던 외로움", social: "모두를 하나로 모으는 즐거운 파티의 주최자" },
+            },
+
+            initDOM() {
+                this.app = document.getElementById('app');
+                this.renderWelcome();
+            },
+            renderWelcome() {
+                this.app.innerHTML = `<div class="header fade-in"><h1>마음의 나침반</h1><p class="subtitle">AI 잠수함 '아스트라'와 함께<br>당신의 마음 속 방을 탐험해 보세요.</p><button class="header start-button">탐험 시작</button></div>`;
+                this.app.querySelector('.start-button').addEventListener('click', () => {
+                    this.startJourney();
+                    this.animateSubmarine();
+                });
+            },
+            animateSubmarine() {
+                const submarine = document.createElement('div');
+                submarine.innerHTML = `<svg viewBox="0 0 100 50" fill="currentColor" color="#90BFFF" width="80px"><path d="M10 25 a10 10 0 0 1 20 0 h40 a10 10 0 0 1 20 0 h10 v25 h-90 z M30 15 a5 5 0 1 1 10 0 a5 5 0 1 1 -10 0 M60 15 a5 5 0 1 1 10 0 a5 5 0 1 1 -10 0"/></svg>`;
+                submarine.style.cssText = `position:fixed; top:40%; left:50%; transform:translateX(-50%); z-index:20; transition: all 1.5s ease-in-out;`;
+                document.body.appendChild(submarine);
+                setTimeout(() => {
+                    submarine.style.transform = 'translateX(-50%) translateY(100vh) scale(0.5)';
+                    submarine.style.opacity = '0';
+                }, 100);
+                setTimeout(() => { submarine.remove(); }, 1600);
+            },
+            startJourney() { this.resetState(); this.renderQuestion(); },
+            resetState() { this.state.currentQuestionIndex = 0; this.state.scores = {}; this.state.isNavigating = false; },
+            renderQuestion() {
+                const index = this.state.currentQuestionIndex;
+                const q = this.questions[index];
+                const progress = ((index + 1) / this.questions.length) * 100;
+                this.app.innerHTML = `<div class="journey-container fade-in"><div class="progress-container"><div id="progress-text">질문 ${index + 1} / ${this.questions.length}</div><div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div></div><div class="question-card"><h3 id="question-box">${q.question}</h3><div class="choice-options">${q.options.map(opt => `<div class="choice-option" data-weight="${opt.weight}"><span class="option-text">${opt.text}</span></div>`).join('')}</div></div></div>`;
+                this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(el.dataset.weight)); });
+            },
+            handleSelection(weight) {
+                if (this.state.isNavigating) return;
+                this.state.isNavigating = true;
+                this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
+                this.app.querySelector('.journey-container').style.opacity = 0;
+                setTimeout(() => {
+                    if (this.state.currentQuestionIndex < this.questions.length - 1) {
+                        this.state.currentQuestionIndex++;
+                        this.renderQuestion();
+                        this.state.isNavigating = false;
+                    } else { this.renderLoading(); }
+                }, 400);
+            },
+            renderLoading() {
+                this.app.innerHTML = `<div class="loading-screen fade-in"><div class="loading-graphic">✨</div><h2 class="loading-text">마음 속을 여행하며<br>당신을 닮은 물건을 찾고 있어요...</h2></div>`;
+                this.createStars();
+                setTimeout(() => {
+                    this.renderResults();
+                    document.getElementById('star-shower').innerHTML = '';
+                }, 3000);
+            },
+            createStars() {
+                const container = document.getElementById('star-shower');
+                if (!container) return;
+                for (let i = 0; i < 15; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.width = `${Math.random() * 2 + 1}px`;
+                    star.style.height = star.style.width;
+                    star.style.left = `${Math.random() * 100}vw`;
+                    star.style.animationDelay = `${Math.random() * 2}s`;
+                    star.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                    container.appendChild(star);
+                }
+            },
+            renderResults() {
+                const analysis = this.analyze();
+                const artifact = this.soulObjects[analysis.primary] || this.soulObjects.lamp;
+                this.app.innerHTML = `
+                    <div class="result-container fade-in">
+                        <div class="result-card">
+                            <div class="artifact-header">
+                                <p style="font-size:16px; color: var(--text-secondary);">당신의 마음의 방에는...</p>
+                                <div class="artifact-icon">${artifact.icon}</div>
+                                <h2 class="artifact-title" style="color:var(--text-primary); margin:0;">${artifact.title}</h2>
+                                <p class="artifact-subtitle">${artifact.subtitle}</p>
+                                <p class="flavor-keywords">${artifact.keywords.map(k => `#${k}`).join(' ')}</p>
+                            </div>
+                            <p>${artifact.description}</p>
+                        </div>
+                        <div class="result-card">
+                            <h2><span class="icon">👍</span>당신이 좋아하는 것 & <span class="icon">👎</span>힘들어하는 것</h2>
+                            <div class="preference-container">
+                                <div class="preference-box">
+                                    <h3>이런 걸 좋아해요</h3>
+                                    <ul class="preference-list">${artifact.likes.map(like => `<li>${like}</li>`).join('')}</ul>
+                                </div>
+                                <div class="preference-box">
+                                    <h3>이런 건 조금 힘들어요</h3>
+                                    <ul class="preference-list">${artifact.dislikes.map(dislike => `<li>${dislike}</li>`).join('')}</ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-card letter-card">
+                            <h2><span class="icon">💌</span>당신의 마음에게</h2>
+                            ${this.getComfortMessage(analysis)}
+                        </div>
+                        <div class="share-buttons">
+                            <button class="share-btn" id="share-kakao">카카오톡으로 공유</button>
+                            <button class="share-btn" id="copy-link">링크 복사</button>
+                        </div>
+                        <button class="restart-button" onclick="MindJourneyApp.initDOM()">다시 탐험하기</button>
+                    </div>`;
+                this.addShareEventListeners(artifact.title);
+            },
+            
+            analyze() {
+                const sorted = Object.entries(this.state.scores).sort((a,b) => b[1] - a[1]);
+                return {
+                    primary: sorted.length > 0 ? sorted[0][0] : "lamp",
+                    secondary: sorted.length > 1 ? sorted[1][0] : null,
+                };
+            },
+            getComfortMessage(analysis) {
+                const p = this.soulObjects[analysis.primary] || this.soulObjects.lamp;
+                const s = analysis.secondary ? this.soulObjects[analysis.secondary] : null;
+
+                let struggle = `말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을지 모릅니다. 바로 '${p.struggle}' 때문에 말이죠.`;
+                if (s) {
+                    struggle += ` 때로는 '${s.struggle}'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.`;
+                } else {
+                    struggle += ` 그 마음을 누구에게도 쉽게 털어놓지 못했을 겁니다.`;
+                }
+                
+                return `<p>당신은 **${p.identity}**입니다.</p><p>${struggle}</p><p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 **${p.social}**입니다. 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.</p>`;
+            },
+            addShareEventListeners(resultTitle) {
+                const shareText = `AI가 발견한 내 마음 속 물건은... [${resultTitle}]이래요! 😲 너의 마음 속에는 어떤 물건이 있을까?`;
+                const shareUrl = window.location.href;
+
+                // Web Share API (모바일 우선)
+                if (navigator.share) {
+                    document.getElementById('share-kakao').addEventListener('click', () => {
+                        navigator.share({
+                            title: '마음의 나침반',
+                            text: shareText,
+                            url: shareUrl,
+                        }).catch(console.error);
+                    });
+                } else {
+                    document.getElementById('share-kakao').style.display = 'none'; // 지원 안 하면 카톡 버튼 숨김
+                }
+                
+                // 링크 복사 (폴백)
+                document.getElementById('copy-link').addEventListener('click', () => {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        alert('링크가 복사되었어요! 친구에게 공유해보세요.');
+                    }).catch(err => {
+                        console.error('Could not copy text: ', err);
+                        alert('링크 복사에 실패했어요.');
+                    });
+                });
+            }
+        };
  
          document.addEventListener('DOMContentLoaded', () => { MindJourneyApp.initDOM(); });
      })()]];
