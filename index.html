@@ -38,13 +38,13 @@
             overflow-x: hidden;
         }
 
-        #app { max-width: 680px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
+        #app { max-width: 680px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
         
         .fade-in { animation: fadeIn 1.5s ease-out both; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- 인트로 화면 스타일 --- */
-        #welcome-container { text-align: center; margin: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: fixed; top:0; left:0; width:100%; z-index: 100; background-color: var(--color-bg); transition: opacity 1s ease-out; }
+        #welcome-container { text-align: center; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: fixed; top:0; left:0; width:100%; height:100%; z-index: 100; background-color: var(--color-bg); transition: opacity 1s ease-out; }
         .prologue { font-family: var(--font-serif); font-size: 20px; color: var(--text-primary); font-weight: 400; line-height: 2; margin-bottom: 40px; }
         .prologue p { opacity: 0; transition: opacity 2s ease-in-out; }
         .prologue p.visible { opacity: 1; }
@@ -58,17 +58,19 @@
         #welcome-container .start-button:hover { transform: scale(1.05); }
 
         #intro-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; overflow: hidden; background-color: var(--color-bg); transition: opacity 1s ease-out; }
-        .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: fall 5s linear infinite; }
-        @keyframes fall { from { transform: translate(-10vw, -10vh) scale(1); opacity: 1; } to { transform: translate(110vw, 110vh) scale(0.5); opacity: 0; } }
-        .bonfire { position: absolute; bottom: 10vh; left: 50%; transform: translateX(-50%); width: 80px; height: 100px; filter: blur(2px); }
-        .flame { position: absolute; bottom: 0; width: 15px; height: 100%; background-color: #FFDE7D; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transform-origin: 50% 100%; animation: flicker 3s infinite; box-shadow: 0 0 15px #FFDE7D, 0 0 30px #FFB347, 0 0 50px #FF6F61; }
-        .flame:nth-child(2) { animation-delay: 0.5s; width: 12px; height: 80%; left: 15px; background-color: #FFB347; }
-        .flame:nth-child(3) { animation-delay: 1s; width: 14px; height: 90%; right: 15px; background-color: #FF6F61; }
-        @keyframes flicker { 0%, 100% { transform: scaleY(1) rotate(-2deg); } 50% { transform: scaleY(1.2) rotate(2deg); opacity: 0.8; } }
+        .star { position: absolute; width: 1px; height: 80px; background: linear-gradient(to bottom, rgba(255,255,255,0.7), transparent); animation: fall 5s linear infinite; transform: rotate(20deg); }
+        @keyframes fall { from { transform: translate(-20vw, -20vh) rotate(20deg); opacity: 1; } to { transform: translate(120vw, 120vh) rotate(20deg); opacity: 0; } }
         
-        /* --- 질문 화면 스타일 --- */
-        .journey-container { display: none; flex-direction: column; min-height: 100vh; justify-content: center; }
-        .journey-container.visible { display: flex; animation: fadeIn 1s forwards; }
+        .bonfire { position: absolute; bottom: 15vh; left: 50%; transform: translateX(-50%); width: 60px; height: 80px; filter: blur(1.5px); }
+        .flame { position: absolute; bottom: 0; width: 15px; height: 100%; background-color: #FFDE7D; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transform-origin: 50% 100%; animation: flicker 3s infinite; box-shadow: 0 0 10px #FFDE7D, 0 0 20px #FFB347; }
+        .flame:nth-child(2) { animation-delay: 0.5s; width: 10px; height: 70%; left: 12px; background-color: #FFB347; }
+        .flame:nth-child(3) { animation-delay: 1s; width: 12px; height: 80%; right: 12px; background-color: #FF6F61; }
+        @keyframes flicker { 0%, 100% { transform: scaleY(1) rotate(-1deg); opacity: 0.9; } 50% { transform: scaleY(1.1) rotate(1deg); opacity: 1; } }
+        
+        /* --- 질문 & 결과 화면 --- */
+        .content-wrapper { display: none; }
+        .content-wrapper.visible { display: block; animation: fadeIn 1s forwards; }
+        .journey-container { display: flex; flex-direction: column; min-height: 100vh; justify-content: center; }
         #question-box { font-family: var(--font-serif); font-size: 24px; font-weight: 600; text-align: center; margin-bottom: 32px; word-break: keep-all; }
         .choice-options { display: flex; flex-direction: column; gap: 12px; }
         .choice-option { background: var(--color-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; text-align: center; }
@@ -77,20 +79,27 @@
         
         .result-container { padding-top: 5vh; }
         .result-card { background: var(--color-surface); border-radius: var(--border-radius); padding: 32px 40px; margin-bottom: 24px; }
-        .result-card h2 { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text-accent); margin-bottom: 16px; }
-        .result-card h2 .icon { margin-right: 12px; }
+        .result-card h2 { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text-accent); margin-bottom: 16px; display: flex; align-items: center; }
+        .result-card h2 .icon { margin-right: 12px; font-size: 22px; }
         .result-card p { font-size: 17px; line-height: 1.9; color: var(--text-secondary); }
+        
         .landscape-header { text-align: center; padding: 24px 0; }
         .landscape-title { font-size: 30px; margin-bottom: 8px; }
         .landscape-subtitle { font-family: var(--font-sans); font-size: 18px; color: var(--accent-point); font-style: italic; }
+        
         .light-shadow-box h3 { font-family: var(--font-serif); font-size: 20px; margin-bottom: 10px; font-weight: 600; }
         .light h3 { color: #A7D7C5; }
         .shadow h3 { color: #DAB894; margin-top: 24px; }
+        
+        .letter-card { background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--text-accent); padding: 40px; }
         .letter-card p { font-family: var(--font-serif); font-size: 18px; line-height: 2; }
         .letter-card strong { color: var(--text-primary); font-weight: 600; }
+        
         .share-buttons { margin-top: 24px; display: flex; gap: 12px; justify-content: center; }
-        .share-btn { font-size: 15px; font-weight: 500; padding: 12px 24px; border-radius: 30px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.1); color: var(--text-primary); cursor: pointer; transition: all 0.2s ease; }
-        .restart-button { display: block; width: fit-content; margin: 24px auto 0; padding: 12px 30px; font-size: 16px; font-weight: 500; background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.2s ease-in-out; }
+        .share-btn { font-size: 15px; font-weight: 500; padding: 12px 24px; border-radius: 30px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.1); color: var(--text-primary); cursor: pointer; }
+        .restart-button { display: block; width: fit-content; margin: 24px auto 0; padding: 12px 30px; font-size: 16px; font-weight: 500; background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; }
+
+        @media (max-width: 480px) { .prologue { font-size: 18px; } .result-card { padding: 24px; } }
     </style>
 </head>
  
@@ -119,9 +128,8 @@
                 lake: {
                     title: "고요한 호숫가",
                     subtitle: "자신을 비추는 깊고 투명한 물",
-                    description: "당신의 마음은 고요한 새벽의 호수와 같습니다. 세상의 소란이 닿지 않는 그곳에서, 당신은 자신의 내면을 깊이 들여다봅니다. 당신은 섣불리 판단하는 대신 오래 관찰하고, 많이 말하기보다 깊이 생각하는 사람입니다. 그 침묵과 사색의 시간 속에서 당신은 누구보다 명료한 지혜를 얻습니다.",
                     light_title: "빛: 통찰",
-                    light_text: "당신은 복잡하게 얽힌 문제의 핵심을 꿰뚫어 보는 힘이 있습니다. 다른 사람들이 놓치는 작은 단서들을 연결하여, 아무도 보지 못했던 큰 그림을 발견해내곤 합니다. 당신의 차분한 한마디는, 길을 잃은 사람들에게 방향을 알려주는 북극성과 같습니다.",
+                    light_text: "당신은 세상의 복잡한 현상들 속에서 자신만의 리듬으로 질서를 발견하는 사람입니다. 다른 사람들이 쉽게 지나치는 사소한 부분에서도, 당신은 끈질긴 사유를 통해 숨겨진 의미와 패턴을 읽어냅니다. 당신의 깊이 있는 통찰은 혼란스러운 상황에서 방향을 제시하는 빛이 됩니다.",
                     shadow_title: "그림자: 망설임",
                     shadow_text: "너무 깊은 생각은 때로 행동을 망설이게 만듭니다. 모든 것을 완벽하게 이해하고 움직이려다, 소중한 순간을 놓쳐버릴 때도 있었을 겁니다. 하지만 괜찮습니다. 그 신중함이 있었기에, 당신은 더 큰 실수를 피할 수 있었을 테니까요.",
                     identity_phrase: "지혜와 통찰로 세상을 이해하는 사람",
@@ -131,7 +139,6 @@
                 forest: {
                     title: "오래된 숲의 땅",
                     subtitle: "모든 것을 품는 단단하고 깊은 뿌리",
-                    description: "당신의 마음은 오랜 세월을 거쳐온 숲의 땅과 같습니다. 수많은 나무들이 깊이 뿌리내린 그곳은, 웬만한 비바람에는 흔들리지 않는 견고한 안정감을 줍니다. 당신은 자신의 사람들을 지키기 위해 기꺼이 단단한 땅이 되어주는, 책임감 있고 믿음직한 사람입니다.",
                     light_title: "빛: 책임감",
                     light_text: "당신은 자신이 뱉은 말을 반드시 지키려 하며, 어려운 상황에서도 쉽게 도망치지 않습니다. 사람들은 당신의 그런 굳건한 모습에 기대어 안정을 찾습니다. 당신이 있는 곳은 마치 폭풍우 속에서도 안전한, 커다란 나무 아래와 같습니다.",
                     shadow_title: "그림자: 부담감",
@@ -143,7 +150,6 @@
                 sky: {
                     title: "새벽의 하늘",
                     subtitle: "정해지지 않은 무한한 가능성의 색",
-                    description: "당신의 마음은 해가 뜨기 직전, 시시각각 다른 빛으로 물드는 새벽의 하늘과 같습니다. 그곳에는 세상에 없던 새로운 색깔과 무한한 가능성이 펼쳐져 있습니다. 당신은 틀에 갇히지 않는 상상력으로, 자신만의 방식으로 세상을 아름답게 칠해나가는 예술가입니다.",
                     light_title: "빛: 창의성",
                     light_text: "당신은 남들이 보지 못하는 방식으로 세상을 보고, 세상에 없던 새로운 아이디어를 떠올립니다. 당신의 독창적인 시선과 풍부한 상상력은, 흑백의 세상에 처음으로 색을 입히는 것과 같은 놀라운 일을 해냅니다.",
                     shadow_title: "그림자: 외로움",
@@ -155,7 +161,6 @@
                 wind: {
                     title: "지평선 너머의 바람",
                     subtitle: "어디에도 얽매이지 않는 자유로운 숨결",
-                    description: "당신의 마음은 드넓은 평원을 가로질러 지평선 너머로 향하는 바람과 같습니다. 당신의 영혼은 하나의 장소, 하나의 정체성에 얽매이는 것을 거부합니다. 당신에게 삶이란, 새로운 경험을 통해 끊임없이 변화하고 성장해나가는 자유로운 여정입니다.",
                     light_title: "빛: 용기",
                     light_text: "당신은 미지의 세계를 향해 기꺼이 발을 내딛는 용감한 사람입니다. 대부분의 사람들이 안정적인 현실에 머무를 때, 당신은 실패의 두려움보다 새로운 경험에 대한 설렘을 선택합니다. 당신의 용기는 주변 사람들에게 새로운 영감을 줍니다.",
                     shadow_title: "그림자: 공허함",
@@ -167,7 +172,6 @@
                 river: {
                     title: "저녁노을 비치는 강",
                     subtitle: "세상의 모든 색을 말없이 품어주는",
-                    description: "당신의 마음은 해 질 녘, 세상의 모든 빛깔을 말없이 품어주는 강물과 같습니다. 당신은 자신의 이야기를 하기보다, 다른 사람의 이야기에 조용히 귀 기울이는 사람입니다. 당신의 깊은 공감과 따뜻한 수용 앞에서, 사람들은 비로소 마음의 짐을 내려놓습니다.",
                     light_title: "빛: 공감",
                     light_text: "당신은 다른 사람의 슬픔을 자신의 슬픔처럼, 다른 사람의 기쁨을 자신의 기쁨처럼 느낄 줄 아는 특별한 능력을 가졌습니다. 당신의 진심 어린 공감은, 세상의 어떤 명약보다 더 깊은 치유의 힘을 발휘합니다.",
                     shadow_title: "그림자: 자기희생",
@@ -179,7 +183,6 @@
                 harbor: {
                     title: "작은 항구의 등대",
                     subtitle: "언제나 그 자리에서 기다리는 불빛",
-                    description: "당신은 폭풍우 치는 바다를 헤매던 배들이 마침내 돌아와 쉴 수 있는, 작은 항구의 등대와 같은 사람입니다. 당신은 사람과 사람 사이의 즐거운 연결을 소중히 여기며, 그들이 언제든 돌아올 수 있는 따뜻한 중심이 되어줍니다. 당신이 있는 곳은 언제나 유쾌하고 안전한 정박지가 됩니다.",
                     light_title: "빛: 연결",
                     light_text: "당신은 사람과 사람을 연결하고 즐거운 순간을 만들어내는 특별한 재능을 가졌습니다. 흩어져 있던 사람들이 당신이라는 항구를 중심으로 모여들어, 하나의 따뜻한 공동체를 이룹니다. 당신은 그 자체로 소중한 구심점입니다.",
                     shadow_title: "그림자: 외로움",
@@ -190,11 +193,13 @@
                 }
             },
 
-            initDOM() { this.app = document.getElementById('app'); this.renderWelcome(); },
+            initDOM() {
+                this.app = document.getElementById('app');
+                this.introBg = document.getElementById('intro-background');
+                this.renderWelcome();
+            },
             renderWelcome() {
-                const introBg = document.getElementById('intro-background');
-                if(!introBg) { const bgDiv = document.createElement('div'); bgDiv.id = 'intro-background'; document.body.prepend(bgDiv); }
-                introBg.innerHTML = '<div class="light-orb"></div>';
+                this.introBg.innerHTML = '<div class="light-orb"></div>';
                 for(let i=0; i<15; i++) {
                     const star = document.createElement('div');
                     star.className = 'star';
@@ -202,7 +207,7 @@
                     star.style.top = `${Math.random() * 100}%`;
                     star.style.animationDelay = `${Math.random() * 5}s`;
                     star.style.animationDuration = `${Math.random() * 3 + 4}s`;
-                    introBg.appendChild(star);
+                    this.introBg.appendChild(star);
                 }
                 
                 this.app.innerHTML = `<div id="welcome-container" class="welcome-screen">
@@ -212,7 +217,8 @@
                         <p>당신의 마음에만 집중하는 시간을 준비했습니다.</p>
                     </div>
                     <button class="start-button">마음속으로 들어가기</button>
-                </div>`;
+                </div>
+                <div id="content-wrapper" class="content-wrapper"></div>`;
 
                 const prologueLines = this.app.querySelectorAll('.prologue p');
                 prologueLines.forEach((line, index) => { setTimeout(() => line.classList.add('visible'), index * 1500 + 500); });
@@ -220,12 +226,17 @@
 
                 this.app.querySelector('.start-button').addEventListener('click', () => { 
                     const welcome = document.getElementById('welcome-container');
-                    const intro = document.getElementById('intro-background');
-                    if(welcome) welcome.style.opacity = 0;
-                    if(intro) intro.style.opacity = 0;
+                    if(welcome) {
+                        welcome.style.opacity = 0;
+                        welcome.style.transition = 'opacity 1s ease-out';
+                    }
+                    if(this.introBg) {
+                        this.introBg.style.opacity = 0;
+                        this.introBg.style.transition = 'opacity 1s ease-out';
+                    }
                     setTimeout(() => {
                         if(welcome) welcome.style.display = 'none';
-                        if(intro) intro.style.display = 'none';
+                        if(this.introBg) this.introBg.style.display = 'none';
                         this.startJourney();
                     }, 1000);
                 }); 
@@ -237,8 +248,11 @@
                 const q = this.questions[index];
                 if (!q) return;
 
+                const contentWrapper = document.getElementById('content-wrapper');
+                if(!contentWrapper) return;
+                
                 const progress = ((index + 1) / this.questions.length) * 100;
-                this.app.innerHTML = `<div class="journey-container">
+                contentWrapper.innerHTML = `<div class="journey-container">
                     <div class="progress-container">
                         <div id="progress-text">탐사 심도 ${Math.round(progress * 10)}m</div>
                         <div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div>
@@ -247,8 +261,8 @@
                     <div class="choice-options">${q.options.map((opt, i) => `<div class="choice-option" data-weight="${opt.weight}" data-answer-index="${i}"><span class="option-text">${opt.text}</span></div>`).join('')}</div>
                 </div>`;
                 
-                this.app.querySelector('.journey-container').classList.add('visible');
-                this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(q, el.dataset.weight, parseInt(el.dataset.answerIndex))); });
+                contentWrapper.classList.add('visible');
+                contentWrapper.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(q, el.dataset.weight, parseInt(el.dataset.answerIndex))); });
                 
                 const colorRatio = index / (this.questions.length - 1);
                 document.body.style.transition = 'background-color 1.2s ease';
@@ -266,7 +280,7 @@
                 if (this.state.isNavigating) return;
                 this.state.isNavigating = true;
                 this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
-                if(question.key) { this.state.answers[question.key] = question.options[answerIndex].text; }
+                if(question.key) { this.state.answers[question.key] = this.questions[this.state.currentQuestionIndex].options[answerIndex].text; }
                 const journeyContainer = this.app.querySelector('.journey-container');
                 if (journeyContainer) { journeyContainer.style.opacity = 0; journeyContainer.style.transition = 'opacity 0.4s ease-out'; }
                 setTimeout(() => {
@@ -278,14 +292,20 @@
                 }, 400);
             },
             renderLoading() {
-                this.app.innerHTML = `<div class="loading-screen fade-in"><h2>마음의 심해를 분석하며<br>당신을 닮은 풍경을 찾고 있어요...</h2></div>`;
+                const contentWrapper = document.getElementById('content-wrapper');
+                if(!contentWrapper) return;
+                contentWrapper.innerHTML = `<div class="loading-screen fade-in"><h2>마음의 심해를 분석하며<br>당신을 닮은 풍경을 찾고 있어요...</h2></div>`;
                 setTimeout(() => { this.renderResults(); }, 3000);
             },
             renderResults() {
                 const analysis = this.analyze();
                 const landscape = this.mindscapes[analysis.primary];
                 if (!landscape) { this.app.innerHTML = `<p>오류: 분석 결과를 불러올 수 없습니다.</p>`; return; }
-                this.app.innerHTML = `
+                
+                const contentWrapper = document.getElementById('content-wrapper');
+                if(!contentWrapper) return;
+
+                contentWrapper.innerHTML = `
                     <div class="result-container fade-in">
                         <div class="result-card" style="animation-delay: 0.5s;">
                             <div class="landscape-header">
