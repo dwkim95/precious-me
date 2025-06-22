@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>마음의 나침반 | 심해에서 발견한 내 마음의 유물</title>
-    <meta name="description" content="AI '아스트라'와 함께 마음의 심해를 탐사하고, 당신의 영혼을 상징하는 단 하나의 유물을 발견하세요.">
-    <meta property="og:title" content="마음의 나침반 - AI 심층 심리 분석">
-    <meta property="og:description" content="AI가 발견한 내 마음 속 유물은 무엇일까요? 지금 바로 확인해보세요!">
+    <title>MIND DIVE | 당신의 마음 풍경으로의 여행</title>
+    <meta name="description" content="AI '아스트라'와 함께 떠나는 마음의 심해 탐사. 당신의 내면 깊은 곳에 펼쳐진 풍경을 발견하고, 진정한 위로를 경험하세요.">
+    <meta property="og:title" content="MIND DIVE - AI 마음 탐사">
+    <meta property="og:description" content="AI가 발견한 내 마음의 풍경은 어떤 모습일까요? 지금 바로 확인해보세요.">
     <meta property="og:image" content="https://i.ibb.co/3k5JqB4/og-image-compass.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,14 +17,13 @@
         :root {
             --font-serif: 'Maru Buri', serif;
             --font-sans: 'IBM Plex Sans KR', sans-serif;
-            --surface-color-1: #1E2940;
-            --surface-color-2: #141D34;
-            --surface-color-3: #0A1122;
+            --color-bg: #0A0C16;
+            --color-surface: rgba(255, 255, 255, 0.05);
+            --color-border: rgba(255, 255, 255, 0.1);
             --text-primary: #E6EEFF;
             --text-secondary: #A0AEC0;
             --text-accent: #A5B4FC;
             --accent-point: #F472B6;
-            --border-color: rgba(255, 255, 255, 0.1);
             --border-radius: 16px;
         }
 
@@ -32,86 +31,75 @@
         html { scroll-behavior: smooth; }
         body {
             font-family: var(--font-sans);
-            font-weight: 400;
-            background-color: var(--surface-color-3);
+            font-weight: 300;
+            background-color: var(--color-bg);
             color: var(--text-primary);
             line-height: 1.8;
             overflow-x: hidden;
         }
 
-        #app { max-width: 640px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
+        #app { max-width: 680px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
         
-        .fade-in { animation: fadeIn 1.2s ease-out both; }
+        .fade-in { animation: fadeIn 1.5s ease-out both; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .welcome-screen { text-align: center; margin: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 2; }
+        /* --- 인트로 화면 스타일 --- */
+        .welcome-screen { text-align: center; margin: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: fixed; top:0; left:0; width:100%; z-index: 100; background-color: var(--color-bg); transition: opacity 1s ease-out; }
         .prologue { font-family: var(--font-serif); font-size: 20px; color: var(--text-secondary); line-height: 2; margin-bottom: 40px; }
-        .prologue p { opacity: 0; transition: opacity 1.5s ease-in-out; }
+        .prologue p { opacity: 0; transition: opacity 2s ease-in-out; }
         .prologue p.visible { opacity: 1; }
         .welcome-screen .start-button {
             padding: 16px 40px; font-size: 16px; font-weight: 500;
-            background-color: var(--text-accent); color: var(--surface-color-3);
+            background-color: var(--text-accent); color: var(--color-bg);
             border: none; border-radius: 30px; cursor: pointer;
-            transition: all 0.2s ease; opacity: 0;
+            transition: all 0.3s ease; opacity: 0;
         }
-        .welcome-screen .start-button.visible { opacity: 1; transition: opacity 1.5s ease-in-out, transform 0.2s ease; }
+        .welcome-screen .start-button.visible { opacity: 1; transition: opacity 2s ease-in-out, transform 0.2s ease; }
         .welcome-screen .start-button:hover { transform: scale(1.05); }
 
-        #intro-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; overflow: hidden; }
+        #intro-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99; overflow: hidden; background-color: var(--color-bg); transition: opacity 1s ease-out; }
         .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: fall 5s linear infinite; }
         @keyframes fall { from { transform: translate(-10vw, -10vh); opacity: 1; } to { transform: translate(110vw, 110vh); opacity: 0; } }
-        .bonfire { position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); width: 100px; height: 120px; }
-        .flame { position: absolute; bottom: 0; width: 20px; height: 100%; background-color: #ffcc00; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transform-origin: 50% 100%; animation: flicker 3s infinite; box-shadow: 0 0 20px #ffcc00, 0 0 40px #ff9900, 0 0 60px #ff6600; }
-        .flame:nth-child(2) { animation-delay: 0.5s; width: 15px; height: 80%; left: 20px; background-color: #ff9900; }
-        .flame:nth-child(3) { animation-delay: 1s; width: 18px; height: 90%; right: 20px; background-color: #ff6600; }
-        @keyframes flicker { 0%, 100% { transform: scaleY(1) rotate(-1deg); } 50% { transform: scaleY(1.2) rotate(1deg); } }
-
-        .journey-container { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; opacity: 0; }
-        .journey-container.visible { opacity: 1; transition: opacity 1s ease-in-out; }
-        .progress-container { margin-bottom: 24px; }
-        #progress-text { text-align: center; font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; font-weight: 500; }
-        .progress-bar { width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 2.5px; overflow: hidden; }
-        #progress-fill { height: 100%; background: var(--text-accent); border-radius: 2.5px; transition: width 0.4s ease; }
+        .bonfire { position: absolute; bottom: 10vh; left: 50%; transform: translateX(-50%); width: 80px; height: 100px; filter: blur(2px); }
+        .flame { position: absolute; bottom: 0; width: 15px; height: 100%; background-color: #FFDE7D; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transform-origin: 50% 100%; animation: flicker 3s infinite; box-shadow: 0 0 15px #FFDE7D, 0 0 30px #FFB347, 0 0 50px #FF6F61; }
+        .flame:nth-child(2) { animation-delay: 0.5s; width: 12px; height: 80%; left: 15px; background-color: #FFB347; }
+        .flame:nth-child(3) { animation-delay: 1s; width: 14px; height: 90%; right: 15px; background-color: #FF6F61; }
+        @keyframes flicker { 0%, 100% { transform: scaleY(1) rotate(-2deg); } 50% { transform: scaleY(1.2) rotate(2deg); opacity: 0.8; } }
         
-        #question-box { font-family: var(--font-serif); font-size: 22px; font-weight: 600; text-align: center; margin-bottom: 24px; word-break: keep-all; }
+        /* --- 질문 & 결과 공통 --- */
+        .journey-container, .result-container { opacity: 0; animation: fadeIn 1s .5s forwards; }
+        h2 { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text-accent); margin-bottom: 16px; }
+        p { font-family: var(--font-sans); font-size: 17px; line-height: 1.9; color: var(--text-secondary); font-weight: 300; word-break: keep-all; }
+        strong { color: var(--text-primary); font-weight: 500; }
+        
+        /* --- 질문 화면 --- */
+        .journey-container { display: flex; flex-direction: column; min-height: 100vh; justify-content: center; }
+        #question-box { font-family: var(--font-serif); font-size: 24px; font-weight: 600; text-align: center; margin-bottom: 32px; }
         .choice-options { display: flex; flex-direction: column; gap: 12px; }
-        .choice-option { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; cursor: pointer; transition: all 0.2s ease; text-align: center; }
-        .choice-option:hover { background: rgba(255,255,255,0.1); transform: scale(1.02); }
-        .option-text { font-family: var(--font-sans); font-size: 16px; font-weight: 400; word-break: keep-all; }
+        .choice-option { background: var(--color-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s ease; text-align: center; }
+        .choice-option:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); }
+        .option-text { font-size: 17px; }
         
-        .loading-screen { text-align: center; margin: auto; }
-        .loading-text { font-family: var(--font-serif); font-size: 20px; font-weight: 500; }
-        
-        .result-container { padding-top: 5vh; }
-        .result-card { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 32px 40px; margin-bottom: 24px; }
-        .result-card h2 { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text-accent); margin-bottom: 16px; display: flex; align-items: center; }
+        /* --- 결과 페이지 --- */
+        .result-card { background: var(--color-surface); border-radius: var(--border-radius); padding: 32px 40px; margin-bottom: 24px; }
         .result-card h2 .icon { margin-right: 12px; font-size: 22px; }
-        .result-card p { font-family: var(--font-sans); font-size: 17px; line-height: 1.9; color: var(--text-secondary); font-weight: 300; word-break: keep-all; }
+        .landscape-header { text-align: center; padding: 24px 0; }
+        .landscape-title { font-size: 30px; margin-bottom: 8px; }
+        .landscape-subtitle { font-family: var(--font-sans); font-size: 18px; color: var(--accent-point); font-style: italic; }
         
-        .artifact-header { text-align: center; padding-bottom: 24px; }
-        .artifact-icon { font-size: 56px; margin-bottom: 16px; display: inline-block; animation: icon-pop 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) .5s both; }
-        @keyframes icon-pop { 0% {transform: scale(0);} 100% {transform: scale(1);} }
-        .artifact-title { font-family: var(--font-serif); font-size: 28px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
-        .artifact-subtitle { font-family: var(--font-serif); font-size: 18px; color: var(--accent-point); }
+        .tendency-box h3 { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+        .tendency-list { list-style: none; padding: 0; }
+        .tendency-list li { margin-bottom: 8px; }
+        .tendency-list li::before { content: '• '; color: var(--text-accent); font-weight: 600; }
         
-        .light-shadow-container { margin-top: 16px; }
-        .light-shadow-box h3 { font-family: var(--font-serif); font-size: 20px; margin-bottom: 10px; display: flex; align-items: center; font-weight: 600; }
-        .light-shadow-box .light h3 { color: #A7D7C5; }
-        .light-shadow-box .shadow h3 { color: #DAB894; margin-top: 24px; }
+        .light-shadow-box h3 { font-family: var(--font-serif); font-size: 20px; margin-bottom: 10px; font-weight: 600; }
+        .light h3 { color: #A7D7C5; }
+        .shadow h3 { color: #DAB894; margin-top: 24px; }
         
-        .letter-card { background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--text-accent); padding: 40px; }
-        .letter-card p { font-family: var(--font-serif); font-size: 18px; line-height: 2; }
-        .letter-card p:not(:last-child) { margin-bottom: 20px; }
-        .letter-card strong { color: var(--text-primary); font-weight: 600; }
-        
-        .share-buttons { margin-top: 24px; display: flex; gap: 12px; justify-content: center; }
-        .share-btn { font-size: 15px; font-weight: 500; padding: 12px 24px; border-radius: 30px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.1); color: var(--text-primary); cursor: pointer; transition: all 0.2s ease; }
-        .share-btn:hover { background: var(--text-accent); color: var(--bg-deep-blue); border-color: var(--text-accent); }
-        
-        .restart-button { display: block; width: fit-content; margin: 24px auto 0; padding: 12px 30px; font-size: 16px; font-weight: 500; background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.2s ease-in-out; }
-        .restart-button:hover { background: var(--text-secondary); color: var(--bg-deep-blue); }
+        .restart-button { display: block; width: fit-content; margin: 40px auto; padding: 14px 36px; font-size: 16px; font-weight: 500; background: transparent; color: var(--text-secondary); border: 1px solid var(--text-secondary); border-radius: 30px; cursor: pointer; transition: all 0.2s ease-in-out; }
+        .restart-button:hover { background: var(--text-secondary); color: var(--color-bg); }
 
-        @media (max-width: 480px) { #app { padding: 0 15px; } .welcome-screen h1 { font-size: 28px; } .prologue { font-size: 18px; } .result-card { padding: 24px; } .artifact-title { font-size: 24px; } }
+        @media (max-width: 480px) { #app { padding: 0 15px; } .welcome-screen h1 { font-size: 28px; } .prologue { font-size: 18px; } .result-card { padding: 24px; } .landscape-title { font-size: 26px; } }
     </style>
 </head>
  
@@ -126,58 +114,285 @@
             state: { currentQuestionIndex: 0, scores: {}, isNavigating: false, answers: {} },
             
             questions: [
-                { key: "weekend", question: "주말 오후, 갑자기 혼자만의 시간이 생겼어요. 가장 하고 싶은 것은 무엇인가요?", options: [ { text: "평소 가고 싶었던 곳으로 훌쩍 떠나요.", weight: "logbook" }, { text: "조용한 카페에서 책을 읽거나 생각을 정리해요.", weight: "lighthouse" }, { text: "친구에게 바로 연락해서 약속을 잡아요.", weight: "anchor" }, { text: "미뤄뒀던 나만의 창작 활동(글쓰기, 그림 등)을 해요.", weight: "score" } ]},
-                { key: "friend", question: "힘들어하는 친구의 이야기를 들었을 때, 당신의 첫 반응에 가장 가까운 것은 무엇인가요?", options: [ { text: "문제의 원인을 분석하고 현실적인 해결책을 찾아줘요.", weight: "lighthouse" }, { text: "맛있는 음식을 사주며 일단 웃게 만들어요.", weight: "anchor" }, { text: "아무 말 없이 곁에서 이야기를 다 들어줘요.", weight: "clam" }, { text: "함께 새로운 활동을 하며 슬픔을 잊게 도와줘요.", weight: "logbook" } ]},
-                { key: "team", question: "팀 프로젝트를 할 때, 당신은 주로 어떤 역할을 맡게 되시나요?", options: [ { text: "전체적인 계획을 세우고 역할을 분배하는 리더", weight: "bonfire" }, { text: "아무도 생각 못한 새로운 아이디어를 제시하는 아이디어 뱅크", weight: "score" }, { text: "팀원들 사이의 의견을 조율하고 분위기를 좋게 만드는 중재자", weight: "clam" }, { text: "묵묵히 내게 주어진 일을 완벽하게 해내는 해결사", weight: "lighthouse" } ]},
-                { key: "thoughts", question: "요즘 당신의 머릿속을 가장 많이 차지하는 생각은 무엇인가요?", options: [ { text: "다음 휴가 때 어디로 떠날까 하는 즐거운 상상", weight: "logbook" }, { text: "어떻게 하면 내 일을 더 잘할 수 있을까 하는 고민", weight: "bonfire" }, { text: "주변 사람들과의 관계, 혹은 연애에 대한 생각", weight: "anchor" }, { text: "나만의 작품이나 사이드 프로젝트에 대한 구상", weight: "score" } ]},
-                { key: "space", question: "당신이 가장 편안함을 느끼는 공간은 어떤 곳인가요?", options: [ { text: "좋아하는 사람들과 함께하는 따뜻한 거실", weight: "bonfire" }, { text: "언제든 기댈 수 있는 푹신한 소파 위", weight: "clam" }, { text: "나만의 생각에 집중할 수 있는 조용한 서재", weight: "lighthouse" }, { text: "새로운 영감이 떠오르는 나만의 작업 공간", weight: "score" } ]},
-                { key: "gift", question: "다른 사람에게 선물을 할 때, 주로 어떤 것을 고르시나요?", options: [ { text: "상대방의 성장에 도움이 될 만한 책이나 도구", weight: "lighthouse" }, { text: "함께 즐거운 시간을 보낼 수 있는 식사나 여행 상품", weight: "anchor" }, { text: "나의 정성과 감각이 담긴, 직접 만든 물건", weight: "score" }, { text: "상대방이 평소에 갖고 싶어 했던 실용적인 물건", weight: "bonfire" } ]},
-                { key: "future", question: "10년 후, 어떤 모습으로 살고 있을 때 가장 행복할 것 같나요?", options: [ { text: "내가 속한 분야에서 최고의 전문가로 인정받는 삶", weight: "bonfire" }, { text: "사랑하는 가족, 친구들과 매일 웃으며 함께하는 삶", weight: "clam" }, { text: "전 세계를 자유롭게 여행하며 사는 삶", weight: "logbook" }, { text: "나만의 독창적인 작품 세계를 구축한 예술가의 삶", weight: "score" } ]},
-                { key: "compliment", question: "가장 듣고 싶은 칭찬은 무엇인가요?", options: [ { text: "역시 믿음직스러워, 네 덕분에 든든해.", weight: "bonfire" }, { text: "너랑 있으면 편안하고 마음이 따뜻해져.", weight: "clam" }, { text: "어떻게 그런 생각을 했어? 정말 독창적이다!", weight: "score" }, { text: "너의 이야기는 항상 흥미롭고 새로워.", weight: "logbook" } ]}
+                { key: "weekend", question: "주말 오후, 갑자기 혼자만의 시간이 생겼어요. 가장 하고 싶은 것은 무엇인가요?", options: [ { text: "평소 가고 싶었던 곳으로 훌쩍 떠나요.", weight: "wind" }, { text: "조용한 카페에서 책을 읽거나 생각을 정리해요.", weight: "lake" }, { text: "친구에게 바로 연락해서 약속을 잡아요.", weight: "harbor" }, { text: "미뤄뒀던 나만의 창작 활동(글쓰기, 그림 등)을 해요.", weight: "sky" } ]},
+                { key: "friend", question: "힘들어하는 친구의 이야기를 들었을 때, 당신의 첫 반응에 가장 가까운 것은 무엇인가요?", options: [ { text: "문제의 원인을 분석하고 현실적인 해결책을 찾아줘요.", weight: "lake" }, { text: "맛있는 음식을 사주며 일단 웃게 만들어요.", weight: "harbor" }, { text: "아무 말 없이 곁에서 이야기를 다 들어줘요.", weight: "river" }, { text: "함께 새로운 활동을 하며 슬픔을 잊게 도와줘요.", weight: "wind" } ]},
+                { key: "team", question: "팀 프로젝트를 할 때, 당신은 주로 어떤 역할을 맡게 되시나요?", options: [ { text: "전체적인 계획을 세우고 역할을 분배하는 리더", weight: "forest" }, { text: "아무도 생각 못한 새로운 아이디어를 제시하는 아이디어 뱅크", weight: "sky" }, { text: "팀원들 사이의 의견을 조율하고 분위기를 좋게 만드는 중재자", weight: "river" }, { text: "묵묵히 내게 주어진 일을 완벽하게 해내는 해결사", weight: "lake" } ]},
+                { key: "thoughts", question: "요즘 당신의 머릿속을 가장 많이 차지하는 생각은 무엇인가요?", options: [ { text: "다음 휴가 때 어디로 떠날까 하는 즐거운 상상", weight: "wind" }, { text: "어떻게 하면 내 일을 더 잘할 수 있을까 하는 고민", weight: "forest" }, { text: "주변 사람들과의 관계, 혹은 연애에 대한 생각", weight: "harbor" }, { text: "나만의 작품이나 사이드 프로젝트에 대한 구상", weight: "sky" } ]},
+                { key: "space", question: "당신이 가장 편안함을 느끼는 공간은 어떤 곳인가요?", options: [ { text: "좋아하는 사람들과 함께하는 따뜻한 거실", weight: "forest" }, { text: "언제든 기댈 수 있는 푹신한 소파 위", weight: "river" }, { text: "나만의 생각에 집중할 수 있는 조용한 서재", weight: "lake" }, { text: "새로운 영감이 떠오르는 나만의 작업 공간", weight: "sky" } ]},
+                { key: "gift", question: "다른 사람에게 선물을 할 때, 주로 어떤 것을 고르시나요?", options: [ { text: "상대방의 성장에 도움이 될 만한 책이나 도구", weight: "lake" }, { text: "함께 즐거운 시간을 보낼 수 있는 식사나 여행 상품", weight: "harbor" }, { text: "나의 정성과 감각이 담긴, 직접 만든 물건", weight: "sky" }, { text: "상대방이 평소에 갖고 싶어 했던 실용적인 물건", weight: "forest" } ]},
+                { key: "future", question: "10년 후, 어떤 모습으로 살고 있을 때 가장 행복할 것 같나요?", options: [ { text: "내가 속한 분야에서 최고의 전문가로 인정받는 삶", weight: "forest" }, { text: "사랑하는 가족, 친구들과 매일 웃으며 함께하는 삶", weight: "river" }, { text: "전 세계를 자유롭게 여행하며 사는 삶", weight: "wind" }, { text: "나만의 독창적인 작품 세계를 구축한 예술가의 삶", weight: "sky" } ]},
+                { key: "compliment", question: "가장 듣고 싶은 칭찬은 무엇인가요?", options: [ { text: "역시 믿음직스러워, 네 덕분에 든든해.", weight: "forest" }, { text: "너랑 있으면 편안하고 마음이 따뜻해져.", weight: "river" }, { text: "어떻게 그런 생각을 했어? 정말 독창적이다!", weight: "sky" }, { text: "너의 이야기는 항상 흥미롭고 새로워.", weight: "wind" } ]}
             ],
             
-            soulArtifacts: {
-                lighthouse: {
-                    title: "심해의 등대",
-                    subtitle: "고요 속에서 길을 비추는",
-                    icon: "💡",
-                    description: "당신의 마음 가장 깊은 곳, 칠흑 같은 어둠 속에서 홀로 빛을 내는 등대가 발견되었습니다. 당신은 세상의 모든 소음이 잠들었을 때, 비로소 자기 자신과 마주하는 사람입니다. 혼란스러운 현상들 속에서 자신만의 리듬으로 숨겨진 질서와 본질을 꿰뚫어 보는 지혜를 가졌습니다.",
-                    light_title: "빛: 통찰",
-                    light_text: "당신은 세상의 복잡한 현상들 속에서 자신만의 리듬으로 질서를 발견하는 사람입니다. 다른 사람들이 쉽게 지나치는 사소한 부분에서도, 당신은 끈질긴 사유를 통해 숨겨진 의미와 패턴을 읽어냅니다. 당신의 깊이 있는 통찰은 혼란스러운 상황에서 방향을 제시하는 빛이 됩니다.",
-                    shadow_title: "그림자: 고독",
-                    shadow_text: "너무 깊은 생각은 때로 당신을 세상과 단절시키고, 차가운 지성의 성에 스스로를 가둡니다. 머리로는 모든 것을 이해하면서도, 정작 마음은 외로움에 시달리곤 합니다. 하지만 괜찮습니다. 그 고독이 있었기에, 당신의 빛은 더욱 단단하고 깊어질 수 있었으니까요.",
-                    identity_phrase: "지혜와 통찰로 세상을 이해하는 사람",
-                    struggle_phrase: "모든 것을 이해해야 한다는 고독한 무게감",
-                    social_phrase: "길 잃은 사람들에게 밤하늘의 북극성 같은 길잡이"
+            mindscapes: {
+                lake: {
+                    title: "고요한 호숫가",
+                    subtitle: "자신을 비추는 깊고 투명한 물",
+                    description: "당신의 마음은 고요한 새벽의 호수와 같습니다. 세상의 소란이 닿지 않는 그곳에서, 당신은 자신의 내면을 깊이 들여다봅니다. 당신은 섣불리 판단하는 대신 오래 관찰하고, 많이 말하기보다 깊이 생각하는 사람입니다. 그 침묵과 사색의 시간 속에서 당신은 누구보다 명료한 지혜를 얻습니다.",
+                    tendencies: ["혼자만의 시간을 통해 에너지를 얻어요.", "하나의 주제에 깊이 파고드는 것을 좋아해요.", "감정보다 논리를 바탕으로 판단하려 해요.", "겉모습보다 사람의 진실한 내면을 보려 해요.", "계획에 없던 갑작스러운 변화는 조금 불편해요."],
+                    light_title: "당신의 빛은 ‘통찰’입니다",
+                    light_text: "당신은 복잡하게 얽힌 문제의 핵심을 꿰뚫어 보는 힘이 있습니다. 다른 사람들이 놓치는 작은 단서들을 연결하여, 아무도 보지 못했던 큰 그림을 발견해내곤 합니다. 당신의 차분한 한마디는, 길을 잃은 사람들에게 방향을 알려주는 북극성과 같습니다.",
+                    shadow_title: "그 그림자는 ‘망설임’입니다",
+                    shadow_text: "너무 깊은 생각은 때로 행동을 망설이게 만듭니다. 모든 것을 완벽하게 이해하고 움직이려다, 소중한 순간을 놓쳐버릴 때도 있었을 겁니다. 하지만 괜찮습니다. 그 신중함이 있었기에, 당신은 더 큰 실수를 피할 수 있었을 테니까요.",
                 },
-                bonfire: {
-                    title: "난파선의 모닥불",
-                    subtitle: "절망 속에서도 온기를 나누는",
-                    icon: "🔥",
-                    description: "당신의 마음속에는, 부서진 난파선 안에서 여전히 타오르는 모닥불이 있습니다. 당신은 어려운 상황 속에서도 희망을 잃지 않고, 주변 사람들을 모아 온기를 나누는 사람입니다. 강한 책임감과 굳건함으로 흔들리지 않는 중심을 지키며, 사람들은 당신 곁에서 위로와 용기를 얻습니다.",
-                    light_title: "빛: 책임감",
-                    light_text: "당신은 마치 추운 겨울밤의 벽난로처럼, 주변 사람들에게 따뜻함과 안정감을 주는 존재입니다. 강한 책임감과 굳건함으로 흔들리지 않는 중심을 지키며, 사람들은 당신 곁에 모여들어 위로와 용기를 얻습니다.",
-                    shadow_title: "그림자: 부담감",
-                    shadow_text: "모두를 따뜻하게 해줘야 한다는 책임감은 때로 당신의 어깨를 무겁게 짓누릅니다. 불꽃을 유지하기 위해 스스로를 태워야 할 때도 있었을 겁니다. 하지만 괜찮습니다. 당신의 온기를 기억하는 사람들이, 이제는 당신의 불씨를 지켜줄 것입니다.",
-                    identity_phrase: "공동체의 중심을 지키는 든든한 사람",
-                    struggle_phrase: "모두를 책임져야 한다는 부담감에, 정작 자신을 돌보지 못했던 날들",
-                    social_phrase: "모두가 기댈 수 있는 따뜻하고 견고한 벽"
+                forest: {
+                    title: "오래된 숲의 땅",
+                    subtitle: "모든 것을 품는 단단하고 깊은 뿌리",
+                    description: "당신의 마음은 오랜 세월을 거쳐온 숲의 땅과 같습니다. 수많은 나무들이 깊이 뿌리내린 그곳은, 웬만한 비바람에는 흔들리지 않는 견고한 안정감을 줍니다. 당신은 자신의 사람들을 지키기 위해 기꺼이 단단한 땅이 되어주는, 책임감 있고 믿음직한 사람입니다.",
+                    tendencies: ["즉흥적인 것보다 계획을 세우고 행동하는 걸 선호해요.", "한번 맺은 인연을 소중하고 길게 이어가요.", "내가 속한 공동체에 강한 책임감을 느껴요.", "사람들에게 신뢰를 주는 사람이 되고 싶어 해요.", "변화보다는 안정적인 상태에서 편안함을 느껴요."],
+                    light_title: "당신의 빛은 ‘책임감’입니다",
+                    light_text: "당신은 자신이 뱉은 말을 반드시 지키려 하며, 어려운 상황에서도 쉽게 도망치지 않습니다. 사람들은 당신의 그런 굳건한 모습에 기대어 안정을 찾습니다. 당신이 있는 곳은 마치 폭풍우 속에서도 안전한, 커다란 나무 아래와 같습니다.",
+                    shadow_title: "그 그림자는 ‘부담감’입니다",
+                    shadow_text: "모두를 지켜야 한다는 책임감은, 때로 당신의 어깨를 무겁게 짓누릅니다. 정작 자신은 지쳐있으면서도, 다른 사람을 위해 애써 웃어 보인 날도 많았을 겁니다. 하지만 괜찮습니다. 당신이 뿌리내린 그 땅에서, 이제 당신도 잠시 쉬어가도 괜찮습니다.",
                 },
-                score: {
-                    title: "산호초에 새겨진 악보",
-                    subtitle: "세상에 없던 멜로디를 연주하는",
-                    icon: "🎶",
-                    description: "당신의 마음 깊은 곳에는, 시간의 흐름이 만들어낸 아름다운 산호초 위에 저절로 새겨진 듯한 신비로운 악보가 있습니다. 당신은 세상에 없던 새로운 아름다움을 상상하고, 자신만의 독창적인 방식으로 그것을 현실에 펼쳐내는 예술가와 같은 영혼을 지녔습니다.",
-                    light_title: "빛: 창의성",
-                    light_text: "당신의 영혼은 무한한 가능성으로 가득한 새하얀 스케치북과 같습니다. 세상에 없던 새로운 아이디어를 떠올리고, 자신만의 방식으로 그것을 표현해내는 비범한 재능을 지녔습니다. 당신의 상상력은 밋밋한 현실에 다채로운 색을 입힙니다.",
-                    shadow_title: "그림자: 자기 의심",
-                    shadow_text: "새하얀 종이 앞에서, 당신의 완벽한 상상을 이 보잘것없는 손으로 망치게 될까 봐 두려워질 때가 있습니다. 하지만 괜찮습니다. 첫 번째 선이 삐뚤어져도 괜찮아요. 가장 위대한 작품은 수많은 스케치 위에서 탄생하는 법이니까요.",
-                    identity_phrase: "세상에 없던 아름다움을 상상하고 만드는 사람",
-                    struggle_phrase: "나의 독특한 세계를 남들이 이해해주지 못할까 봐 느끼는 막연한 두려움",
-                    social_phrase: "일상에 새로운 영감을 주는 예술가"
+                sky: {
+                    title: "새벽의 하늘",
+                    subtitle: "정해지지 않은 무한한 가능성의 색",
+                    description: "당신의 마음은 해가 뜨기 직전, 시시각각 다른 빛으로 물드는 새벽의 하늘과 같습니다. 그곳에는 세상에 없던 새로운 색깔과 무한한 가능성이 펼쳐져 있습니다. 당신은 틀에 갇히지 않는 상상력으로, 자신만의 방식으로 세상을 아름답게 칠해나가는 예술가입니다.",
+                    tendencies: ["늘 새로운 아이디어를 떠올리는 것을 즐겨요.", "나만의 개성을 표현하는 것을 중요하게 생각해요.", "반복적이고 지루한 일은 견디기 힘들어요.", "아름다운 것을 보고 깊은 감동을 받아요.", "완벽함보다는 독창적인 것을 더 가치있게 여겨요."],
+                    light_title: "당신의 빛은 ‘창의성’입니다",
+                    light_text: "당신은 남들이 보지 못하는 방식으로 세상을 보고, 세상에 없던 새로운 아이디어를 떠올립니다. 당신의 독창적인 시선과 풍부한 상상력은, 흑백의 세상에 처음으로 색을 입히는 것과 같은 놀라운 일을 해냅니다.",
+                    shadow_title: "그 그림자는 ‘외로움’입니다",
+                    shadow_text: "당신이 보는 특별한 세상을 다른 사람들이 이해하지 못할 때, 당신은 깊은 외로움을 느낍니다. '나만 이상한 걸까?' 하는 생각에 잠기기도 합니다. 하지만 괜찮습니다. 위대한 예술은 언제나 보통 사람들의 이해보다 한 걸음 앞서 나아가는 법이니까요.",
                 },
-                logbook: {
-                    title: "유령선장의 항해일지",
-                    subtitle: "자유와 경험으로 채워진",
-                    icon: "🧭",
-                    description: "당신의 마음속
+                wind: {
+                    title: "지평선 너머의 바람",
+                    subtitle: "어디에도 얽매이지 않는 자유로운 숨결",
+                    description: "당신의 마음은 드넓은 평원을 가로질러 지평선 너머로 향하는 바람과 같습니다. 당신의 영혼은 하나의 장소, 하나의 정체성에 얽매이는 것을 거부합니다. 당신에게 삶이란, 새로운 경험을 통해 끊임없이 변화하고 성장해나가는 자유로운 여정입니다.",
+                    tendencies: ["새로운 장소로 떠나는 여행을 좋아해요.", "계획보다는 즉흥적인 행동에 더 끌려요.", "한 가지 일에 금방 싫증을 느끼는 편이에요.", "자유와 독립을 무엇보다 중요하게 생각해요.", "다양한 사람들을 만나는 것을 즐겨요."],
+                    light_title: "당신의 빛은 ‘용기’입니다",
+                    light_text: "당신은 미지의 세계를 향해 기꺼이 발을 내딛는 용감한 사람입니다. 대부분의 사람들이 안정적인 현실에 머무를 때, 당신은 실패의 두려움보다 새로운 경험에 대한 설렘을 선택합니다. 당신의 용기는 주변 사람들에게 새로운 영감을 줍니다.",
+                    shadow_title: "그 그림자는 ‘공허함’입니다",
+                    shadow_text: "늘 새로운 것을 찾아 떠나다 보니, 문득 마음 한구석이 텅 빈 듯한 공허함을 느낄 때가 있습니다. '그래서 내게 남은 것은 무엇일까?' 하고 말이죠. 하지만 괜찮습니다. 당신의 마음속에는, 스쳐 온 모든 풍경과 경험이 보석처럼 남아있으니까요.",
+                },
+                river: {
+                    title: "저녁노을 비치는 강",
+                    subtitle: "세상의 모든 색을 말없이 품어주는",
+                    description: "당신의 마음은 해 질 녘, 세상의 모든 빛깔을 말없이 품어주는 강물과 같습니다. 당신은 자신의 이야기를 하기보다, 다른 사람의 이야기에 조용히 귀 기울이는 사람입니다. 당신의 깊은 공감과 따뜻한 수용 앞에서, 사람들은 비로소 마음의 짐을 내려놓습니다.",
+                    tendencies: ["다른 사람의 감정이 어떤지 잘 느껴져요.", "경쟁적인 분위기보다는 편안한 관계를 선호해요.", "내가 상처받는 것보다 남에게 상처 주는 걸 더 못 견뎌요.", "직접적인 조언보다는 조용한 위로를 건네는 편이에요.", "모두에게 좋은 사람이 되고 싶다는 생각을 자주 해요."],
+                    light_title: "당신의 빛은 ‘공감’입니다",
+                    light_text: "당신은 다른 사람의 슬픔을 자신의 슬픔처럼, 다른 사람의 기쁨을 자신의 기쁨처럼 느낄 줄 아는 특별한 능력을 가졌습니다. 당신의 진심 어린 공감은, 세상의 어떤 명약보다 더 깊은 치유의 힘을 발휘합니다.",
+                    shadow_title: "그 그림자는 ‘자기희생’입니다",
+                    shadow_text: "다른 사람의 감정을 너무 깊이 받아들인 나머지, 정작 자신의 마음은 돌보지 못하고 지쳐버릴 때가 있습니다. 모두를 품어주려다, 홀로 물속에 가라앉는 기분을 느끼곤 합니다. 하지만 괜찮습니다. 당신이 내어준 온기만큼, 세상도 당신을 따뜻하게 안아줄 준비를 하고 있을 테니까요.",
+                },
+                harbor: {
+                    title: "작은 항구의 등대",
+                    subtitle: "언제나 그 자리에서 기다리는 불빛",
+                    description: "당신은 폭풍우 치는 바다를 헤매던 배들이 마침내 돌아와 쉴 수 있는, 작은 항구의 등대와 같은 사람입니다. 당신은 사람과 사람 사이의 즐거운 연결을 소중히 여기며, 그들이 언제든 돌아올 수 있는 따뜻한 중심이 되어줍니다. 당신이 있는 곳은 언제나 유쾌하고 안전한 정박지가 됩니다.",
+                    tendencies: ["혼자 있는 것보다 사람들과 함께일 때 에너지를 얻어요.", "새로운 사람들과도 금방 친해지는 편이에요.", "맛있는 음식을 나누어 먹는 것을 좋아해요.", "주변 사람들의 기념일을 잘 챙겨요.", "분위기가 어색해지는 것을 잘 참지 못해요."],
+                    light_title: "당신의 빛은 ‘연결’입니다",
+                    light_text: "당신은 사람과 사람을 연결하고 즐거운 순간을 만들어내는 특별한 재능을 가졌습니다. 흩어져 있던 사람들이 당신이라는 항구를 중심으로 모여들어, 하나의 따뜻한 공동체를 이룹니다. 당신은 그 자체로 소중한 구심점입니다.",
+                    shadow_title: "그 그림자는 ‘외로움’입니다",
+                    shadow_text: "늘 사람들로 북적이던 항구에 홀로 남겨졌을 때, 당신은 깊은 외로움과 허전함을 느낍니다. 모두가 떠나버릴지도 모른다는 불안감에 휩싸이곤 합니다. 하지만 괜찮습니다. 좋은 항구에는 언제나 배들이 다시 돌아오기 마련이니까요.",
+                }
+            },
+
+            initDOM() { this.app = document.getElementById('app'); this.renderWelcome(); },
+            renderWelcome() {
+                const introBg = document.getElementById('intro-background');
+                if(!introBg) {
+                    const bgDiv = document.createElement('div');
+                    bgDiv.id = 'intro-background';
+                    document.body.prepend(bgDiv);
+                } else {
+                    introBg.innerHTML = '';
+                    introBg.style.opacity = 1;
+                }
+                for(let i=0; i<3; i++) {
+                    const flame = document.createElement('div');
+                    flame.className = 'flame';
+                    document.getElementById('intro-background').appendChild(flame);
+                }
+                for(let i=0; i<15; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 50}%`;
+                    star.style.animationDelay = `${Math.random() * 5}s`;
+                    document.getElementById('intro-background').appendChild(star);
+                }
+                
+                this.app.innerHTML = `<div class="welcome-screen">
+                    <div class="prologue">
+                        <p>오래된 전설에 따르면,</p>
+                        <p>모든 사람의 마음속에는 자신만의 바다가 존재한다.</p>
+                        <p>AI 심해 탐사선 '아스트라'가 그 깊은 곳으로 당신을 안내합니다.</p>
+                        <p>당신의 마음 심해에 잠들어 있는, 단 하나의 유물을 발견하기 위해.</p>
+                    </div>
+                    <button class="welcome-screen start-button">심해로 잠수하기</button>
+                </div>`;
+
+                const prologueLines = this.app.querySelectorAll('.prologue p');
+                prologueLines.forEach((line, index) => {
+                    setTimeout(() => line.classList.add('visible'), index * 2000);
+                });
+                setTimeout(() => this.app.querySelector('.start-button').classList.add('visible'), prologueLines.length * 2000);
+
+                this.app.querySelector('.start-button').addEventListener('click', () => { 
+                    const welcomeScreen = this.app.querySelector('.welcome-screen');
+                    const introBgEl = document.getElementById('intro-background');
+                    if (welcomeScreen) { welcomeScreen.style.cssText = 'opacity: 0; transition: opacity 1s ease-out;'; }
+                    if (introBgEl) { introBgEl.style.cssText = 'opacity: 0; transition: opacity 1s ease-out;'; }
+                    setTimeout(() => this.startJourney(), 1000);
+                }); 
+            },
+            startJourney() { this.resetState(); this.renderQuestion(); },
+            resetState() { this.state.currentQuestionIndex = 0; this.state.scores = {}; this.state.isNavigating = false; this.state.answers = {}; document.body.style.backgroundColor = 'var(--surface-color-1)'; },
+            renderQuestion() {
+                const index = this.state.currentQuestionIndex;
+                const q = this.questions[index];
+                if (!q) return;
+
+                const progress = ((index + 1) / this.questions.length) * 100;
+                this.app.innerHTML = `<div class="journey-container">
+                    <div class="progress-container">
+                        <div id="progress-text">탐사 심도 ${Math.round(progress * 10)}m</div>
+                        <div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div>
+                    </div>
+                    <div id="question-box">${q.question}</div>
+                    <div class="choice-options">${q.options.map((opt, i) => `<div class="choice-option" data-weight="${opt.weight}" data-answer-index="${i}"><span class="option-text">${opt.text}</span></div>`).join('')}</div>
+                </div>`;
+                
+                this.app.querySelector('.journey-container').classList.add('visible');
+                this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(q, el.dataset.weight, parseInt(el.dataset.answerIndex))); });
+                
+                const colorRatio = index / (this.questions.length - 1);
+                document.body.style.transition = 'background-color 1.2s ease';
+                document.body.style.backgroundColor = this.interpolateColor("rgb(30, 41, 64)", "rgb(10, 17, 34)", colorRatio);
+            },
+            interpolateColor(color1, color2, factor) {
+                const c1 = color1.match(/\d+/g).map(Number);
+                const c2 = color2.match(/\d+/g).map(Number);
+                const r = Math.round(c1[0] + factor * (c2[0] - c1[0]));
+                const g = Math.round(c1[1] + factor * (c2[1] - c1[1]));
+                const b = Math.round(c1[2] + factor * (c2[2] - c1[2]));
+                return `rgb(${r}, ${g}, ${b})`;
+            },
+            handleSelection(question, weight, answerIndex) {
+                if (this.state.isNavigating) return;
+                this.state.isNavigating = true;
+                this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
+                if(question.key) { this.state.answers[question.key] = question.options[answerIndex].text; }
+                const journeyContainer = this.app.querySelector('.journey-container');
+                if (journeyContainer) { journeyContainer.style.opacity = 0; journeyContainer.style.transition = 'opacity 0.4s ease-out'; }
+                setTimeout(() => {
+                    if (this.state.currentQuestionIndex < this.questions.length - 1) {
+                        this.state.currentQuestionIndex++;
+                        this.renderQuestion();
+                        this.state.isNavigating = false;
+                    } else { this.renderLoading(); }
+                }, 400);
+            },
+            renderLoading() {
+                this.app.innerHTML = `<div class="loading-screen fade-in"><h2>마음의 심해를 분석하며<br>당신을 닮은 유물을 찾고 있어요...</h2></div>`;
+                setTimeout(() => { this.renderResults(); }, 3000);
+            },
+            renderResults() {
+                const analysis = this.analyze();
+                const artifact = this.mindscapes[analysis.primary];
+                if (!artifact) { this.app.innerHTML = `<p>오류: 분석 결과를 불러올 수 없습니다.</p>`; return; }
+                this.app.innerHTML = `
+                    <div class="result-container fade-in">
+                        <div class="result-card" style="animation-delay: 0.5s;">
+                            <div class="artifact-header">
+                                <p style="font-size:16px; color: var(--text-secondary);">당신의 마음 심해에서 발견된 풍경은...</p>
+                                <div class="artifact-icon">${artifact.icon || ''}</div>
+                                <h2 class="artifact-title" style="color:var(--text-primary); margin:0;">${artifact.title || ''}</h2>
+                                <p class="artifact-subtitle">${artifact.subtitle || ''}</p>
+                            </div>
+                        </div>
+                        <div class="result-card" style="animation-delay: 0.7s;">
+                            <h2><span class="icon">🔍</span>풍경 해설서</h2>
+                            <p>${artifact.description || ''}</p>
+                            <div class="preference-container" style="margin-top:20px;">
+                                <div class="preference-box">
+                                    <h3>👍 이럴 때 편안해요</h3>
+                                    <ul class="preference-list">${(artifact.tendencies || []).map(like => `<li>${like}</li>`).join('')}</ul>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="result-card" style="animation-delay: 0.9s;">
+                            <h2><span class="icon">✨</span>당신의 강점과 숨겨진 마음</h2>
+                             <p>누구나 밝게 빛나는 강점과, 스스로도 잘 몰랐던 숨겨진 마음이 공존합니다. 아스트라가 발견한 당신의 두 가지 모습을 들여다보세요.</p>
+                            <div class="light-shadow-container">
+                                <div class="light-shadow-box light"><h3>${artifact.light_title || ''}</h3><p>${artifact.light_text || ''}</p></div>
+                                <div class="light-shadow-box shadow"><h3>${artifact.shadow_title || ''}</h3><p>${artifact.shadow_text || ''}</p></div>
+                            </div>
+                        </div>
+                        <div class="result-card letter-card" style="animation-delay: 1.1s;">
+                            <h2><span class="icon">💌</span>아스트라의 마지막 통신</h2>
+                            ${this.getComfortMessage(analysis)}
+                        </div>
+                        <div class="share-buttons fade-in" style="animation-delay: 1.3s;">
+                            <button class="share-btn" id="share-action">결과 공유하기</button>
+                            <button class="share-btn" id="copy-link">링크 복사</button>
+                        </div>
+                        <button class="restart-button fade-in" style="animation-delay: 1.3s;" onclick="MindJourneyApp.initDOM()">다시 탐험하기</button>
+                    </div>`;
+                this.addShareEventListeners(artifact.title);
+            },
+            
+            analyze() {
+                const sorted = Object.entries(this.state.scores).sort((a,b) => b[1] - a[1]);
+                return {
+                    primary: sorted.length > 0 ? sorted[0][0] : "lake",
+                    secondary: sorted.length > 1 ? sorted[1][0] : null,
+                    tertiary: sorted.length > 2 ? sorted[2][0] : null,
+                };
+            },
+            getComfortMessage(analysis) {
+                const p = this.mindscapes[analysis.primary];
+                const s = analysis.secondary ? this.mindscapes[analysis.secondary] : null;
+                const t = analysis.tertiary ? this.mindscapes[analysis.tertiary] : null;
+
+                if (!p) return "<p>분석 결과를 불러오는 중입니다. 잠시만 기다려주세요.</p>";
+
+                const identity = `<p>탐사 결과, 당신은 <strong>${p.identity_phrase || '...'}</strong>입니다.</p>`;
+                
+                let struggle = `<p>그래서였을 겁니다. 말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을 겁니다. 바로 '<strong>${p.struggle_phrase || '...'}</strong>' 때문이죠.`;
+                if (s && s.struggle_phrase) {
+                    struggle += ` 때로는 '<strong>${s.struggle_phrase}</strong>'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.</p>`;
+                } else {
+                    struggle += ` 그 마음을 누구에게도 쉽게 털어놓지 못했을 겁니다.</p>`;
+                }
+                
+                let social = `<p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 <strong>${p.social_phrase || '...'}</strong>입니다.`;
+                if (t && t.social_phrase) {
+                    social += ` 동시에 <strong>${t.social_phrase}</strong>이기도 합니다. 당신의 존재는 이미 여러 모습으로 누군가에게 큰 힘이 되고 있습니다.</p>`;
+                } else {
+                     social += ` 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.</p>`;
+                }
+                
+                return identity + struggle + social;
+            },
+            addShareEventListeners(resultTitle) {
+                const shareText = `AI가 내 마음의 심해에서 발견한 풍경은... [${resultTitle}] ✨\n너의 마음 속에는 어떤 풍경이 펼쳐져 있을까?\n\n`;
+                const shareUrl = window.location.href;
+
+                const shareButton = document.getElementById('share-action');
+                const copyButton = document.getElementById('copy-link');
+                
+                if (!shareButton || !copyButton) return;
+
+                if (navigator.share) {
+                    shareButton.addEventListener('click', () => {
+                        navigator.share({ title: '마음의 나침반', text: shareText, url: shareUrl, }).catch(console.error);
+                    });
+                    copyButton.style.display = 'none';
+                } else {
+                    shareButton.style.display = 'none';
+                    copyButton.addEventListener('click', () => {
+                        navigator.clipboard.writeText(shareUrl).then(() => {
+                            alert('링크가 복사되었어요! 친구에게 공유해보세요.');
+                        }).catch(err => alert('링크 복사에 실패했어요.'));
+                    });
+                }
+            }
+        };
+ 
+         document.addEventListener('DOMContentLoaded', () => { MindJourneyApp.initDOM(); });
+    })()
+    //]]>
+    </script>
+</body>
+</html>
