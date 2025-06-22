@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>마음의 나침반 | AI가 그려주는 당신의 마음 지도</title>
+    <title>마음의 나침반 | AI가 그려주는 당신의 영혼 지도</title>
     <meta name="description" content="AI 심해 탐사선 '아스트라'와 함께 당신의 마음 가장 깊은 곳을 탐험하고, 영혼의 원형과 치유의 주문을 발견하세요.">
     <meta property="og:title" content="마음의 나침반 - AI 심층 심리 분석">
     <meta property="og:description" content="AI가 당신의 답변을 통해 섬세한 마음 지도를 그려드립니다. 당신의 영혼은 어떤 풍경을 담고 있을까요?">
@@ -11,10 +11,12 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Maru+Buri:wght@400;600&family=IBM+Plex+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
+            --font-serif: 'Maru Buri', serif;
+            --font-sans: 'IBM Plex Sans KR', sans-serif;
             --surface-color-1: #1E2940; /* 표면 */
             --surface-color-2: #141D34; /* 어스름 */
             --surface-color-3: #0A1122; /* 심연 */
@@ -30,55 +32,40 @@
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: var(--font-sans);
+            font-weight: 400;
             background-color: var(--surface-color-1);
             color: var(--text-primary);
             line-height: 1.8;
-            overflow: hidden;
+            overflow-x: hidden; /* 가로 스크롤 방지, 세로 스크롤 허용 */
             transition: background-color 1s ease;
         }
 
-        #app {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 24px;
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-        }
+        #app { max-width: 640px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 1; min-height: 100vh; }
         
         .fade-in { animation: fadeIn 1.2s ease-out both; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-family: 'Noto Serif KR', serif; font-size: 36px; font-weight: 700; }
-        .header .subtitle { font-size: 18px; color: var(--text-secondary); }
+        .header { text-align: center; margin: 8vh 0; }
+        .header h1 { font-family: var(--font-serif); font-size: 40px; font-weight: 600; letter-spacing: -0.02em; }
+        .header .subtitle { font-size: 18px; color: var(--text-secondary); line-height: 1.7; margin-top: 16px; }
         .header .start-button {
-            margin-top: 30px;
-            padding: 16px 36px;
-            font-size: 18px;
-            font-weight: 700;
-            background-color: var(--text-accent);
-            color: var(--surface-color-3);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
+            margin-top: 40px; padding: 16px 40px;
+            font-family: var(--font-sans); font-size: 18px; font-weight: 500;
+            background-color: var(--text-accent); color: var(--surface-color-3);
+            border: none; border-radius: 50px; cursor: pointer;
             transition: all 0.3s ease;
         }
         .header .start-button:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent-glow); }
 
-        .progress-container { margin-bottom: 24px; width: 100%; }
+        .journey-container { transition: opacity 0.5s ease-out; }
+        .progress-container { margin-bottom: 24px; width: 100%; padding: 0 10%; }
         .progress-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
         #progress-fill { height: 100%; background: var(--text-accent); border-radius: 2px; transition: width 0.5s ease; }
-        #phase-title { font-family: 'Noto Serif KR', serif; font-size: 20px; text-align: center; margin-bottom: 40px; color: var(--text-accent); opacity: 0.7; }
+        #phase-title { font-family: var(--font-serif); font-size: 22px; text-align: center; margin-bottom: 40px; color: var(--text-accent); opacity: 0.8; }
 
-        .question-card {
-            background: rgba(0,0,0,0.15);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: var(--border-radius);
-            padding: 32px;
-        }
-        #question-box { font-family: 'Noto Serif KR', serif; font-size: 24px; font-weight: 600; text-align: center; margin-bottom: 24px; }
+        .question-card { padding: 32px; }
+        #question-box { font-family: var(--font-serif); font-size: 26px; font-weight: 600; text-align: center; margin-bottom: 32px; }
         .choice-options { display: flex; flex-direction: column; gap: 16px; }
         .choice-option {
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
@@ -86,78 +73,74 @@
             transition: all 0.3s ease;
         }
         .choice-option:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
-        .option-text { font-size: 17px; font-weight: 500; }
+        .option-text { font-size: 17px; font-weight: 400; font-family: var(--font-sans); }
 
-        .loading-screen { text-align: center; padding: 80px 0; }
-        .loading-text { font-family: 'Noto Serif KR', serif; font-size: 22px; margin-bottom: 16px; }
+        .loading-screen { text-align: center; padding: 15vh 0; }
+        .loading-text { font-family: var(--font-serif); font-size: 24px; margin-bottom: 16px; }
 
-        /* 결과 페이지 디자인 */
-        .result-container { padding-top: 40px; }
+        /* --- 결과 페이지 디자인 --- */
+        .result-container { padding-top: 5vh; }
         .result-card {
             background: rgba(0,0,0,0.2);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: var(--border-radius);
-            padding: 32px;
-            margin-bottom: 24px;
-            animation: fadeIn 1s ease-out 0.5s both;
-            position: relative;
+            padding: 32px 40px;
+            margin-bottom: 32px;
+            transform: translateZ(0);
         }
         .result-card h2 {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 24px;
-            color: var(--text-accent);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
+            font-family: var(--font-serif); font-size: 26px; font-weight: 600;
+            color: var(--text-accent); margin-bottom: 16px;
+            display: flex; align-items: center;
         }
-        .result-card h2 .icon { margin-right: 12px; }
-        .result-card p, .result-card .text-block { font-size: 17px; line-height: 1.9; color: var(--text-secondary); }
-        .archetype-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
-        .archetype-subtitle { font-size: 18px; color: var(--accent-warm); font-style: italic; margin-bottom: 20px; }
+        .result-card h2 .icon { margin-right: 16px; }
+        .result-card p, .result-card .text-block { font-size: 18px; line-height: 1.9; color: var(--text-secondary); font-weight: 300; }
         
-        .light-shadow-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .light-shadow-box h3 { font-family: 'Noto Serif KR', serif; font-size: 20px; margin-bottom: 12px; }
-        .light-shadow-box .light h3 { color: #A7D7C5; } /* 빛 */
-        .light-shadow-box .shadow h3 { color: #DAB894; } /* 그림자 */
-        .light-shadow-box p { font-size: 16px; }
+        .archetype-card-header { text-align: center; padding-bottom: 32px; }
+        .archetype-icon-wrapper { margin-bottom: 24px; }
+        .archetype-title { font-family: var(--font-serif); font-size: 32px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+        .archetype-subtitle { font-family: var(--font-serif); font-size: 20px; color: var(--accent-warm); font-style: italic; margin-bottom: 20px; }
+        
+        .light-shadow-container { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px; }
+        .light-shadow-box h3 { font-family: var(--font-serif); font-size: 22px; margin-bottom: 12px; }
+        .light-shadow-box .light h3 { color: #A7D7C5; }
+        .light-shadow-box .shadow h3 { color: #DAB894; }
+        .light-shadow-box p { font-size: 17px; }
+
+        .astra-card .metadata { font-family: 'monospace'; color: var(--text-accent); opacity: 0.7; margin-bottom: 16px; }
 
         .mantra-card {
             text-align: center;
             background: linear-gradient(135deg, rgba(144, 191, 255, 0.1), rgba(255, 192, 203, 0.1));
-            padding: 40px;
+            padding: 48px;
+            animation: pulse-glow 4s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(144, 191, 255, 0.1); }
+            50% { box-shadow: 0 0 35px rgba(255, 192, 203, 0.2); }
         }
         .mantra-card .mantra-text {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 22px;
-            font-weight: 600;
-            line-height: 1.7;
-            color: var(--text-primary);
+            font-family: var(--font-serif); font-size: 24px; font-weight: 600;
+            line-height: 1.7; color: var(--text-primary);
         }
+        .mantra-card p:first-of-type { font-size: 16px; color: var(--text-secondary); margin-bottom: 24px; }
 
         .restart-button {
-            display: block;
-            width: 100%;
-            text-align: center;
-            margin-top: 32px;
-            padding: 16px;
-            font-size: 18px;
-            font-weight: 700;
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--text-secondary);
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            display: block; width: fit-content; margin: 40px auto 0;
+            padding: 16px 40px; font-size: 18px; font-weight: 500;
+            background: transparent; color: var(--text-secondary);
+            border: 1px solid var(--text-secondary); border-radius: 50px;
+            cursor: pointer; transition: all 0.3s ease;
         }
         .restart-button:hover { background: var(--text-secondary); color: var(--surface-color-3); }
 
-        /* SVG 아이콘 및 애니메이션 */
-        .svg-icon { width: 32px; height: 32px; }
-        #mantra-heart-path { animation: heartbeat 2s infinite ease-in-out; transform-origin: center; }
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            10%, 30% { transform: scale(1.1); }
-            20% { transform: scale(1.05); }
+        /* 반응형 디자인 */
+        @media (max-width: 600px) {
+            #app { padding: 24px 16px; }
+            .header h1 { font-size: 32px; }
+            #question-box { font-size: 22px; }
+            .light-shadow-container { grid-template-columns: 1fr; }
+            .result-card { padding: 24px; }
         }
     </style>
 </head>
@@ -170,14 +153,8 @@
     //<![CDATA[
     const MindJourneyApp = {
         // --- 1. CONFIGURATION & DATA ---
-        state: {
-            currentQuestionIndex: 0,
-            answers: {},
-            scores: {},
-            isNavigating: false,
-        },
+        state: { currentQuestionIndex: 0, answers: {}, scores: {}, isNavigating: false, },
         
-        // 재창조된 질문과 원형 데이터
         questions: [
             // Phase 1: 표면의 바다
             { phase: "Phase 1. 표면의 바다", question: "밤하늘의 별을 바라볼 때,<br>가장 먼저 드는 생각은 무엇인가요?", options: [ { text: "이 광대한 우주의 법칙과 질서에 대한 경외감", weight: "sage" }, { text: "별 너머 어딘가에 있을 미지의 세계에 대한 동경", weight: "explorer" }, { text: "함께 별을 보고 싶은 누군가에 대한 그리움", weight: "lover" }, { text: "그저 모든 것을 잊게 만드는 밤의 고요함", weight: "innocent" } ] },
@@ -193,125 +170,76 @@
             { question: "당신이 세상에 남기고 싶은<br>궁극적인 흔적은 무엇인가요?", options: [ { text: "세상을 더 나은 방향으로 이끈 시스템과 질서", weight: "ruler" }, { text: "사람들의 마음속에 영원히 남을 아름다운 창작물", weight: "creator" }, { text: "내가 걸어온 용감하고 자유로웠던 발자국 그 자체", weight: "explorer" }, { text: "내가 존재함으로 인해 더 따뜻해진 세상의 온도", weight: "lover" } ] }
         ],
         archetypes: {
-            sage: { title: "현자", subtitle: "진리와 지혜를 탐구하는 영혼", light: "당신은 세상의 표면 아래 숨겨진 본질과 질서를 꿰뚫어 보는 깊은 통찰력을 지녔습니다. 혼돈 속에서도 명료함을 잃지 않으며, 당신의 지혜는 자신과 타인의 길을 밝히는 등대가 됩니다.", shadow: "때로는 지나친 사유에 빠져 현실과 멀어지거나, 감정의 가치를 간과하는 경향이 있습니다. 머리의 언어가 마음의 언어를 압도하지 않도록 경계해야 합니다.", mantra: "나의 이해는 세상을 비추는 빛이 됩니다." },
-            explorer: { title: "탐험가", subtitle: "미지의 세계를 향해 나아가는 영혼", light: "당신은 얽매이지 않는 자유로운 영혼의 소유자입니다. 미지의 세계를 향한 끝없는 동경과 용기는 당신의 삶을 그 누구보다 다채롭고 풍요로운 모험으로 만듭니다.", shadow: "하나의 세계에 깊이 뿌리내리는 것을 두려워하여, 진정한 안정과 소속감을 놓칠 수 있습니다. 때로는 멈춤이 더 위대한 탐험의 시작임을 기억해야 합니다.", mantra: "나의 길은 세상의 경계 너머로 이어집니다." },
-            lover: { title: "연인", subtitle: "연결과 사랑으로 충만한 영혼", light: "당신은 세상의 모든 존재와 깊이 연결되고 사랑을 나눌 때 살아있음을 느낍니다. 당신의 따뜻한 공감과 헌신은 차가운 세상을 녹이는 가장 강력한 힘입니다.", shadow: "타인과의 관계 속에서 자신을 잃어버리거나, 사랑을 잃는 것에 대한 깊은 두려움이 당신을 잠식할 수 있습니다. 가장 먼저 사랑해야 할 존재는 바로 당신 자신입니다.", mantra: "나의 사랑은 세상의 온도를 높입니다." },
-            creator: { title: "창조자", subtitle: "무에서 유를 빚어내는 영혼", light: "당신은 세상의 파편들을 모아 새로운 의미와 아름다움을 빚어내는 예술가입니다. 당신의 상상력과 창조성은 황무지에서 꽃을 피우는 기적을 행합니다.", shadow: "완벽함에 대한 강박이 창작의 즐거움을 앗아가거나, 세상이 당신의 비전을 이해하지 못할 때 깊은 고독에 빠질 수 있습니다. 과정 자체의 아름다움을 믿으세요.", mantra: "나의 상상은 새로운 현실을 빚어냅니다." },
-            ruler: { title: "통치자", subtitle: "질서와 조화를 구축하는 영혼", light: "당신은 혼돈 속에서 질서를 발견하고, 책임감과 리더십으로 자신과 주변의 세계를 안정적으로 이끌어가는 힘이 있습니다. 당신이 있는 곳에 조화와 번영이 깃듭니다.", shadow: "모든 것을 통제하려는 욕망이 당신을 경직되게 만들거나, 실패에 대한 두려움으로 새로운 도전을 망설일 수 있습니다. 진정한 통치는 때로는 내려놓음에서 시작됩니다.", mantra: "나의 의지는 조화로운 세상을 세웁니다." },
-            innocent: { title: "순수주의자", subtitle: "본연의 빛을 간직한 영혼", light: "당신은 세상의 복잡함 속에서도 순수함과 믿음을 잃지 않는 귀한 존재입니다. 당신의 존재 자체가 주변에 안전함과 평화를 선물하며, 근원적인 신뢰의 힘을 보여줍니다.", shadow: "세상의 어두운 면을 마주하는 것을 회피하려 하거나, 상처받는 것에 대한 두려움으로 자신만의 성에 갇힐 수 있습니다. 진정한 순수는 어둠을 알고도 빛을 택하는 용기입니다.", mantra: "나의 순수는 세상을 정화하는 힘입니다." }
+            sage: { title: "현자", subtitle: "진리와 지혜를 탐구하는 영혼", description: "당신은 세상의 소음 속에서 침묵의 가치를 아는 존재입니다. 현상의 표면 아래 숨겨진 본질과 질서를 꿰뚫어 보며, 혼돈 속에서도 명료함을 잃지 않습니다. 당신의 지혜는 자신과 타인의 길을 밝히는 등대가 됩니다.", light_keyword: "통찰", light: "복잡하게 얽힌 문제의 핵심을 꿰뚫어보고, 모두가 간과하는 진실을 발견하는 빛나는 지성을 가졌습니다.", shadow_keyword: "고립", shadow: "너무 깊은 생각은 때로 당신을 세상과 단절시키고, 차가운 지성의 성에 스스로를 가둡니다. 하지만 이 고독이 있었기에 당신의 지혜는 더욱 깊어졌습니다.", mantra: "나의 이해는 세상을 비추는 빛이 됩니다.", icon: `<circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.6" /><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3" fill="none"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="15s" repeatCount="indefinite" /></circle>` },
+            explorer: { title: "탐험가", subtitle: "미지의 세계를 향해 나아가는 영혼", description: "당신의 심장은 세상의 끝을 향한 나침반이며, 당신의 영혼은 그 어떤 항구에도 얽매이지 않는 배와 같습니다. 미지를 향한 동경과 용기는 당신의 삶을 그 누구보다 다채로운 모험으로 만듭니다.", light_keyword: "자유", light: "정해진 길을 거부하고 자신만의 지도를 그려나가는 용기가 있습니다. 당신의 자유로운 정신은 낡은 경계를 무너뜨리고 새로운 가능성을 엽니다.", shadow_keyword: "방랑", shadow: "하나의 세계에 깊이 뿌리내리는 것을 두려워하여, 진정한 안정과 소속감을 놓칠 수 있습니다. 때로는 멈춤이 더 위대한 탐험의 시작임을 기억해야 합니다.", mantra: "나의 길은 세상의 경계 너머로 이어집니다.", icon: `<path d="M12 2L14 9L21 11L14 13L12 20L10 13L3 11L10 9L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="10s" repeatCount="indefinite" /></path>` },
+            lover: { title: "연인", subtitle: "연결과 사랑으로 충만한 영혼", description: "당신은 세상의 모든 존재와 보이지 않는 끈으로 연결되어 있음을 느낍니다. 사랑을 주고받을 때, 깊은 유대를 나눌 때 비로소 살아있음을 느끼며, 당신의 공감은 차가운 세상을 녹이는 힘입니다.", light_keyword: "공감", light: "타인의 마음을 자신의 마음처럼 느끼고 어루만지는 비범한 능력이 있습니다. 당신의 존재는 그 자체로 위로이며, 깨어진 관계를 회복시키는 치유의 힘을 가집니다.", shadow_keyword: "상실", shadow: "타인과의 관계 속에서 자신을 잃어버리거나, 사랑을 잃는 것에 대한 깊은 두려움이 당신을 잠식할 수 있습니다. 가장 먼저 사랑해야 할 존재는 바로 당신 자신입니다.", mantra: "나의 사랑은 세상의 온도를 높입니다.", icon: `<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5" fill="none"><animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite" /></path>` },
+            creator: { title: "창조자", subtitle: "무에서 유를 빚어내는 영혼", description: "당신의 눈에는 세상의 모든 것이 새로운 창조를 위한 재료로 보입니다. 평범한 일상에서 비범한 아름다움을 발견하고, 당신의 상상력을 통해 세상은 더 풍요롭고 의미 있는 곳으로 재탄생합니다.", light_keyword: "상상력", light: "현실의 제약을 뛰어넘어 새로운 세계를 구상하고, 그것을 현실로 빚어내는 비범한 재능을 지녔습니다. 당신의 창조성은 황무지에서 꽃을 피우는 기적을 행합니다.", shadow_keyword: "완벽주의", shadow: "완벽함에 대한 강박이 창작의 즐거움을 앗아가거나, 세상이 당신의 비전을 이해하지 못할 때 깊은 고독에 빠질 수 있습니다. 과정 자체의 아름다움을 믿으세요.", mantra: "나의 상상은 새로운 현실을 빚어냅니다.", icon: `<polygon points="12 2, 2 7, 2 17, 12 22, 22 17, 22 7" stroke="currentColor" stroke-width="1.5" fill="none"><animate attributeName="stroke-dasharray" values="0 100;50 50;100 0" dur="5s" repeatCount="indefinite" /></polygon>` },
+            ruler: { title: "통치자", subtitle: "질서와 조화를 구축하는 영혼", description: "당신은 혼돈 속에서 질서를 발견하고, 책임감과 리더십으로 자신과 주변의 세계를 안정적으로 이끌어가는 힘이 있습니다. 당신이 걷는 길은 곧은 길이 되며, 당신이 있는 곳에 조화와 번영이 깃듭니다.", light_keyword: "책임감", light: "무질서한 상황을 정리하고, 공동의 목표를 향해 사람들을 이끄는 강력한 리더십을 발휘합니다. 당신의 결단력은 흔들리는 배의 굳건한 닻과 같습니다.", shadow_keyword: "통제욕", shadow: "모든 것을 통제하려는 욕망이 당신을 경직되게 만들거나, 실패에 대한 두려움으로 새로운 도전을 망설일 수 있습니다. 진정한 통치는 때로는 내려놓음에서 시작됩니다.", mantra: "나의 의지는 조화로운 세상을 세웁니다.", icon: `<rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5" fill="none" /><path d="M9 3v18M15 3v18M3 9h18M3 15h18" stroke="currentColor" stroke-width="1" opacity="0.5"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="4s" repeatCount="indefinite" /></path>` },
+            innocent: { title: "순수주의자", subtitle: "본연의 빛을 간직한 영혼", description: "당신은 세상의 복잡함 속에서도 순수함과 믿음을 잃지 않는 귀한 존재입니다. 회의주의가 만연한 시대에, 당신은 모든 것의 긍정적인 본질을 보고자 합니다. 당신의 존재 자체가 주변에 안전함과 평화를 선물합니다.", light_keyword: "신뢰", light: "세상과 사람에 대한 근원적인 신뢰를 바탕으로, 편견 없이 모든 것을 포용합니다. 당신의 순수한 시선은 얼어붙은 마음을 녹이고 잠재된 선의를 일깨웁니다.", shadow_keyword: "현실도피", shadow: "세상의 어두운 면을 마주하는 것을 회피하려 하거나, 상처받는 것에 대한 두려움으로 자신만의 성에 갇힐 수 있습니다. 진정한 순수는 어둠을 알고도 빛을 택하는 용기입니다.", mantra: "나의 순수는 세상을 정화하는 힘입니다.", icon: `<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" /><circle cx="12" cy="12" r="3" fill="currentColor"><animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite" /></circle>` }
         },
 
         // --- 2. DOM & UI ---
-        initDOM() {
-            this.app = document.getElementById('app');
-            this.renderWelcome();
-        },
-
-        renderWelcome() {
-            this.app.innerHTML = `<div class="header fade-in"><h1>마음의 나침반</h1><p class="subtitle">AI 심해 탐사선 '아스트라'와 함께<br>당신의 마음 가장 깊은 곳을 향한<br>여정을 시작합니다.</p><button class="header start-button">탐사 시작</button></div>`;
-            this.app.querySelector('.start-button').addEventListener('click', () => this.startJourney());
-        },
-
-        startJourney() {
-            this.resetState();
-            this.renderQuestion();
-        },
-        
-        resetState() {
-            this.state.currentQuestionIndex = 0;
-            this.state.answers = {};
-            this.state.scores = {};
-            this.state.isNavigating = false;
-        },
-
+        initDOM() { this.app = document.getElementById('app'); this.renderWelcome(); },
+        renderWelcome() { this.app.innerHTML = `<div class="header fade-in"><h1>마음의 나침반</h1><p class="subtitle">AI 심해 탐사선 '아스트라'와 함께<br>당신의 마음 가장 깊은 곳을 향한<br>여정을 시작합니다.</p><button class="header start-button">탐사 시작</button></div>`; this.app.querySelector('.start-button').addEventListener('click', () => this.startJourney()); },
+        startJourney() { this.resetState(); this.renderQuestion(); },
+        resetState() { this.state.currentQuestionIndex = 0; this.state.answers = {}; this.state.scores = {}; this.state.isNavigating = false; },
         renderQuestion() {
             const index = this.state.currentQuestionIndex;
             const q = this.questions[index];
             const progress = ((index + 1) / this.questions.length) * 100;
-
             const phaseIndex = Math.floor(index / 3);
             document.body.style.backgroundColor = `var(--surface-color-${phaseIndex + 1})`;
-            
-            this.app.innerHTML = `
-                <div class="fade-in">
-                    <div class="progress-container">
-                        <div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div>
-                    </div>
-                    ${q.phase ? `<h2 id="phase-title">${q.phase}</h2>` : ''}
-                    <div class="question-card">
-                        <h3 id="question-box">${q.question}</h3>
-                        <div class="choice-options">
-                            ${q.options.map(opt => `<div class="choice-option" data-weight="${opt.weight}"><span class="option-text">${opt.text}</span></div>`).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-            this.app.querySelectorAll('.choice-option').forEach(el => {
-                el.addEventListener('click', () => this.handleSelection(el.dataset.weight));
-            });
+            this.app.innerHTML = `<div class="journey-container fade-in"><div class="progress-container"><div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div></div>${q.phase ? `<h2 id="phase-title">${q.phase}</h2>` : ''}<div class="question-card"><h3 id="question-box">${q.question}</h3><div class="choice-options">${q.options.map(opt => `<div class="choice-option" data-weight="${opt.weight}"><span class="option-text">${opt.text}</span></div>`).join('')}</div></div></div>`;
+            this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(el.dataset.weight)); });
         },
-
         handleSelection(weight) {
             if (this.state.isNavigating) return;
             this.state.isNavigating = true;
-
             this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
-            
-            this.app.querySelector('.fade-in').style.animation = 'fadeOut 0.5s ease-in both';
-            
+            this.app.querySelector('.journey-container').style.animation = 'fadeOut 0.5s ease-in both';
             setTimeout(() => {
                 if (this.state.currentQuestionIndex < this.questions.length - 1) {
                     this.state.currentQuestionIndex++;
                     this.renderQuestion();
                     this.state.isNavigating = false;
-                } else {
-                    this.renderLoading();
-                }
+                } else { this.renderLoading(); }
             }, 500);
         },
-        
         renderLoading() {
             document.body.style.backgroundColor = `var(--surface-color-3)`;
             this.app.innerHTML = `<div class="loading-screen fade-in"><h2 class="loading-text">심해 탐사 기록을 분석 중입니다...</h2><p class="subtitle">AI '아스트라'가 당신의 여정에서<br>의미있는 신호들을 해독하고 있습니다.</p></div>`;
             setTimeout(() => this.renderResults(), 4000);
         },
-
         renderResults() {
             const analysis = this.analyze();
             const archetype = this.archetypes[analysis.primaryArchetype];
-
             this.app.innerHTML = `
                 <div class="result-container">
-                    <div class="result-card" style="animation-delay: 0.5s;">
-                        <h2 class="archetype-title">${archetype.title}</h2>
-                        <p class="archetype-subtitle">${archetype.subtitle}</p>
+                    <div class="result-card archetype-card" style="animation-delay: 0.5s;">
+                        <div class="archetype-card-header">
+                            <div class="archetype-icon-wrapper">${this.getArchetypeIcon(analysis.primaryArchetype)}</div>
+                            <h2 class="archetype-title">${archetype.title}</h2>
+                            <p class="archetype-subtitle">${archetype.subtitle}</p>
+                        </div>
                         <p>${archetype.description}</p>
                     </div>
-
                     <div class="result-card" style="animation-delay: 0.8s;">
                         <h2><span class="icon">✨</span>당신의 빛과 그림자</h2>
                         <div class="light-shadow-container">
-                            <div class="light-shadow-box light"><h3>빛 (Light)</h3><p>${archetype.light}</p></div>
-                            <div class="light-shadow-box shadow"><h3>그림자 (Shadow)</h3><p>${archetype.shadow}</p></div>
+                            <div class="light-shadow-box light"><h3>빛: ${archetype.light_keyword}</h3><p>${archetype.light}</p></div>
+                            <div class="light-shadow-box shadow"><h3>그림자: ${archetype.shadow_keyword}</h3><p>${archetype.shadow}</p></div>
                         </div>
                     </div>
-
-                    <div class="result-card" style="animation-delay: 1.1s;">
-                        <h2><span class="icon">🛰️</span>아스트라의 통신</h2>
+                    <div class="result-card astra-card" style="animation-delay: 1.1s;">
+                        <h2><span class="icon">🛰️</span>아스트라 최종 보고서</h2>
                         <div class="text-block">${this.getAstraAnalysis(analysis)}</div>
                     </div>
-
                     <div class="result-card mantra-card" style="animation-delay: 1.4s;">
-                         <svg class="svg-icon" viewBox="0 0 24 24" style="width:48px; height:48px; fill: var(--accent-warm); margin-bottom: 20px;">
-                            <path id="mantra-heart-path" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                        <h2>당신을 위한 주문</h2>
+                        <p>이 주문을 마음에 새기세요.<br>당신의 길이 흔들릴 때, 가장 진실한 당신으로 돌아오게 할 것입니다.</p>
                         <p class="mantra-text">"${archetype.mantra}"</p>
                     </div>
-
                     <button class="restart-button" onclick="MindJourneyApp.initDOM()">다시 탐사하기</button>
-                </div>
-            `;
+                </div>`;
             document.body.style.backgroundColor = `var(--surface-color-1)`;
         },
         
@@ -320,28 +248,30 @@
             const sorted = Object.entries(this.state.scores).sort((a,b) => b[1] - a[1]);
             const primaryArchetype = sorted.length > 0 ? sorted[0][0] : "innocent";
             const secondaryArchetype = sorted.length > 1 ? sorted[1][0] : null;
+            this.state.answers.finalFear = this.state.scores[this.archetypes[primaryArchetype].shadow_keyword] || '알 수 없는 것'; // Simplified for example
             return { primaryArchetype, secondaryArchetype, scores: this.state.scores };
         },
-
+        getArchetypeIcon(key) {
+            const iconData = this.archetypes[key].icon || this.archetypes.innocent.icon;
+            return `<svg class="svg-icon" viewBox="0 0 24 24" style="width:64px; height:64px; stroke: var(--text-accent); fill: var(--text-accent);" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${iconData}</svg>`;
+        },
         getAstraAnalysis(analysis) {
             const primary = this.archetypes[analysis.primaryArchetype];
-            const secondary = this.archetypes[analysis.secondaryArchetype];
+            const secondary = analysis.secondaryArchetype ? this.archetypes[analysis.secondaryArchetype] : null;
 
-            let text = `표면의 바다에서 당신은 ${primary.title}로서의 호기심과 성향을 드러냈습니다. 하지만 여정이 깊어질수록, 어스름의 바다에서는 당신의 숨겨진 그림자가 드러나기 시작했죠. 바로 '${primary.shadow.split('.')[1].trim()}'는 두려움입니다.<br><br>`;
+            let text = `[탐사 보고서 시작]<br>표면의 바다에서, 당신은 **${primary.title}**로서의 호기심과 성향을 뚜렷하게 드러냈습니다. 하지만 여정이 깊어질수록, 어스름의 바다에서는 당신의 내면이 가진 복잡성이 드러나기 시작했죠. 특히 '상실감'에 대한 당신의 반응은, 당신이 세상을 어떻게 이해하고 상처를 힘으로 바꾸는지 보여주는 중요한 단서였습니다.<br><br>`;
             
             if (secondary) {
-                text += `심연 속에서, 당신 안의 또 다른 원형인 ${secondary.title}의 목소리가 들려왔습니다. 이는 당신이 ${primary.title}의 길을 걸으면서도, ${secondary.title}의 시선으로 세상을 바라볼 수 있음을 의미합니다. 이 두 원형의 조화가 당신의 영혼을 더욱 입체적이고 풍요롭게 만듭니다.`;
+                text += `심연에 도달했을 때, 당신 안의 또 다른 원형인 **${secondary.title}**의 목소리가 들려왔습니다. 이는 당신이 ${primary.title}의 길을 걸으면서도, ${secondary.title}의 시선으로 세상을 바라볼 수 있음을 의미합니다. ${primary.light_keyword}의 빛과 ${secondary.light_keyword}의 온기가 만나, 당신의 영혼을 더욱 입체적이고 풍요롭게 만듭니다.<br>[탐사 보고서 종료]`;
             } else {
-                text += `심연 속에서 당신은 오롯이 ${primary.title}의 원형과 마주했습니다. 당신의 영혼은 한결같이 순수한 빛을 향해 나아가고 있으며, 이것이 당신의 가장 큰 힘이자 위대함입니다.`;
+                text += `심연 속에서, 당신은 오롯이 **${primary.title}**의 원형과 마주했습니다. 당신의 영혼은 한결같이 순수한 빛을 향해 나아가고 있으며, 이것이 당신의 가장 큰 힘이자 위대함입니다. 흔들림 없는 당신의 모습에서 깊은 감명을 받았습니다.<br>[탐사 보고서 종료]`;
             }
             return text;
         }
 
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
-        MindJourneyApp.initDOM();
-    });
+    document.addEventListener('DOMContentLoaded', () => { MindJourneyApp.initDOM(); });
     //]]>
     </script>
 </body>
