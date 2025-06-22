@@ -21,7 +21,7 @@
             --surface-color-2: #141D34;
             --surface-color-3: #0A1122;
             --text-primary: #E6EEFF;
-            --text-secondary: #BCC8E0;
+            --text-secondary: #A0AEC0;
             --text-accent: #A5B4FC;
             --accent-point: #F472B6;
             --border-color: rgba(255, 255, 255, 0.1);
@@ -33,71 +33,66 @@
         body {
             font-family: var(--font-sans);
             font-weight: 400;
-            background-color: var(--surface-color-1);
+            background-color: var(--bg-deep-blue);
             color: var(--text-primary);
             line-height: 1.8;
             overflow-x: hidden;
-            transition: background-color 1.2s ease;
         }
 
-        #app { max-width: 600px; margin: 0 auto; padding: 30px 20px; position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+        #app { max-width: 640px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 1; min-height: 100vh; }
         
-        .fade-in { animation: fadeIn 1s ease-out both; }
+        .fade-in { animation: fadeIn 1.2s ease-out both; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header { text-align: center; margin: auto; padding: 20px; }
+        .header { text-align: center; margin: 10vh 0; }
         .header h1 { font-family: var(--font-serif); font-size: 36px; font-weight: 600; }
-        .header .subtitle { font-size: 17px; color: var(--text-secondary); margin-top: 16px; }
+        .header .subtitle { font-size: 17px; color: var(--text-secondary); margin-top: 16px; line-height: 1.7; }
         .header .start-button {
             margin-top: 30px; padding: 14px 36px;
             font-size: 16px; font-weight: 500;
             background-color: var(--text-accent); color: var(--surface-color-3);
-            border: none; border-radius: 30px; cursor: pointer;
-            transition: all 0.2s ease-in-out;
+            border: none; border-radius: 30px; cursor: pointer; transition: all 0.2s ease;
         }
         .header .start-button:hover { transform: translateY(-2px); }
 
         .journey-container { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; opacity: 0; animation: fadeIn 0.5s forwards; }
-        .progress-container { margin-bottom: 24px; width: 100%; }
+        .progress-container { margin-bottom: 24px; }
         #progress-text { text-align: center; font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; font-weight: 500; }
         .progress-bar { width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 2.5px; overflow: hidden; }
         #progress-fill { height: 100%; background: var(--text-accent); border-radius: 2.5px; transition: width 0.4s ease; }
         
         #question-box { font-family: var(--font-serif); font-size: 22px; font-weight: 600; text-align: center; margin-bottom: 24px; word-break: keep-all; }
         .choice-options { display: flex; flex-direction: column; gap: 12px; }
-        .choice-option {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 18px; cursor: pointer;
-            transition: all 0.2s ease-in-out; text-align: center;
-        }
+        .choice-option { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; cursor: pointer; transition: all 0.2s ease; text-align: center; }
         .choice-option:hover { background: rgba(255,255,255,0.1); transform: scale(1.02); }
         .option-text { font-size: 16px; font-weight: 400; word-break: keep-all; }
         
         .loading-screen { text-align: center; margin: auto; }
         .loading-text { font-family: var(--font-serif); font-size: 20px; font-weight: 500; }
-        #star-shower { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
-        .star { position: absolute; background: white; border-radius: 50%; animation: fall 2s linear forwards; }
-        @keyframes fall { to { transform: translateY(100vh); opacity: 0; } }
-
+        
         /* --- 결과 페이지 --- */
         .result-container { padding-top: 5vh; }
         .result-card { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 32px 40px; margin-bottom: 24px; }
-        .result-card h2 { font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--text-accent); margin-bottom: 16px; display: flex; align-items: center; }
-        .result-card h2 .icon { margin-right: 12px; font-size: 20px; }
+        .result-card h2 { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text-accent); margin-bottom: 16px; display: flex; align-items: center; }
+        .result-card h2 .icon { margin-right: 12px; font-size: 22px; }
         .result-card p { font-family: var(--font-sans); font-size: 17px; line-height: 1.9; color: var(--text-secondary); font-weight: 300; word-break: keep-all; }
         
-        .artifact-header { text-align: center; padding: 16px 0; }
+        .artifact-header { text-align: center; padding-bottom: 24px; }
         .artifact-icon { font-size: 56px; margin-bottom: 16px; display: inline-block; animation: icon-pop 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) .5s both; }
         @keyframes icon-pop { 0% {transform: scale(0);} 100% {transform: scale(1);} }
         .artifact-title { font-family: var(--font-serif); font-size: 28px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
         .artifact-subtitle { font-family: var(--font-serif); font-size: 18px; color: var(--accent-point); }
-        .artifact-keywords { font-size: 14px; color: var(--text-accent); margin-top: 16px; font-weight: 500; }
         
-        .preference-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .preference-box h3 { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+        .preference-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .preference-box h3 { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-bottom: 12px; }
         .preference-list { list-style: none; padding: 0; }
-        .preference-list li { font-size: 16px; color: var(--text-secondary); margin-bottom: 8px; }
-        .preference-list li::before { content: '✓ '; color: var(--text-accent); }
+        .preference-list li { font-size: 16px; color: var(--text-secondary); margin-bottom: 8px; display: flex; }
+        .preference-list li .icon { margin-right: 8px; }
+
+        .light-shadow-container { margin-top: 24px; }
+        .light-shadow-box h3 { font-family: var(--font-serif); font-size: 20px; margin-bottom: 10px; display: flex; align-items: center; font-weight: 600; }
+        .light-shadow-box .light h3 { color: #A7D7C5; }
+        .light-shadow-box .shadow h3 { color: #DAB894; margin-top: 24px; }
         
         .letter-card { background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--text-accent); padding: 40px; }
         .letter-card p { font-family: var(--font-serif); font-size: 18px; line-height: 2; }
@@ -107,34 +102,31 @@
         .share-btn { font-size: 15px; font-weight: 500; padding: 12px 24px; border-radius: 30px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.1); color: var(--text-primary); cursor: pointer; transition: all 0.2s ease; }
         .share-btn:hover { background: var(--text-accent); color: var(--bg-deep-blue); border-color: var(--text-accent); }
         
-        .restart-button { display: block; width: fit-content; margin: 30px auto 0; padding: 12px 30px; font-size: 16px; font-weight: 500; background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.2s ease-in-out; }
+        .restart-button { display: block; width: fit-content; margin: 24px auto 0; padding: 12px 30px; font-size: 16px; font-weight: 500; background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.2s ease-in-out; }
         .restart-button:hover { background: var(--text-secondary); color: var(--bg-deep-blue); }
 
-        @media (max-width: 480px) { #app { padding: 20px 15px; } .header h1 { font-size: 28px; } #question-box { font-size: 20px; } .choice-option { padding: 16px; } .option-text { font-size: 15px; } .result-card { padding: 24px; } .artifact-title { font-size: 24px; } .preference-container { grid-template-columns: 1fr; gap: 24px; } }
-        @media (max-height: 700px) { .header { margin: 4vh 0; } #question-box { margin-bottom: 20px; font-size: 20px; } .choice-option { padding: 15px; } .option-text { font-size: 15px; } }
-
-     </style>
- </head>
+        @media (max-width: 480px) { #app { padding: 30px 15px; } .header h1 { font-size: 28px; } #question-box { font-size: 20px; } .result-card { padding: 24px; } .artifact-title { font-size: 24px; } .preference-container { grid-template-columns: 1fr; gap: 24px; } }
+    </style>
+</head>
  
- <body>
-    <div id="star-shower"></div>
+<body>
     <div id="app"></div>
  
-     <script>
+    <script>
     //<![CDATA[
     (function() {
         const MindJourneyApp = {
-            state: { currentQuestionIndex: 0, scores: {}, isNavigating: false },
+            state: { currentQuestionIndex: 0, scores: {}, isNavigating: false, answers: {} },
             
             questions: [
-                { question: "주말 오후, 갑자기 혼자만의 시간이 생겼어요. 가장 하고 싶은 것은 무엇인가요?", options: [ { text: "평소 가고 싶었던 곳으로 훌쩍 떠나요.", weight: "suitcase" }, { text: "조용한 카페에서 책을 읽거나 생각을 정리해요.", weight: "lamp" }, { text: "친구에게 바로 연락해서 약속을 잡아요.", weight: "table" }, { text: "미뤄뒀던 나만의 창작 활동(글쓰기, 그림 등)을 해요.", weight: "sketchbook" } ]},
-                { question: "힘들어하는 친구의 이야기를 들었을 때, 당신의 첫 반응에 가장 가까운 것은 무엇인가요?", options: [ { text: "문제의 원인을 분석하고 현실적인 해결책을 찾아줘요.", weight: "lamp" }, { text: "맛있는 음식을 사주며 일단 웃게 만들어요.", weight: "table" }, { text: "아무 말 없이 곁에서 이야기를 다 들어줘요.", weight: "sofa" }, { text: "함께 새로운 활동을 하며 슬픔을 잊게 도와줘요.", weight: "suitcase" } ]},
-                { question: "팀 프로젝트를 할 때, 당신은 주로 어떤 역할을 맡게 되시나요?", options: [ { text: "전체적인 계획을 세우고 역할을 분배하는 리더", weight: "fireplace" }, { text: "아무도 생각 못한 새로운 아이디어를 제시하는 아이디어 뱅크", weight: "sketchbook" }, { text: "팀원들 사이의 의견을 조율하고 분위기를 좋게 만드는 중재자", weight: "sofa" }, { text: "묵묵히 내게 주어진 일을 완벽하게 해내는 해결사", weight: "lamp" } ]},
-                { question: "요즘 당신의 머릿속을 가장 많이 차지하는 생각은 무엇인가요?", options: [ { text: "다음 휴가 때 어디로 떠날까 하는 즐거운 상상", weight: "suitcase" }, { text: "어떻게 하면 내 일을 더 잘할 수 있을까 하는 고민", weight: "fireplace" }, { text: "주변 사람들과의 관계, 혹은 연애에 대한 생각", weight: "table" }, { text: "나만의 작품이나 사이드 프로젝트에 대한 구상", weight: "sketchbook" } ]},
-                { question: "당신이 가장 편안함을 느끼는 공간은 어떤 곳인가요?", options: [ { text: "좋아하는 사람들과 함께하는 따뜻한 거실", weight: "fireplace" }, { text: "언제든 기댈 수 있는 푹신한 소파 위", weight: "sofa" }, { text: "나만의 생각에 집중할 수 있는 조용한 서재", weight: "lamp" }, { text: "새로운 영감이 떠오르는 나만의 작업 공간", weight: "sketchbook" } ]},
-                { question: "다른 사람에게 선물을 할 때, 주로 어떤 것을 고르시나요?", options: [ { text: "상대방의 성장에 도움이 될 만한 책이나 도구", weight: "lamp" }, { text: "함께 즐거운 시간을 보낼 수 있는 식사나 여행 상품", weight: "table" }, { text: "나의 정성과 감각이 담긴, 직접 만든 물건", weight: "sketchbook" }, { text: "상대방이 평소에 갖고 싶어 했던 실용적인 물건", weight: "fireplace" } ]},
-                { question: "10년 후, 어떤 모습으로 살고 있을 때 가장 행복할 것 같나요?", options: [ { text: "내가 속한 분야에서 최고의 전문가로 인정받는 삶", weight: "fireplace" }, { text: "사랑하는 가족, 친구들과 매일 웃으며 함께하는 삶", weight: "sofa" }, { text: "전 세계를 자유롭게 여행하며 사는 삶", weight: "suitcase" }, { text: "나만의 독창적인 작품 세계를 구축한 예술가의 삶", weight: "sketchbook" } ]},
-                { question: "가장 듣고 싶은 칭찬은 무엇인가요?", options: [ { text: "역시 믿음직스러워, 네 덕분에 든든해.", weight: "fireplace" }, { text: "너랑 있으면 편안하고 마음이 따뜻해져.", weight: "sofa" }, { text: "어떻게 그런 생각을 했어? 정말 독창적이다!", weight: "sketchbook" }, { text: "너의 이야기는 항상 흥미롭고 새로워.", weight: "suitcase" } ]}
+                { key: "weekend", question: "주말 오후, 갑자기 혼자만의 시간이 생겼어요. 가장 하고 싶은 것은 무엇인가요?", options: [ { text: "평소 가고 싶었던 곳으로 훌쩍 떠나요.", weight: "suitcase" }, { text: "조용한 카페에서 책을 읽거나 생각을 정리해요.", weight: "lamp" }, { text: "친구에게 바로 연락해서 약속을 잡아요.", weight: "table" }, { text: "미뤄뒀던 나만의 창작 활동(글쓰기, 그림 등)을 해요.", weight: "sketchbook" } ]},
+                { key: "friend", question: "힘들어하는 친구의 이야기를 들었을 때, 당신의 첫 반응에 가장 가까운 것은 무엇인가요?", options: [ { text: "문제의 원인을 분석하고 현실적인 해결책을 찾아줘요.", weight: "lamp" }, { text: "맛있는 음식을 사주며 일단 웃게 만들어요.", weight: "table" }, { text: "아무 말 없이 곁에서 이야기를 다 들어줘요.", weight: "sofa" }, { text: "함께 새로운 활동을 하며 슬픔을 잊게 도와줘요.", weight: "suitcase" } ]},
+                { key: "team", question: "팀 프로젝트를 할 때, 당신은 주로 어떤 역할을 맡게 되시나요?", options: [ { text: "전체적인 계획을 세우고 역할을 분배하는 리더", weight: "fireplace" }, { text: "아무도 생각 못한 새로운 아이디어를 제시하는 아이디어 뱅크", weight: "sketchbook" }, { text: "팀원들 사이의 의견을 조율하고 분위기를 좋게 만드는 중재자", weight: "sofa" }, { text: "묵묵히 내게 주어진 일을 완벽하게 해내는 해결사", weight: "lamp" } ]},
+                { key: "thoughts", question: "요즘 당신의 머릿속을 가장 많이 차지하는 생각은 무엇인가요?", options: [ { text: "다음 휴가 때 어디로 떠날까 하는 즐거운 상상", weight: "suitcase" }, { text: "어떻게 하면 내 일을 더 잘할 수 있을까 하는 고민", weight: "fireplace" }, { text: "주변 사람들과의 관계, 혹은 연애에 대한 생각", weight: "table" }, { text: "나만의 작품이나 사이드 프로젝트에 대한 구상", weight: "sketchbook" } ]},
+                { key: "space", question: "당신이 가장 편안함을 느끼는 공간은 어떤 곳인가요?", options: [ { text: "좋아하는 사람들과 함께하는 따뜻한 거실", weight: "fireplace" }, { text: "언제든 기댈 수 있는 푹신한 소파 위", weight: "sofa" }, { text: "나만의 생각에 집중할 수 있는 조용한 서재", weight: "lamp" }, { text: "새로운 영감이 떠오르는 나만의 작업 공간", weight: "sketchbook" } ]},
+                { key: "gift", question: "다른 사람에게 선물을 할 때, 주로 어떤 것을 고르시나요?", options: [ { text: "상대방의 성장에 도움이 될 만한 책이나 도구", weight: "lamp" }, { text: "함께 즐거운 시간을 보낼 수 있는 식사나 여행 상품", weight: "table" }, { text: "나의 정성과 감각이 담긴, 직접 만든 물건", weight: "sketchbook" }, { text: "상대방이 평소에 갖고 싶어 했던 실용적인 물건", weight: "fireplace" } ]},
+                { key: "future", question: "10년 후, 어떤 모습으로 살고 있을 때 가장 행복할 것 같나요?", options: [ { text: "내가 속한 분야에서 최고의 전문가로 인정받는 삶", weight: "fireplace" }, { text: "사랑하는 가족, 친구들과 매일 웃으며 함께하는 삶", weight: "sofa" }, { text: "전 세계를 자유롭게 여행하며 사는 삶", weight: "suitcase" }, { text: "나만의 독창적인 작품 세계를 구축한 예술가의 삶", weight: "sketchbook" } ]},
+                { key: "compliment", question: "가장 듣고 싶은 칭찬은 무엇인가요?", options: [ { text: "역시 믿음직스러워, 네 덕분에 든든해.", weight: "fireplace" }, { text: "너랑 있으면 편안하고 마음이 따뜻해져.", weight: "sofa" }, { text: "어떻게 그런 생각을 했어? 정말 독창적이다!", weight: "sketchbook" }, { text: "너의 이야기는 항상 흥미롭고 새로워.", weight: "suitcase" } ]}
             ],
             
             soulObjects: {
@@ -143,8 +135,8 @@
                     subtitle: "어둠 속에서 진리를 비추는",
                     icon: "💡",
                     description: "당신의 마음의 방, 그 가장 깊고 고요한 곳에는 낡은 책상 하나와 그 위를 비추는 램프가 있습니다. 세상의 모든 소음이 잠들었을 때, 당신은 비로소 그 램프에 불을 켭니다. 한 장 한 장 책장을 넘기듯, 당신은 삶의 현상들을 넘기며 그 안에 숨겨진 인과관계를, 아무도 주목하지 않았던 질서를, 마침내 발견하고야 마는 사람입니다.",
-                    likes: ["혼자만의 시간", "깊이 있는 대화", "지식 탐구", "논리적인 토론"],
-                    dislikes: ["가볍고 피상적인 대화", "성급한 결정", "시끄러운 장소", "감정에만 호소하는 것"],
+                    likes: ["📚 조용한 곳에서 몇 시간이고 책 읽기", "🤔 하나의 주제를 깊게 파고드는 것", "☕️ 새벽이나 늦은 밤, 혼자만의 시간 갖기", "🗣️ 단 한 명과 나누는 깊고 진솔한 대화", "❓ '왜?'라는 질문을 던지고 해답을 찾는 과정"],
+                    dislikes: ["🗣️ 가볍고 피상적인 수다", "🏃‍♂️ 성급하고 충동적인 결정", "🎉 너무 시끄럽고 번잡한 장소", "😭 감정에만 호소하는 억지", "🤷‍♂️ 앞뒤가 맞지 않는 비논리적인 주장"],
                     light_title: "당신의 빛은 ‘통찰’입니다",
                     light_text: "당신은 세상의 복잡한 현상들 속에서 자신만의 리듬으로 질서를 발견하는 사람입니다. 다른 사람들이 쉽게 지나치는 사소한 부분에서도, 당신은 끈질긴 사유를 통해 숨겨진 의미와 패턴을 읽어냅니다. 당신의 깊이 있는 통찰은 혼란스러운 상황에서 방향을 제시하는 빛이 됩니다.",
                     shadow_title: "당신의 그림자는 ‘고독’입니다",
@@ -160,8 +152,8 @@
                     subtitle: "따뜻한 중심과 안정",
                     icon: "🔥",
                     description: "당신의 마음의 방, 그 중심에는 언제나 따뜻한 온기를 내뿜는 벽난로가 있습니다. 사람들은 자연스럽게 당신의 곁으로 모여듭니다. 당신이 주는 온기와 안정감 속에서, 그들은 위로를 얻고 다시 나아갈 힘을 얻습니다. 당신은 기꺼이 자신을 태워, 공동체의 중심을 지키는 사람입니다.",
-                    likes: ["사람들을 챙겨주기", "계획 세우기", "신뢰받는 것", "안정적인 리더십"],
-                    dislikes: ["무질서하고 즉흥적인 상황", "무책임한 태도", "불확실함", "개인주의적인 행동"],
+                    likes: ["👨‍👩‍👧‍👦 주변 사람들을 살뜰히 챙겨주기", "📝 꼼꼼하게 계획을 세우고 실행하기", "🤝 다른 사람에게 신뢰를 얻는 것", "🏛️ 안정적이고 예측 가능한 상황", "🏆 목표를 정하고 성취해내는 과정"],
+                    dislikes: ["🌪️ 무질서하고 즉흥적인 상황", "🤷‍♀️ 무책임한 태도와 변명", "❓ 불확실하고 애매한 상태", "🙏 약속을 지키지 않는 것", "📉 계획이 틀어지는 돌발 상황"],
                     light_title: "당신의 빛은 ‘신뢰’입니다",
                     light_text: "당신은 마치 추운 겨울밤의 벽난로처럼, 주변 사람들에게 따뜻함과 안정감을 주는 존재입니다. 강한 책임감과 굳건함으로 흔들리지 않는 중심을 지키며, 사람들은 당신 곁에 모여들어 위로와 용기를 얻습니다.",
                     shadow_title: "당신의 그림자는 ‘무게’입니다",
@@ -177,8 +169,8 @@
                     subtitle: "무한한 가능성과 창의력",
                     icon: "🎨",
                     description: "당신의 마음의 방에는, 무한한 가능성으로 가득한 새하얀 스케치북이 놓여 있습니다. 당신의 눈에는 세상의 모든 것이 새로운 창조를 위한 재료로 보입니다. 당신은 기존의 것들을 조합하는 것을 넘어, 완전히 새로운 아름다움을 상상하고 그것을 현실로 빚어내는 예술가입니다.",
-                    likes: ["새로운 아이디어", "자유로운 표현", "나만의 방식으로 만들기", "예술적 영감"],
-                    dislikes: ["틀에 박힌 규칙", "반복적인 일상", "창의성을 억압하는 것", "무미건조함"],
+                    likes: ["💡 새로운 아이디어를 떠올리는 것", "✍️ 나만의 방식으로 자유롭게 표현하기", "✨ 반짝이는 영감을 얻는 순간", "🖼️ 아름다운 것을 보고 감상하기", "👨‍🎨 나만의 개성이 담긴 물건들"],
+                    dislikes: ["📏 틀에 박힌 규칙과 제약", "🔁 지루하고 반복적인 일상", "🚫 창의성을 억압하는 분위기", "💔 나의 감각을 이해받지 못하는 것", "🤔 상상력이 제한되는 상황"],
                     light_title: "당신의 빛은 ‘창조’입니다",
                     light_text: "당신의 영혼은 무한한 가능성으로 가득한 새하얀 스케치북과 같습니다. 세상에 없던 새로운 아이디어를 떠올리고, 자신만의 방식으로 그것을 표현해내는 비범한 재능을 지녔습니다. 당신의 상상력은 밋밋한 현실에 다채로운 색을 입힙니다.",
                     shadow_title: "당신의 그림자는 ‘미완성’에 대한 두려움입니다",
@@ -194,8 +186,8 @@
                     subtitle: "자유와 경험의 기록",
                     icon: "✈️",
                     description: "당신의 마음의 방, 그 한켠에는 언제든 떠날 준비가 된 오래된 여행 가방이 있습니다. 수많은 여행의 흔적이 담긴 이 가방처럼, 당신의 영혼은 하나의 장소, 하나의 정체성에 얽매이는 것을 거부합니다. 당신에게 삶이란 새로운 경험을 통해 자신을 발견해나가는 설레는 모험입니다.",
-                    likes: ["새로운 장소와 경험", "예측 불가능한 모험", "자유", "다양한 문화"],
-                    dislikes: ["정체되고 지루한 일상", "규칙과 제약", "깊은 소속감", "예상 가능한 미래"],
+                    likes: ["낯선 장소로 떠나는 여행", "🗺️ 계획 없는 즉흥적인 모험", "🏃‍♀️ 새로운 것을 배우고 도전하는 것", "💨 누구에게도 구속받지 않는 자유", "🌏 다양한 문화를 경험하는 것"],
+                    dislikes: ["🥱 정체되고 지루한 일상", "⛓️ 나를 옭아매는 규칙과 제약", "🏠 한곳에 오래 머무르는 것", "🗓️ 모든 것이 예측 가능한 미래", "👨‍👩‍👧‍👦 너무 깊은 소속감과 책임"],
                     light_title: "당신의 빛은 ‘자유’입니다",
                     light_text: "당신의 영혼은 수많은 여행의 흔적이 담긴 오래된 가방을 닮았습니다. 당신은 하나의 장소, 하나의 정체성에 얽매이는 것을 거부합니다. 새로운 경험과 예측 불가능한 모험 속으로 기꺼이 몸을 던지며, 그 과정을 통해 삶을 배워나갑니다.",
                     shadow_title: "당신의 그림자는 ‘공허함’입니다",
@@ -211,8 +203,8 @@
                     subtitle: "편안한 위로와 안식",
                     icon: "🛋️",
                     description: "당신의 마음의 방에는, 누구든 편안히 몸을 기댈 수 있는 크고 푹신한 소파가 놓여 있습니다. 당신은 타인의 잘잘못을 따지기 전에, 그 사람의 지친 마음을 먼저 헤아립니다. 당신 곁에서 사람들은 비로소 가면을 벗고, 안심하며 자신의 상처를 드러냅니다.",
-                    likes: ["안정적인 관계", "편안한 분위기", "다른 사람의 이야기 들어주기", "따뜻한 스킨십"],
-                    dislikes: ["불편하고 어색한 관계", "날카로운 비판", "과도한 경쟁", "가식적인 모습"],
+                    likes: ["🤗 안정적이고 편안한 관계", "☕️ 따뜻한 분위기에서 나누는 대화", "👂 다른 사람의 이야기를 들어주는 것", "🤝 갈등 없이 평화로운 상태", "🎁 사소한 것이라도 나누는 기쁨"],
+                    dislikes: ["🥶 불편하고 어색한 분위기", "🗣️ 날카로운 비판과 지적", "💥 과도한 경쟁과 갈등", "🎭 가식적이고 피상적인 관계", "😨 누군가를 실망시키는 것"],
                     light_title: "당신의 빛은 ‘수용’입니다",
                     light_text: "당신은 지친 사람들이 아무런 조건 없이 몸을 기댈 수 있는 푹신한 소파 같은 사람입니다. 당신은 타인의 잘잘못을 따지기 전에, 그 사람의 존재 자체를 따뜻하게 받아들입니다. 당신 곁에서 사람들은 비로소 안심하고 상처를 회복합니다.",
                     shadow_title: "당신의 그림자는 ‘자기희생’입니다",
@@ -228,8 +220,8 @@
                     subtitle: "나눔과 연결의 즐거움",
                     icon: "🍽️",
                     description: "당신의 마음의 방에는, 언제나 맛있는 음식이 차려진 커다란 식탁이 있습니다. 당신은 혼자일 때보다 함께일 때 더욱 빛나는 사람입니다. 사람들을 초대하고, 음식을 나누고, 유쾌한 대화를 통해 에너지를 얻습니다. 당신이 있는 곳은 언제나 즐거운 파티가 됩니다.",
-                    likes: ["친구들과의 만남", "맛있는 음식 나누기", "유쾌한 대화", "새로운 사람"],
-                    dislikes: ["혼자 있는 것", "어색하고 조용한 분위기", "진지하고 무거운 이야기", "계획이 틀어지는 것"],
+                    likes: ["🎉 친구들과의 즐거운 만남", "🍕 맛있는 음식을 함께 나누기", "😂 유쾌하고 재미있는 대화", "🙋‍♂️ 새로운 사람들을 만나는 것", "🎈 다른 사람들을 즐겁게 해주는 일"],
+                    dislikes: ["👤 오랫동안 혼자 있는 것", "🤫 어색하고 조용한 분위기", "🤔 너무 진지하고 무거운 이야기", "💔 사람들로부터 소외되는 기분", "😥 다른 사람의 슬픔에 깊이 빠지는 것"],
                     light_title: "당신의 빛은 ‘연결’입니다",
                     light_text: "당신은 맛있는 음식을 나누어 먹는 식탁처럼, 사람과 사람을 연결하고 즐거운 순간을 만들어내는 사람입니다. 당신 곁에는 늘 유쾌한 웃음과 따뜻한 대화가 가득합니다. 당신은 혼자일 때보다 함께일 때 더욱 빛나는 존재입니다.",
                     shadow_title: "당신의 그림자는 ‘외로움’입니다",
@@ -245,18 +237,19 @@
             initDOM() { this.app = document.getElementById('app'); this.renderWelcome(); },
             renderWelcome() { this.app.innerHTML = `<div class="header fade-in"><h1>마음의 나침반</h1><p class="subtitle">AI '아스트라'와 함께<br>당신의 마음 속 방을 탐험해 보세요.</p><button class="header start-button">탐험 시작</button></div>`; this.app.querySelector('.start-button').addEventListener('click', () => { this.startJourney(); }); },
             startJourney() { this.resetState(); this.renderQuestion(); },
-            resetState() { this.state.currentQuestionIndex = 0; this.state.scores = {}; this.state.isNavigating = false; },
+            resetState() { this.state.currentQuestionIndex = 0; this.state.scores = {}; this.state.isNavigating = false; this.state.answers = {}; },
             renderQuestion() {
                 const index = this.state.currentQuestionIndex;
                 const q = this.questions[index];
                 const progress = ((index + 1) / this.questions.length) * 100;
-                this.app.innerHTML = `<div class="journey-container"><div class="progress-container"><div id="progress-text">질문 ${index + 1} / ${this.questions.length}</div><div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div></div><div id="question-box">${q.question}</div><div class="choice-options">${q.options.map(opt => `<div class="choice-option" data-weight="${opt.weight}"><span class="option-text">${opt.text}</span></div>`).join('')}</div></div>`;
-                this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(el.dataset.weight)); });
+                this.app.innerHTML = `<div class="journey-container"><div class="progress-container"><div id="progress-text">질문 ${index + 1} / ${this.questions.length}</div><div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div></div><div id="question-box">${q.question}</div><div class="choice-options">${q.options.map((opt, i) => `<div class="choice-option" data-weight="${opt.weight}" data-answer-index="${i}"><span class="option-text">${opt.text}</span></div>`).join('')}</div></div>`;
+                this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(q, el.dataset.weight, parseInt(el.dataset.answerIndex))); });
             },
-            handleSelection(weight) {
+            handleSelection(question, weight, answerIndex) {
                 if (this.state.isNavigating) return;
                 this.state.isNavigating = true;
                 this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
+                if(question.key) { this.state.answers[question.key] = question.options[answerIndex].text; }
                 this.app.querySelector('.journey-container').style.opacity = 0;
                 setTimeout(() => {
                     if (this.state.currentQuestionIndex < this.questions.length - 1) {
@@ -267,16 +260,22 @@
                 }, 400);
             },
             renderLoading() {
-                this.app.innerHTML = `<div class="loading-screen fade-in"><h2 class="loading-text">마음 속을 여행하며<br>당신을 닮은 물건을 찾고 있어요...</h2></div>`;
+                this.app.innerHTML = `<div class="loading-screen fade-in"><h2>마음 속을 여행하며<br>당신을 닮은 물건을 찾고 있어요...</h2></div>`;
                 this.createStars();
                 setTimeout(() => {
                     this.renderResults();
-                    document.getElementById('star-shower').innerHTML = '';
+                    const starContainer = document.getElementById('star-shower');
+                    if(starContainer) starContainer.innerHTML = '';
                 }, 3000);
             },
             createStars() {
-                const container = document.getElementById('star-shower');
-                if (!container) return;
+                let container = document.getElementById('star-shower');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'star-shower';
+                    document.body.prepend(container);
+                }
+                container.innerHTML = '';
                 for (let i = 0; i < 15; i++) {
                     const star = document.createElement('div');
                     star.className = 'star';
@@ -296,7 +295,6 @@
                                 <h2 class="artifact-title" style="color:var(--text-primary); margin:0;">${artifact.title}</h2>
                                 <p class="artifact-subtitle">${artifact.subtitle}</p>
                             </div>
-                            <p>${artifact.description}</p>
                         </div>
                         <div class="result-card" style="animation-delay: 0.7s;">
                             <h2><span class="icon">🔍</span>당신의 성향</h2>
@@ -307,20 +305,27 @@
                                     <ul class="preference-list">${artifact.likes.map(like => `<li>${like}</li>`).join('')}</ul>
                                 </div>
                                 <div class="preference-box">
-                                    <h3>조금 힘들어요</h3>
+                                    <h3>👎 조금 힘들어요</h3>
                                     <ul class="preference-list">${artifact.dislikes.map(dislike => `<li>${dislike}</li>`).join('')}</ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="result-card letter-card" style="animation-delay: 0.9s;">
+                         <div class="result-card" style="animation-delay: 0.9s;">
+                            <h2><span class="icon">✨</span>당신의 빛과 그림자</h2>
+                            <div class="light-shadow-container">
+                                <div class="light-shadow-box light"><h3>${artifact.light_title}</h3><p>${artifact.light_text}</p></div>
+                                <div class="light-shadow-box shadow"><h3>${artifact.shadow_title}</h3><p>${artifact.shadow_text}</p></div>
+                            </div>
+                        </div>
+                        <div class="result-card letter-card" style="animation-delay: 1.1s;">
                             <h2><span class="icon">💌</span>아스트라의 마지막 통신</h2>
                             ${this.getComfortMessage(analysis)}
                         </div>
-                        <div class="share-buttons fade-in" style="animation-delay: 1.1s;">
+                        <div class="share-buttons fade-in" style="animation-delay: 1.3s;">
                             <button class="share-btn" id="share-action">결과 공유하기</button>
                             <button class="share-btn" id="copy-link">링크 복사</button>
                         </div>
-                        <button class="restart-button fade-in" style="animation-delay: 1.1s;" onclick="MindJourneyApp.initDOM()">다시 탐험하기</button>
+                        <button class="restart-button fade-in" style="animation-delay: 1.3s;" onclick="MindJourneyApp.initDOM()">다시 탐험하기</button>
                     </div>`;
                 this.addShareEventListeners(artifact.title);
             },
@@ -330,23 +335,25 @@
                 return {
                     primary: sorted.length > 0 ? sorted[0][0] : "lamp",
                     secondary: sorted.length > 1 ? sorted[1][0] : null,
+                    tertiary: sorted.length > 2 ? sorted[2][0] : null,
                 };
             },
             getComfortMessage(analysis) {
                 const p = this.soulObjects[analysis.primary] || this.soulObjects.lamp;
                 const s = analysis.secondary ? this.soulObjects[analysis.secondary] : null;
 
-                let struggle = `말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을 겁니다. 바로 '${p.struggle}' 때문이죠.`;
+                const identity = `<p>탐사 결과, 당신은 <strong>${p.identity_phrase}</strong>입니다.</p>`;
+                
+                let struggle = `<p>그래서였을 겁니다. 말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을지 모릅니다. 바로 '<strong>${p.struggle}</strong>' 때문이죠.`;
                 if (s) {
-                    struggle += ` 때로는 '${s.struggle}'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.`;
+                    struggle += ` 때로는 '<strong>${s.struggle}</strong>'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.</p>`;
                 } else {
-                    struggle += ` 그 마음을 누구에게도 쉽게 털어놓지 못했을 겁니다.`;
+                    struggle += ` 그 마음을 누구에게도 쉽게 털어놓지 못했을 겁니다.</p>`;
                 }
                 
-                const identity = `당신은 <strong>${p.identity}</strong>입니다.`;
-                const social = `하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 <strong>${p.social}</strong>입니다. 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.`;
+                const social = `<p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 <strong>${p.social}</strong>입니다. 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.</p>`;
                 
-                return `<p>${identity}</p><p>${struggle}</p><p>${social}</p>`;
+                return identity + struggle + social;
             },
             addShareEventListeners(resultTitle) {
                 const shareText = `AI가 발견한 내 마음 속 물건은... [${resultTitle}]이래요! 😲\n너의 마음 속에는 어떤 물건이 있을까?\n\n`;
