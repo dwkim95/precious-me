@@ -21,7 +21,7 @@
             --surface-color-2: #141D34; /* 어스름 */
             --surface-color-3: #0A1122; /* 심연 */
             --text-primary: #E6EEFF;
-            --text-secondary: #A0AEC0;
+            --text-secondary: #BCC8E0;
             --text-accent: #90BFFF;
             --accent-glow: #82B8FF;
             --accent-warm: #FFC0CB;
@@ -90,26 +90,38 @@
         }
         .result-card h2 {
             font-family: var(--font-serif); font-size: 26px; font-weight: 600;
-            color: var(--text-accent); margin-bottom: 16px;
+            color: var(--text-accent); margin-bottom: 20px;
             display: flex; align-items: center;
         }
-        .result-card h2 .icon { margin-right: 16px; }
-        .result-card p, .result-card .text-block { font-size: 18px; line-height: 1.9; color: var(--text-secondary); font-weight: 300; }
+        .result-card h2 .icon { margin-right: 16px; font-size: 24px; }
+        .result-card p, .result-card .text-block { font-size: 18px; line-height: 1.9; color: var(--text-secondary); font-weight: 400; }
         
         .archetype-card-header { text-align: center; padding-bottom: 32px; }
-        .archetype-icon-wrapper { margin-bottom: 24px; }
         .archetype-title { font-family: var(--font-serif); font-size: 32px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
-        .archetype-subtitle { font-family: var(--font-serif); font-size: 20px; color: var(--accent-warm); font-style: italic; margin-bottom: 20px; }
+        .archetype-subtitle { font-family: var(--font-serif); font-size: 20px; color: var(--accent-warm); font-style: italic; margin-bottom: 24px; }
         
-        .light-shadow-container { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px; }
-        .light-shadow-box h3 { font-family: var(--font-serif); font-size: 22px; margin-bottom: 12px; }
-        .light-shadow-box .light h3 { color: #A7D7C5; }
-        .light-shadow-box .shadow h3 { color: #DAB894; }
-        .light-shadow-box p { font-size: 17px; }
+        .strength-growth-container { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 24px; }
+        .strength-growth-box h3 { font-family: var(--font-serif); font-size: 22px; margin-bottom: 12px; display: flex; align-items: center; }
+        .strength-growth-box .strength h3 { color: #A7D7C5; }
+        .strength-growth-box .growth h3 { color: #DAB894; }
+        .strength-growth-box p { font-size: 17px; }
 
-        .astra-card .metadata { font-family: 'monospace'; color: var(--text-accent); opacity: 0.7; margin-bottom: 16px; }
-
-        .mantra-card {
+        /* 당신의 마음에게 카드 특별 디자인 */
+        .letter-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 40px;
+        }
+        .letter-card p {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            line-height: 2;
+            text-align: center;
+        }
+        .letter-card p:not(:last-child) {
+            margin-bottom: 24px;
+        }
+        
+        .final-word-card {
             text-align: center;
             background: linear-gradient(135deg, rgba(144, 191, 255, 0.1), rgba(255, 192, 203, 0.1));
             padding: 48px;
@@ -119,11 +131,10 @@
             0%, 100% { box-shadow: 0 0 20px rgba(144, 191, 255, 0.1); }
             50% { box-shadow: 0 0 35px rgba(255, 192, 203, 0.2); }
         }
-        .mantra-card .mantra-text {
-            font-family: var(--font-serif); font-size: 24px; font-weight: 600;
-            line-height: 1.7; color: var(--text-primary);
+        .final-word-text {
+            font-family: var(--font-serif); font-size: 22px; font-weight: 600;
+            line-height: 1.8; color: var(--text-primary);
         }
-        .mantra-card p:first-of-type { font-size: 16px; color: var(--text-secondary); margin-bottom: 24px; }
 
         .restart-button {
             display: block; width: fit-content; margin: 40px auto 0;
@@ -134,12 +145,11 @@
         }
         .restart-button:hover { background: var(--text-secondary); color: var(--surface-color-3); }
 
-        /* 반응형 디자인 */
         @media (max-width: 600px) {
             #app { padding: 24px 16px; }
             .header h1 { font-size: 32px; }
             #question-box { font-size: 22px; }
-            .light-shadow-container { grid-template-columns: 1fr; }
+            .strength-growth-container { grid-template-columns: 1fr; }
             .result-card { padding: 24px; }
         }
     </style>
@@ -152,27 +162,32 @@
     <script>
     //<![CDATA[
     const MindJourneyApp = {
-        // --- 1. CONFIGURATION & DATA ---
         state: { currentQuestionIndex: 0, answers: {}, scores: {}, isNavigating: false, },
         
         questions: [
-            { phase: "Phase 1. 표면의 바다", question: "밤하늘의 별을 바라볼 때,<br>가장 먼저 드는 생각은 무엇인가요?", options: [ { text: "이 광대한 우주의 법칙과 질서에 대한 경외감", weight: "sage" }, { text: "별 너머 어딘가에 있을 미지의 세계에 대한 동경", weight: "explorer" }, { text: "함께 별을 보고 싶은 누군가에 대한 그리움", weight: "lover" }, { text: "그저 모든 것을 잊게 만드는 밤의 고요함", weight: "innocent" } ] },
-            { question: "당신에게 '집'이란 어떤 의미에<br>가장 가까운가요?", options: [ { text: "세상의 소음으로부터 나를 지키는 유일한 성역", weight: "innocent" }, { text: "사랑하는 사람들과의 기억이 깃든 따뜻한 공간", weight: "lover" }, { text: "새로운 여정을 떠나기 위해 잠시 머무는 정거장", weight: "explorer" }, { text: "내 안의 창조적 영감을 실현하는 아틀리에", weight: "creator" } ] },
-            { question: "당신의 서재에 단 한 종류의 책만<br>꽂을 수 있다면 무엇을 선택하겠어요?", options: [ { text: "세상의 진리와 지혜를 담은 철학서", weight: "sage" }, { text: "가슴 뛰는 모험과 탐험에 대한 여행기", weight: "explorer" }, { text: "다양한 형태의 사랑을 노래하는 시집", weight: "lover" }, { text: "아무것도 쓰여있지 않은, 내가 채워나갈 빈 노트", weight: "creator" } ] },
-            { phase: "Phase 2. 어스름의 바다", question: "길을 잃은 밤, 당신 손에 들린 등불은<br>어떤 빛을 내고 있나요?", options: [ { text: "나아갈 길을 멀리까지 비추는 단단하고 밝은 빛", weight: "ruler" }, { text: "길의 끝이 아닌, 바로 발밑을 비추는 작은 온기", weight: "innocent" }, { text: "주변의 어둠까지 아름답게 만드는 은은한 빛", weight: "creator" }, { text: "함께 길을 잃은 다른 이를 찾기 위한 신호의 빛", weight: "lover" } ] },
-            { question: "깊은 상실감을 마주했을 때,<br>당신은 어떻게 반응하나요?", options: [ { text: "상실의 의미를 이해하고 받아들이려 노력한다", weight: "sage" }, { text: "그 감정을 새로운 창작의 동력으로 승화시킨다", weight: "creator" }, { text: "또 다른 새로움으로 빈자리를 채우기 위해 떠난다", weight: "explorer" }, { text: "그 슬픔이 지나갈 때까지 고요히 나를 돌본다", weight: "innocent" } ] },
-            { question: "당신의 가장 오랜 기억은<br>어떤 감각으로 남아있나요?", options: [ { text: "누군가의 따뜻한 손길과 체온", weight: "lover" }, { text: "세상을 처음 발견했을 때의 놀라움과 경이", weight: "explorer" }, { text: "고요한 안정감 속에서 들려오던 심장 박동 소리", weight: "innocent" }, { text: "세상의 이치를 처음 깨달았을 때의 명료함", weight: "sage" } ] },
-            { phase: "Phase 3. 심연의 바다", question: "세상의 모든 규칙 중 단 하나를<br>없앨 수 있다면 무엇을 없애겠어요?", options: [ { text: "사람과 사람을 가로막는 모든 경계선", weight: "lover" }, { text: "진실을 가리는 거짓과 위선", weight: "sage" }, { text: "영혼의 자유를 속박하는 모든 의무", weight: "explorer" }, { text: "세상을 혼란에 빠뜨리는 무질서 그 자체", weight: "ruler" } ] },
-            { question: "당신의 가장 깊은 곳에 숨겨진<br>두려움은 무엇인가요?", options: [ { text: "사랑하는 모든 것을 잃고 완전히 혼자가 되는 것", weight: "lover" }, { text: "나의 잠재력을 전부 펼치지 못하고 생을 마감하는 것", weight: "creator" }, { text: "통제할 수 없는 혼돈 속에 무력하게 휩쓸리는 것", weight: "ruler" }, { text: "삶의 의미를 끝내 발견하지 못하는 것", weight: "sage" } ] },
-            { question: "당신이 세상에 남기고 싶은<br>궁극적인 흔적은 무엇인가요?", options: [ { text: "세상을 더 나은 방향으로 이끈 시스템과 질서", weight: "ruler" }, { text: "사람들의 마음속에 영원히 남을 아름다운 창작물", weight: "creator" }, { text: "내가 걸어온 용감하고 자유로웠던 발자국 그 자체", weight: "explorer" }, { text: "내가 존재함으로 인해 더 따뜻해진 세상의 온도", weight: "lover" } ] }
+            // Phase 1: 표면의 바다 (4개)
+            { phase: "Phase 1. 표면의 바다", question: "낯선 도시에 혼자 도착한 첫날,<br>당신이 가장 먼저 할 일은 무엇인가요?", options: [ { text: "발길 닿는 대로, 정처 없이 도시를 헤맨다.", weight: "explorer" }, { text: "가장 높은 곳에 올라 도시의 전체 모습을 조망한다.", weight: "ruler" }, { text: "마음이 끌리는 카페에 들어가 사람들을 구경한다.", weight: "lover" }, { text: "이 도시의 역사가 담긴 박물관이나 서점을 찾는다.", weight: "sage" } ]},
+            { question: "당신에게 '집'이란 어떤 의미에<br>가장 가까운가요?", options: [ { text: "세상의 소음으로부터 나를 지키는 유일한 성역", weight: "innocent" }, { text: "사랑하는 사람들과의 기억이 깃든 따뜻한 공간", weight: "lover" }, { text: "새로운 여정을 떠나기 위해 잠시 머무는 정거장", weight: "explorer" }, { text: "내 안의 생각을 자유롭게 펼치는 작업실", weight: "creator" } ]},
+            { question: "오래된 물건을 볼 때<br>가장 먼저 드는 생각은 무엇인가요?", options: [ { text: "이 물건에 어떤 이야기가 담겨 있을까?", weight: "lover" }, { text: "시간이 흘러도 변치 않는 아름다움이 있구나.", weight: "sage" }, { text: "나만의 감성으로 새롭게 꾸며보고 싶다.", weight: "creator" }, { text: "참 잘 만들어져서 오래도록 제 역할을 해냈구나.", weight: "ruler" } ]},
+             { question: "당신의 서재에 단 한 종류의 책만<br>꽂을 수 있다면 무엇을 선택하겠어요?", options: [ { text: "세상의 지혜와 지식을 담은 역사서나 과학책", weight: "sage" }, { text: "가슴 뛰는 모험과 탐험에 대한 여행기", weight: "explorer" }, { text: "사람과 사람의 마음을 섬세하게 그린 소설", weight: "lover" }, { text: "영감을 주는 사진이나 그림이 담긴 예술 서적", weight: "creator" } ]},
+            // Phase 2: 어스름의 바다 (4개)
+            { phase: "Phase 2. 어스름의 바다", question: "길을 잃은 밤, 당신 손에 들린 등불은<br>어떤 빛을 내고 있나요?", options: [ { text: "나아갈 길을 멀리까지 비추는 단단하고 밝은 빛", weight: "ruler" }, { text: "길의 끝이 아닌, 바로 발밑을 비추는 작은 온기", weight: "innocent" }, { text: "주변의 어둠까지 아름답게 만드는 은은한 빛", weight: "creator" }, { text: "함께 길을 잃은 다른 이를 찾기 위한 신호의 빛", weight: "lover" } ]},
+            { question: "아무도 없는 텅 빈 무대 위에<br>홀로 서 있다면 무엇을 하시겠어요?", options: [ { text: "세상을 향해 나의 비전과 계획을 선포한다.", weight: "ruler" }, { text: "떠오르는 영감을 따라 즉흥적인 춤을 춘다.", weight: "creator" }, { text: "아무도 없기에 느낄 수 있는 완전한 평화를 만끽한다.", weight: "innocent" }, { text: "그리운 사람의 이름을 허공에 불러본다.", weight: "lover" } ]},
+            { question: "깊은 상실감을 마주했을 때,<br>당신은 어떻게 반응하나요?", options: [ { text: "이 경험이 내게 어떤 의미인지 차분히 생각한다", weight: "sage" }, { text: "슬픔을 이겨내기 위해 무언가에 더욱 몰두한다", weight: "creator" }, { text: "훌쩍 다른 곳으로 떠나 기분을 전환한다", weight: "explorer" }, { text: "충분히 슬퍼하며, 혼자만의 시간을 갖는다", weight: "innocent" } ]},
+            { question: "당신의 가장 오랜 기억은<br>어떤 감각으로 남아있나요?", options: [ { text: "누군가의 따뜻한 손길과 체온", weight: "lover" }, { text: "세상을 처음 발견했을 때의 놀라움과 경이", weight: "explorer" }, { text: "고요한 안정감 속에서 들려오던 심장 박동 소리", weight: "innocent" }, { text: "세상의 이치를 처음 깨달았을 때의 명료함", weight: "sage" } ]},
+            // Phase 3: 심연의 바다 (4개)
+            { phase: "Phase 3. 심연의 바다", question: "세상의 모든 규칙 중 단 하나를<br>없앨 수 있다면 무엇을 없애겠어요?", options: [ { text: "사람과 사람을 가로막는 모든 종류의 차별", weight: "lover" }, { text: "진실을 가리는 거짓과 위선", weight: "sage" }, { text: "영혼의 자유를 속박하는 사회적 관습", weight: "explorer" }, { text: "세상을 혼란에 빠뜨리는 무질서 그 자체", weight: "ruler" } ]},
+            { question: "당신의 가장 깊은 곳에 숨겨진<br>두려움은 무엇인가요?", options: [ { text: "사랑하는 모든 것을 잃고 완전히 혼자가 되는 것", weight: "lover" }, { text: "나의 가능성을 전부 펼치지 못하고 잊혀지는 것", weight: "creator" }, { text: "나의 삶을 통제할 수 없게 되는 무력감", weight: "ruler" }, { text: "삶의 의미를 끝내 발견하지 못하는 것", weight: "sage" } ]},
+            { question: "당신이 잠든 사이, 신이 당신에게<br>단 하나의 능력을 준다면 무엇을 바라나요?", options: [ { text: "모든 사람의 마음을 진심으로 이해하는 능력", weight: "lover" }, { text: "상상하는 모든 것을 현실로 만드는 능력", weight: "creator" }, { text: "세상의 모든 지식과 지혜를 습득하는 능력", weight: "sage" }, { text: "내가 원하는 어디로든 순간이동하는 능력", weight: "explorer" } ]},
+            { question: "당신이 세상에 남기고 싶은<br>궁극적인 흔적은 무엇인가요?", options: [ { text: "더 나은 세상을 만드는 데 기여한 나의 역할", weight: "ruler" }, { text: "사람들의 마음속에 영원히 남을 감동적인 이야기", weight: "creator" }, { text: "내가 걸어온 용감하고 자유로웠던 발자국 그 자체", weight: "explorer" }, { text: "나로 인해 더 행복해진 단 한 사람의 미소", weight: "lover" } ]}
         ],
         archetypes: {
-            sage: { title: "현자", subtitle: "진리와 지혜를 탐구하는 영혼", description: "당신은 세상의 소음 속에서 침묵의 가치를 아는 존재입니다. 현상의 표면 아래 숨겨진 본질과 질서를 꿰뚫어 보며, 혼돈 속에서도 명료함을 잃지 않습니다. 당신의 지혜는 자신과 타인의 길을 밝히는 등대가 됩니다.", light_keyword: "통찰", light: "복잡하게 얽힌 문제의 핵심을 꿰뚫어보고, 모두가 간과하는 진실을 발견하는 빛나는 지성을 가졌습니다.", shadow_keyword: "고립", shadow: "너무 깊은 생각은 때로 당신을 세상과 단절시키고, 차가운 지성의 성에 스스로를 가둡니다. 하지만 이 고독이 있었기에 당신의 지혜는 더욱 깊어졌습니다.", mantra: "나의 이해는 세상을 비추는 빛이 됩니다.", icon: `<circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.6" /><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3" fill="none"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="15s" repeatCount="indefinite" /></circle>` },
-            explorer: { title: "탐험가", subtitle: "미지의 세계를 향해 나아가는 영혼", description: "당신의 심장은 세상의 끝을 향한 나침반이며, 당신의 영혼은 그 어떤 항구에도 얽매이지 않는 배와 같습니다. 미지를 향한 동경과 용기는 당신의 삶을 그 누구보다 다채로운 모험으로 만듭니다.", light_keyword: "자유", light: "정해진 길을 거부하고 자신만의 지도를 그려나가는 용기가 있습니다. 당신의 자유로운 정신은 낡은 경계를 무너뜨리고 새로운 가능성을 엽니다.", shadow_keyword: "방랑", shadow: "하나의 세계에 깊이 뿌리내리는 것을 두려워하여, 진정한 안정과 소속감을 놓칠 수 있습니다. 때로는 멈춤이 더 위대한 탐험의 시작임을 기억해야 합니다.", mantra: "나의 길은 세상의 경계 너머로 이어집니다.", icon: `<path d="M12 2L14 9L21 11L14 13L12 20L10 13L3 11L10 9L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="10s" repeatCount="indefinite" /></path>` },
-            lover: { title: "연인", subtitle: "연결과 사랑으로 충만한 영혼", description: "당신은 세상의 모든 존재와 보이지 않는 끈으로 연결되어 있음을 느낍니다. 사랑을 주고받을 때, 깊은 유대를 나눌 때 비로소 살아있음을 느끼며, 당신의 공감은 차가운 세상을 녹이는 힘입니다.", light_keyword: "공감", light: "타인의 마음을 자신의 마음처럼 느끼고 어루만지는 비범한 능력이 있습니다. 당신의 존재는 그 자체로 위로이며, 깨어진 관계를 회복시키는 치유의 힘을 가집니다.", shadow_keyword: "상실", shadow: "타인과의 관계 속에서 자신을 잃어버리거나, 사랑을 잃는 것에 대한 깊은 두려움이 당신을 잠식할 수 있습니다. 가장 먼저 사랑해야 할 존재는 바로 당신 자신입니다.", mantra: "나의 사랑은 세상의 온도를 높입니다.", icon: `<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5" fill="none"><animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite" /></path>` },
-            creator: { title: "창조자", subtitle: "무에서 유를 빚어내는 영혼", description: "당신의 눈에는 세상의 모든 것이 새로운 창조를 위한 재료로 보입니다. 평범한 일상에서 비범한 아름다움을 발견하고, 당신의 상상력을 통해 세상은 더 풍요롭고 의미 있는 곳으로 재탄생합니다.", light_keyword: "상상력", light: "현실의 제약을 뛰어넘어 새로운 세계를 구상하고, 그것을 현실로 빚어내는 비범한 재능을 지녔습니다. 당신의 창조성은 황무지에서 꽃을 피우는 기적을 행합니다.", shadow_keyword: "완벽주의", shadow: "완벽함에 대한 강박이 창작의 즐거움을 앗아가거나, 세상이 당신의 비전을 이해하지 못할 때 깊은 고독에 빠질 수 있습니다. 과정 자체의 아름다움을 믿으세요.", mantra: "나의 상상은 새로운 현실을 빚어냅니다.", icon: `<polygon points="12 2, 2 7, 2 17, 12 22, 22 17, 22 7" stroke="currentColor" stroke-width="1.5" fill="none"><animate attributeName="stroke-dasharray" values="0 100;50 50;100 0" dur="5s" repeatCount="indefinite" /></polygon>` },
-            ruler: { title: "통치자", subtitle: "질서와 조화를 구축하는 영혼", description: "당신은 혼돈 속에서 질서를 발견하고, 책임감과 리더십으로 자신과 주변의 세계를 안정적으로 이끌어가는 힘이 있습니다. 당신이 걷는 길은 곧은 길이 되며, 당신이 있는 곳에 조화와 번영이 깃듭니다.", light_keyword: "책임감", light: "무질서한 상황을 정리하고, 공동의 목표를 향해 사람들을 이끄는 강력한 리더십을 발휘합니다. 당신의 결단력은 흔들리는 배의 굳건한 닻과 같습니다.", shadow_keyword: "통제욕", shadow: "모든 것을 통제하려는 욕망이 당신을 경직되게 만들거나, 실패에 대한 두려움으로 새로운 도전을 망설일 수 있습니다. 진정한 통치는 때로는 내려놓음에서 시작됩니다.", mantra: "나의 의지는 조화로운 세상을 세웁니다.", icon: `<rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5" fill="none" /><path d="M9 3v18M15 3v18M3 9h18M3 15h18" stroke="currentColor" stroke-width="1" opacity="0.5"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="4s" repeatCount="indefinite" /></path>` },
-            innocent: { title: "순수주의자", subtitle: "본연의 빛을 간직한 영혼", description: "당신은 세상의 복잡함 속에서도 순수함과 믿음을 잃지 않는 귀한 존재입니다. 회의주의가 만연한 시대에, 당신은 모든 것의 긍정적인 본질을 보고자 합니다. 당신의 존재 자체가 주변에 안전함과 평화를 선물합니다.", light_keyword: "신뢰", light: "세상과 사람에 대한 근원적인 신뢰를 바탕으로, 편견 없이 모든 것을 포용합니다. 당신의 순수한 시선은 얼어붙은 마음을 녹이고 잠재된 선의를 일깨웁니다.", shadow_keyword: "현실도피", shadow: "세상의 어두운 면을 마주하는 것을 회피하려 하거나, 상처받는 것에 대한 두려움으로 자신만의 성에 갇힐 수 있습니다. 진정한 순수는 어둠을 알고도 빛을 택하는 용기입니다.", mantra: "나의 순수는 세상을 정화하는 힘입니다.", icon: `<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none" /><circle cx="12" cy="12" r="3" fill="currentColor"><animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite" /></circle>` }
+            sage: { title: "현자", subtitle: "지혜의 탐구자", description: "당신은 세상의 시끄러운 소리 속에서도 진실의 목소리를 듣는 사람입니다. 현상의 표면 너머 숨겨진 의미를 찾고, 흩어진 지식들을 연결하여 세상의 큰 그림을 이해하려 합니다.", strength_keyword: "통찰력", strength: "남들이 그냥 지나치는 부분에서도 '아하!' 하고 핵심을 발견하곤 하죠. 복잡한 문제일수록 당신의 머릿속은 오히려 명쾌해집니다.", growth_keyword: "차가운 지성", growth: "너무 깊은 생각은 때로 당신의 마음을 차갑게 만들 수 있어요. 세상의 모든 것을 이해할 순 없어도, 따뜻하게 안아줄 수는 있다는 사실을 기억해주세요.", identity_phrase: "세상의 진리를 탐구하는 지적인 사람", struggle_phrase: "모든 질문에 답을 찾아야 한다는 고독한 책임감", social_phrase: "혼란 속에서 명쾌한 길을 알려주는 등대 같은 존재", final_advice: "때로는 머리가 아닌, 마음의 소리에 귀 기울여 보세요.", final_comfort: "모든 것을 이해하지 못해도 당신의 존재는 충분히 지혜롭습니다." },
+            explorer: { title: "탐험가", subtitle: "자유로운 영혼", description: "당신의 심장은 아직 가보지 않은 길을 향해 뛰고, 영혼은 그 어떤 항구에도 얽매이지 않는 배와 같습니다. '안정'보다는 '경험'을 통해 삶의 의미를 채워나가는 용감한 여행자입니다.", strength_keyword: "용기", strength: "당신은 실패를 두려워하지 않고 새로운 도전에 기꺼이 몸을 던집니다. 당신의 용기있는 발걸음이 곧 새로운 길이 됩니다.", growth_keyword: "정착에 대한 두려움", growth: "때로는 한 곳에 머물며 내면을 돌보는 시간이, 더 멀리 나아가기 위한 가장 좋은 준비가 될 수 있음을 기억하세요. 뿌리내림은 구속이 아닌, 성장의 발판입니다.", identity_phrase: "경계 없는 세상을 꿈꾸는 자유로운 사람", struggle_phrase: "혹시나 한곳에 얽매여 나 자신을 잃게 될지 모른다는 불안감", social_phrase: "일상에 안주한 사람들에게 새로운 가능성을 보여주는 바람 같은 존재", final_advice: "가장 위대한 탐험은 때로 자기 자신을 향한 여정입니다.", final_comfort: "당신이 머무는 모든 곳이 당신의 집이 될 수 있습니다." },
+            lover: { title: "연인", subtitle: "마음의 연결자", description: "당신은 세상이 보이지 않는 끈으로 연결되어 있음을 아는 사람입니다. 다른 사람의 마음에 깊이 공감하고, 사랑을 주고받을 때 비로소 살아있음을 느낍니다. 당신의 존재는 세상의 온도를 1도 더 높여줍니다.", strength_keyword: "공감능력", strength: "당신은 말하지 않아도 상대방의 마음을 느끼고, 그 슬픔을 함께 아파할 줄 압니다. 당신의 따뜻한 공감은 세상의 어떤 상처든 아물게 하는 힘이 있습니다.", growth_keyword: "자신을 돌보는 일", growth: "타인을 향한 깊은 마음만큼, 자기 자신을 향한 따뜻한 시선을 잊지 마세요. 나 자신이 행복으로 가득 차 있을 때, 더 큰 사랑을 나눌 수 있습니다.", identity_phrase: "사랑과 관계를 무엇보다 소중히 여기는 사람", struggle_phrase: "소중한 사람들을 실망시키거나 그들을 잃게 될지 모른다는 두려움", social_phrase: "차가운 세상 속에서 서로 기댈 수 있는 포근한 안식처 같은 존재", final_advice: "자신을 사랑으로 채우는 것이 가장 위대한 사랑의 시작입니다.", final_comfort: "당신은 이미 누군가의 세상에 따스한 빛을 비추고 있습니다." },
+            creator: { title: "창조자", subtitle: "영감의 예술가", description: "당신의 눈에는 세상의 모든 것이 새로운 작품을 위한 재료로 보입니다. 평범한 일상에서 비범한 아름다움을 발견하고, 당신의 상상력과 손길을 통해 세상은 더 풍요롭고 의미 있는 곳으로 재탄생합니다.", strength_keyword: "독창성", strength: "당신은 세상에 없던 새로운 아이디어를 떠올리고, 자신만의 방식으로 그것을 표현해냅니다. 당신의 독창적인 시선은 세상을 더 다채롭게 만듭니다.", growth_keyword: "세상의 평가", growth: "세상이 나의 작품을 즉시 알아주지 않을 때, 쉽게 지치거나 외로워질 수 있습니다. 결과보다는 창조하는 과정의 순수한 기쁨을 더 믿어주세요.", identity_phrase: "세상에 없던 아름다움을 만드는 예술가 같은 사람", struggle_phrase: "나의 내면 세계를 세상이 이해해주지 못할 것이라는 외로움", social_phrase: "무미건조한 일상에 영감과 아름다움을 불어넣는 특별한 존재", final_advice: "가장 위대한 작품은 바로 당신의 삶 그 자체입니다.", final_comfort: "당신의 존재만으로도 세상은 이미 더 아름다워졌습니다." },
+            ruler: { title: "통치자", subtitle: "조화의 설계자", description: "당신은 혼돈 속에서 질서를 발견하고, 더 나은 세상을 만들기 위한 청사진을 그리는 사람입니다. 강한 책임감과 현실적인 판단력으로, 당신은 자신과 주변의 삶을 안정적으로 이끌어갑니다.", strength_keyword: "책임감", strength: "당신은 어려운 상황에서도 회피하지 않고, 문제를 해결하기 위해 발 벗고 나섭니다. 당신의 굳건한 책임감은 주변 사람들에게 깊은 신뢰를 줍니다.", growth_keyword: "지나친 통제", growth: "모든 것을 계획대로 통제하려는 마음이 때로는 당신과 주변을 지치게 할 수 있습니다. 때로는 예상치 못한 흐름에 몸을 맡기는 것이 더 큰 조화를 이룰 수 있습니다.", identity_phrase: "자신만의 왕국을 책임감 있게 이끌어가는 사람", struggle_phrase: "상황을 통제하지 못하고 무력해질 수 있다는 깊은 불안감", social_phrase: "거친 폭풍우 속에서 모두가 기댈 수 있는 견고한 기둥 같은 존재", final_advice: "진정한 힘은 모든 것을 통제하는 것이 아닌, 조화를 이루는 데 있습니다.", final_comfort: "당신의 어깨에 놓인 책임감의 무게를 이제는 조금 내려놓아도 괜찮습니다." },
+            innocent: { title: "순수주의자", subtitle: "믿음의 수호자", description: "당신은 세상의 복잡함과 냉소 속에서도, 사람과 세상에 대한 근본적인 믿음을 잃지 않는 귀한 영혼입니다. 당신의 순수한 시선은 얼어붙은 마음을 녹이고 잠재된 선의를 일깨웁니다.", strength_keyword: "긍정성", strength: "당신은 어떤 어두운 상황 속에서도 희망의 씨앗을 발견하는 놀라운 능력이 있습니다. 당신의 긍정적인 에너지는 주변 사람들에게도 빛과 온기를 전파합니다.", growth_keyword: "상처에 대한 두려움", growth: "세상의 어두운 면을 마주하는 것을 피하고 싶을 때가 있습니다. 하지만 진정한 긍정은, 어둠을 알고 있음에도 불구하고 기꺼이 빛을 선택하는 용기에서 나옵니다.", identity_phrase: "세상의 선한 본질을 믿는 순수한 사람", struggle_phrase: "나의 믿음이 결국 상처로 돌아올지 모른다는 여린 마음", social_phrase: "각박한 세상 속에서 잠시 쉬어갈 수 있는 작은 오아시스 같은 존재", final_advice: "당신의 순수함은 약점이 아닌, 세상을 바꾸는 가장 큰 힘입니다.", final_comfort: "이미 충분히 강하니, 억지로 단단해지려 애쓰지 않아도 괜찮습니다." }
         },
 
         initDOM() { this.app = document.getElementById('app'); this.renderWelcome(); },
@@ -183,15 +198,16 @@
             const index = this.state.currentQuestionIndex;
             const q = this.questions[index];
             const progress = ((index + 1) / this.questions.length) * 100;
-            const phaseIndex = Math.floor(index / 3);
+            const phaseIndex = Math.floor(index / 4); // 12문항이므로 4개씩 1단계
             document.body.style.backgroundColor = `var(--surface-color-${phaseIndex + 1})`;
-            this.app.innerHTML = `<div class="journey-container fade-in"><div class="progress-container"><div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div></div>${q.phase ? `<h2 id="phase-title">${q.phase}</h2>` : ''}<div class="question-card"><h3 id="question-box">${q.question}</h3><div class="choice-options">${q.options.map(opt => `<div class="choice-option" data-weight="${opt.weight}"><span class="option-text">${opt.text}</span></div>`).join('')}</div></div></div>`;
-            this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(el.dataset.weight)); });
+            this.app.innerHTML = `<div class="journey-container fade-in"><div class="progress-container"><div class="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div></div>${q.phase ? `<h2 id="phase-title">${q.phase}</h2>` : ''}<div class="question-card"><h3 id="question-box">${q.question}</h3><div class="choice-options">${q.options.map((opt, i) => `<div class="choice-option" data-weight="${opt.weight}" data-answer-index="${i}"><span class="option-text">${opt.text}</span></div>`).join('')}</div></div></div>`;
+            this.app.querySelectorAll('.choice-option').forEach(el => { el.addEventListener('click', () => this.handleSelection(q, el.dataset.weight, parseInt(el.dataset.answerIndex))); });
         },
-        handleSelection(weight) {
+        handleSelection(question, weight, answerIndex) {
             if (this.state.isNavigating) return;
             this.state.isNavigating = true;
             this.state.scores[weight] = (this.state.scores[weight] || 0) + 1;
+            if(question.answerKey) { this.state.answers[question.answerKey] = question.options[answerIndex].text; }
             this.app.querySelector('.journey-container').style.animation = 'fadeOut 0.5s ease-in both';
             setTimeout(() => {
                 if (this.state.currentQuestionIndex < this.questions.length - 1) {
@@ -208,35 +224,30 @@
         },
         renderResults() {
             const analysis = this.analyze();
-            const archetype = this.archetypes[analysis.primaryArchetype];
+            const archetype = this.archetypes[analysis.primary] || this.archetypes.innocent;
             const card_animation_delay = 0.5;
             this.app.innerHTML = `
                 <div class="result-container">
                     <div class="result-card" style="animation: fadeIn 1s ease-out ${card_animation_delay}s both;">
                         <div class="archetype-card-header">
-                            <div class="archetype-icon-wrapper">${this.getArchetypeIcon(analysis.primaryArchetype)}</div>
                             <h2 class="archetype-title">${archetype.title}</h2>
                             <p class="archetype-subtitle">${archetype.subtitle}</p>
                         </div>
                         <p>${archetype.description}</p>
                     </div>
                     <div class="result-card" style="animation: fadeIn 1s ease-out ${card_animation_delay + 0.3}s both;">
-                        <h2><span class="icon">✨</span>당신의 빛과 그림자</h2>
-                        <div class="light-shadow-container">
-                            <div class="light-shadow-box light"><h3>빛: ${archetype.light_keyword}</h3><p>${archetype.light}</p></div>
-                            <div class="light-shadow-box shadow"><h3>그림자: ${archetype.shadow_keyword}</h3><p>${archetype.shadow}</p></div>
+                        <h2>✨ 당신의 강점 & 🌱 성장의 기회</h2>
+                        <div class="strength-growth-container">
+                            <div class="strength-growth-box strength"><h3>${archetype.strength_keyword}</h3><p>${archetype.strength}</p></div>
+                            <div class="strength-growth-box growth"><h3>${archetype.growth_keyword}</h3><p>${archetype.growth}</p></div>
                         </div>
                     </div>
-                    <div class="result-card astra-card" style="animation: fadeIn 1s ease-out ${card_animation_delay + 0.6}s both;">
-                        <h2><span class="icon">🛰️</span>아스트라 최종 보고서</h2>
-                        <div class="text-block">${this.getAstraAnalysis(analysis)}</div>
+                    <div class="result-card letter-card" style="animation: fadeIn 1s ease-out ${card_animation_delay + 0.6}s both;">
+                        <h2><span class="icon">💌</span>당신의 마음에게</h2>
+                        ${this.getComfortMessage(analysis)}
                     </div>
-                    <div class="result-card mantra-card" style="animation: fadeIn 1s ease-out ${card_animation_delay + 0.9}s both;">
-                         <svg class="svg-icon" viewBox="0 0 24 24" style="width:48px; height:48px; fill: var(--accent-warm); margin-bottom: 20px;">
-                            <path id="mantra-heart-path" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                        <p>이 주문을 마음에 새기세요.<br>당신의 길이 흔들릴 때, 가장 진실한 당신으로 돌아오게 할 것입니다.</p>
-                        <p class="mantra-text">"${archetype.mantra}"</p>
+                    <div class="result-card final-word-card" style="animation: fadeIn 1s ease-out ${card_animation_delay + 0.9}s both;">
+                        <p class="final-word-text">${this.getFinalWord(analysis)}</p>
                     </div>
                     <button class="restart-button" onclick="MindJourneyApp.initDOM()">다시 탐사하기</button>
                 </div>`;
@@ -245,29 +256,39 @@
         
         analyze() {
             const sorted = Object.entries(this.state.scores).sort((a,b) => b[1] - a[1]);
-            const primaryArchetype = sorted.length > 0 ? sorted[0][0] : "innocent";
-            const secondaryArchetype = sorted.length > 1 ? sorted[1][0] : null;
-            return { primaryArchetype, secondaryArchetype };
+            return {
+                primary: sorted.length > 0 ? sorted[0][0] : "innocent",
+                secondary: sorted.length > 1 ? sorted[1][0] : null,
+                tertiary: sorted.length > 2 ? sorted[2][0] : null,
+            };
         },
-        getArchetypeIcon(key) {
-            const archetype = this.archetypes[key] || this.archetypes.innocent;
-            const iconData = archetype.icon;
-            return `<svg class="svg-icon" viewBox="0 0 24 24" style="width:64px; height:64px; stroke: var(--text-accent); fill: var(--text-accent);" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${iconData}</svg>`;
-        },
-        getAstraAnalysis(analysis) {
-            const primary = this.archetypes[analysis.primaryArchetype];
-            const secondary = analysis.secondaryArchetype ? this.archetypes[analysis.secondaryArchetype] : null;
+        getComfortMessage(analysis) {
+            const p = this.archetypes[analysis.primary] || this.archetypes.innocent;
+            const s = analysis.secondary ? this.archetypes[analysis.secondary] : null;
 
-            let text = `[탐사 보고서 시작]<br>표면의 바다에서, 당신은 **${primary.title}**로서의 호기심과 성향을 뚜렷하게 드러냈습니다. 하지만 여정이 깊어질수록, 어스름의 바다에서는 당신의 숨겨진 그림자가 드러나기 시작했죠. 바로 '${primary.shadow_keyword}'이라는 이름의, 당신이 성장하기 위해 끌어안아야 할 신성한 상처입니다.<br><br>`;
+            const identity = `<p>당신은 ${p.identity_phrase}입니다.</p>`;
             
-            if (secondary) {
-                text += `심연에 도달했을 때, 당신 안의 또 다른 원형인 **${secondary.title}**의 목소리가 들려왔습니다. 이는 당신이 ${primary.title}의 길을 걸으면서도, ${secondary.title}의 시선으로 세상을 바라볼 수 있음을 의미합니다. ${primary.light_keyword}의 빛과 ${secondary.light_keyword}의 온기가 만나, 당신의 영혼을 더욱 입체적이고 풍요롭게 만듭니다.<br>[탐사 보고서 종료]`;
+            let struggle = `<p>말은 안 해도, 어쩌면 당신은 그동안 혼자 끙끙 앓아왔을지 모릅니다. 바로 '${p.struggle_phrase}' 때문에 말이죠.`;
+            if (s) {
+                struggle += ` 때로는 '${s.struggle_phrase}'까지 더해져, 그 무게가 더욱 버거웠을 겁니다.</p>`;
             } else {
-                text += `심연 속에서, 당신은 오롯이 **${primary.title}**의 원형과 마주했습니다. 당신의 영혼은 한결같이 순수한 빛을 향해 나아가고 있으며, 이것이 당신의 가장 큰 힘이자 위대함입니다. 흔들림 없는 당신의 모습에서 깊은 감명을 받았습니다.<br>[탐사 보고서 종료]`;
+                struggle += ` 그 마음을 누구에게도 쉽게 털어놓지 못했을 겁니다.</p>`;
             }
-            return text;
-        }
+            
+            const social = `<p>하지만 기억하세요. 그런 당신이기에, 주변 사람들에게 당신은 **${p.social_phrase}**입니다. 당신의 존재는 이미 누군가에게 큰 힘이 되고 있습니다.</p>`;
+            
+            return identity + struggle + social;
+        },
+        getFinalWord(analysis) {
+            const p = this.archetypes[analysis.primary] || this.archetypes.innocent;
+            const s = analysis.secondary ? this.archetypes[analysis.secondary] : null;
 
+            // 조언은 주된 성향에서, 위로는 보조 성향에서 가져와 조합
+            const advice = p.final_advice;
+            const comfort = s ? s.final_comfort : p.final_comfort;
+
+            return `${advice} ${comfort}`;
+        }
     };
 
     document.addEventListener('DOMContentLoaded', () => { MindJourneyApp.initDOM(); });
