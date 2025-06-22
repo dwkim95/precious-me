@@ -1,176 +1,1538 @@
-<!DOCTYPE html>
+{
+        id: 1,
+        type: "choice",
+        question: "밤하늘의 별을 바라볼 때, 당신의 마음에 가장 먼저 스며드는 감정은?",
+        description: "별빛이 당신의 영혼에 닿는 그 순간을 떠올려보세요",
+        options: [
+          { text: "무한한 우주 앞에서 느끼는 경이로움과 전율", keywords: ["영혼의탐험가", "우주적감수성", "경이로운시선"], weight: "cosmic_wonder" },
+          { text: "자신의 존재가 한없이 작게 느껴지는 겸손함", keywords: ["심연의지혜", "겸손한영혼", "존재적성찰"], weight: "humble_depth" },
+          { text: "어디론가 떠나고 싶은 자유로운 충동", keywords: ["바람의아이", "무한자유", "떠남의미학"], weight: "wandering_soul" },
+          { text: "고요함 속에서 찾는 마음의 평화로움", keywords: ["달빛명상", "고요한치유", "내면의정원"], weight: "serene_peace" }
+        ]
+      },
+      {
+        id: 2,
+        type: "choice",
+        question: "어린 시절, 당신이 가장 안전하다고 느꼈던 순간의 향기나 소리는?",
+        description: "그 기억 속 감각이 지금도 당신을 어떻게 위로하는지 느껴보세요",
+        options: [
+          { text: "엄마의 품에서 맡았던 따뜻한 향과 심장소리", keywords: ["모성의품", "원초적안전", "심장의리듬"], weight: "maternal_warmth" },
+          { text: "비 오는 날 창가에서 들었던 빗소리와 책 냄새", keywords: ["빗소리치유", "책의마법", "창가의꿈"], weight: "contemplative_solitude" },
+          { text: "할머니 손에서 풍기던 꽃향기와 자장가", keywords: ["세대의지혜", "꽃향기기억", "자장가의마법"], weight: "ancestral_comfort" },
+          { text: "혼자만의 비밀공간에서 느꼈던 고요함", keywords: ["비밀의성", "혼자만의세계", "고독의달콤함"], weight: "secret_sanctuary" }
+        ]
+      },
+      {
+        id: 3,
+        type: "choice",
+        question: "당신이 가장 깊이 몰입할 수 있는 순간은 언제인가요?",
+        description: "시간이 멈춘 듯 느껴지는 그 마법같은 순간들",
+        options: [
+          { text: "창작이나 예술 작업에 완전히 빠져들 때", keywords: ["창조의불꽃", "예술혼", "영감의순간"], weight: "creative_flow" },
+          { text: "사랑하는 사람과 진솔한 대화를 나눌 때", keywords: ["영혼의대화", "진심의교류", "마음의공명"], weight: "deep_connection" },
+          { text: "자연 속에서 고요히 사색에 잠길 때", keywords: ["자연의속삭임", "사색의깊이", "영적교감"], weight: "nature_meditation" },
+          { text: "새로운 지식을 탐구하고 깨달음을 얻을 때", keywords: ["지식의탐험", "깨달음의순간", "학문적열정"], weight: "intellectual_discovery" }
+        ]
+      },
+      {
+        id: 4,
+        type: "text",
+        question: "지금까지 당신을 가장 크게 변화시킨 한 순간이 있다면, 그때의 감정을 한 문장으로 표현해주세요.",
+        description: "그 순간이 지금의 당신에게 어떤 의미인지 진솔하게 적어보세요",
+        keywords: ["변화의순간", "성장의기억", "인생전환점"],
+        analysis_focus: "transformation_moment"
+      },
+      {
+        id: 5,
+        type: "choice",
+        question: "꿈속에서 자주 나타나는 공간이나 상황은?",
+        description: "무의식 깊은 곳에서 올라오는 이미지들의 의미를 탐구해보세요",
+        options: [
+          { text: "끝없이 펼쳐진 바다나 무한한 하늘", keywords: ["무한의꿈", "자유의바다", "하늘의아이"], weight: "infinite_expansion" },
+          { text: "복잡한 미로나 알 수 없는 건물들", keywords: ["미로의심리", "복잡성탐구", "숨겨진문"], weight: "complex_psyche" },
+          { text: "따뜻하고 포근한 집이나 안전한 공간", keywords: ["안전의꿈", "포근한귀환", "집의의미"], weight: "safe_haven" },
+          { text: "꿈을 잘 기억하지 못하거나 현실적인 꿈", keywords: ["현실의무게", "실용적영혼", "땅의아이"], weight: "grounded_realism" }
+        ]
+      },
+      {
+        id: 6,
+        type: "choice",
+        question: "깊은 상처를 받았을 때, 당신의 마음은 어떤 색깔과 질감을 갖나요?",
+        description: "고통의 순간에 느끼는 당신만의 감정의 색채와 촉감",
+        options: [
+          { text: "짙은 바다색 - 깊고 차가운 슬픔의 무게", keywords: ["깊은바다", "슬픔의무게", "침묵의깊이"], weight: "deep_melancholy" },
+          { text: "회색 안개 - 모든 것이 흐릿하고 무기력함", keywords: ["안개의마음", "무기력의회색", "흐린의식"], weight: "foggy_numbness" },
+          { text: "붉은 불꽃 - 분노와 격정이 타오름", keywords: ["분노의불꽃", "격정의붉음", "열정의역설"], weight: "fiery_passion" },
+          { text: "검은 구멍 - 빛이 닿지 않는 완전한 어둠", keywords: ["어둠의깊이", "절망의검정", "침묵의구멍"], weight: "void_darkness" }
+        ]
+      },
+      {
+        id: 7,
+        type: "choice",
+        question: "혼자만의 시간에 가장 자주 떠올리는 생각의 방향은?",
+        description: "고요한 순간에 마음 깊은 곳에서 올라오는 생각들의 흐름",
+        options: [
+          { text: "지나간 시간들과 그때의 감정들을 되새김", keywords: ["시간의강", "추억의보석", "과거의향수"], weight: "nostalgic_reflection" },
+          { text: "앞으로의 가능성과 꿈들을 그려봄", keywords: ["미래의씨앗", "꿈의설계도", "희망의지평"], weight: "future_dreaming" },
+          { text: "현재의 문제들과 해결방법을 모색함", keywords: ["현실의해답", "문제의실타래", "실용적지혜"], weight: "practical_solving" },
+          { text: "존재의 의미와 삶의 본질을 탐구함", keywords: ["존재의질문", "철학의길", "의미의탐구"], weight: "existential_inquiry" }
+        ]
+      },
+      {
+        id: 8,
+        type: "text",
+        question: "당신에게 '용서'란 무엇인가요? 한 문장으로 정의해주세요.",
+        description: "용서에 대한 당신만의 철학을 진솔하게 표현해보세요",
+        keywords: ["용서의철학", "치유의지혜", "마음의자유"],
+        analysis_focus: "forgiveness_philosophy"
+      },
+      {
+        id: 9,
+        type: "choice",
+        question: "당신이 가장 깊이 두려워하는 것은 무엇인가요?",
+        description: "마음 깊은 곳에 숨어있는 근본적인 두려움을 마주해보세요",
+        options: [
+          { text: "사랑하는 사람들과의 영원한 이별", keywords: ["이별의공포", "사랑의상실", "영원한작별"], weight: "separation_fear" },
+          { text: "자신의 진정한 가능성을 발견하지 못하는 것", keywords: ["잠재력의묘지", "미완성의인생", "가능성의상실"], weight: "unfulfilled_potential" },
+          { text: "완전히 혼자가 되어 버려지는 것", keywords: ["고독의심연", "버림받음", "존재의소거"], weight: "ultimate_abandonment" },
+          { text: "모든 통제력을 잃고 무력해지는 것", keywords: ["통제의상실", "무력감의늪", "카오스의공포"], weight: "loss_of_control" }
+        ]
+      },
+      {
+        id: 10,
+        type: "choice",
+        question: "마지막으로, 지금 이 순간 당신의 마음이 가장 간절히 원하는 것은?",
+        description: "솔직한 마음으로 현재 가장 필요로 하는 것을 선택해주세요",
+        options: [
+          { text: "진정한 이해와 깊은 공감을 받는 것", keywords: ["영혼의공감", "진정한이해", "마음의공명"], weight: "deep_understanding" },
+          { text: "내면의 평화와 마음의 안정을 찾는 것", keywords: ["내면평화", "마음의안식", "영혼의휴식"], weight: "inner_peace" },
+          { text: "새로운 도전과 성장의 기회를 만나는 것", keywords: ["성장의기회", "도전의용기", "새로운시작"], weight: "growth_opportunity" },
+          { text: "자신만의 특별한 의미와 목적을 발견하는 것", keywords: ["삶의목적", "존재의의미", "나만의길"], weight: "life_purpose" }
+        ]
+      }
+    ];
+
+    // 설문조사 상태 관리
+    let currentQuestionIndex = 0;
+    let answers = {};
+    let userKeywords = [];
+    let personalityWeights = {
+      cosmic_wonder: 0, humble_depth: 0, wandering_soul: 0, serene_peace: 0,
+      maternal_warmth: 0, contemplative_solitude: 0, ancestral_comfort: 0, secret_sanctuary: 0,
+      creative_flow: 0, deep_connection: 0, nature_meditation: 0, intellectual_discovery: 0,
+      infinite_expansion: 0, complex_psyche: 0, safe_haven: 0, grounded_realism: 0,
+      deep_melancholy: 0, foggy_numbness: 0, fiery_passion: 0, void_darkness: 0,
+      nostalgic_reflection: 0, future_dreaming: 0, practical_solving: 0, existential_inquiry: 0,
+      separation_fear: 0, unfulfilled_potential: 0, ultimate_abandonment: 0, loss_of_control: 0,
+      deep_understanding: 0, inner_peace: 0, growth_opportunity: 0, life_purpose: 0
+    };
+
+    // DOM 요소들
+    const questionNumber = document.getElementById('question-number');
+    const questionBox = document.getElementById('question-box');
+    const questionDescription = document.getElementById('question-description');
+    const answerBox = document.getElementById('answer-box');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+
+    // 초기화
+    function init() {
+      showQuestion(0);
+    }
+
+    // 질문 표시
+    function showQuestion(index) {
+      const question = questions[index];
+      
+      // 진행률 업데이트
+      const progress = ((index) / questions.length) * 100;
+      progressFill.style.width = `${progress}%`;
+      progressText.textContent = `${index}/${questions.length} - ${Math.round(progress)}% 완료`;
+
+      // 질문 내용 표시
+      questionNumber.textContent = `질문 ${index + 1}`;
+      questionBox.textContent = question.question;
+      questionDescription.textContent = question.description;
+
+      // 답변 영역 생성
+      answerBox.innerHTML = '';
+
+      if (question.type === 'choice') {
+        createChoiceQuestion(question);
+      } else if (question.type === 'text') {
+        createTextQuestion(question);
+      }
+
+      // 네비게이션 버튼 생성
+      createNavigation();
+    }
+
+    // 선택형 질문 생성
+    function createChoiceQuestion(question) {
+      const optionsContainer = document.createElement('div');
+      optionsContainer.className = 'choice-options';
+
+      question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'choice-option';
+        optionElement.innerHTML = `<div class="option-text">${option.text}</div>`;
+        
+        optionElement.addEventListener('click', () => {
+          // 이전 선택 해제
+          document.querySelectorAll('.choice-option').forEach(el => el.classList.remove('selected'));
+          // 현재 선택 표시
+          optionElement.classList.add('selected');
+          
+          // 답변 저장
+          answers[question.id] = {
+            type: 'choice',
+            answer: option.text,
+            keywords: option.keywords,
+            weight: option.weight
+          };
+          
+          // 키워드 및 가중치 수집
+          userKeywords.push(...option.keywords);
+          if (option.weight) {
+            personalityWeights[option.weight] += 1;
+          }
+        });
+
+        optionsContainer.appendChild(optionElement);
+      });
+
+      answerBox.appendChild(optionsContainer);
+    }
+
+    // 주관식 질문 생성
+    function createTextQuestion(question) {
+      const container = document.createElement('div');
+      container.className = 'text-input-container';
+      
+      const textarea = document.createElement('textarea');
+      textarea.placeholder = '당신의 진솔한 이야기를 들려주세요...';
+      textarea.addEventListener('input', () => {
+        answers[question.id] = {
+          type: 'text',
+          answer: textarea.value,
+          keywords: question.keywords,
+          analysis_focus: question.analysis_focus
+        };
+        
+        if (textarea.value.trim()) {
+          userKeywords.push(...question.keywords);
+        }
+      });
+
+      container.appendChild(textarea);
+      answerBox.appendChild(container);
+    }
+
+    // 네비게이션 생성
+    function createNavigation() {
+      const navigation = document.createElement('div');
+      navigation.className = 'navigation';
+
+      // 이전 버튼
+      if (currentQuestionIndex > 0) {
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'btn btn-secondary';
+        prevBtn.textContent = '이전';
+        prevBtn.addEventListener('click', () => {
+          currentQuestionIndex--;
+          showQuestion(currentQuestionIndex);
+        });
+        navigation.appendChild(prevBtn);
+      } else {
+        navigation.appendChild(document.createElement('div'));
+      }
+
+      // 다음/완료 버튼
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'btn';
+      
+      if (currentQuestionIndex < questions.length - 1) {
+        nextBtn.textContent = '다음';
+        nextBtn.addEventListener('click', () => {
+          if (answers[questions[currentQuestionIndex].id]) {
+            currentQuestionIndex++;
+            showQuestion(currentQuestionIndex);
+          } else {
+            alert('답변을 선택하거나 입력해주세요.');
+          }
+        });
+      } else {
+        nextBtn.textContent = '나만의 마음 분석 받기';
+        nextBtn.addEventListener('click', () => {
+          if (answers[questions[currentQuestionIndex].id]) {
+            showLoading();
+          } else {
+            alert('답변을 선택하거나 입력해주세요.');
+          }
+        });
+      }
+
+      navigation.appendChild(nextBtn);
+      answerBox.appendChild(navigation);
+    }
+
+    // 로딩 화면
+    function showLoading() {
+      const content = document.querySelector('.content');
+      content.innerHTML = `
+        <div class="loading-screen">
+          <div class="loading-animation">
+            <div class="loading-circle"></div>
+            <div class="loading-inner"></div>
+          </div>
+          <div class="loading-text">당신만의 마음 이야기를 창조하고 있습니다</div>
+          <div class="loading-subtext">
+            AI가 당신의 답변을 섬세하게 분석하고<br>
+            개인화된 결과를 만들어드려요
+            <span class="loading-dots">
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+            </span>
+          </div>
+        </div>
+      `;
+
+      // 4초 후 결과 표시 (AI 분석 시뮬레이션)
+      setTimeout(() => {
+        showResults();
+      }, 4000);
+    }
+
+    // AI 기반 개인화 분석 및 결과 표시
+    function showResults() {
+      const analysis = generatePersonalizedAnalysis();
+      const content = document.querySelector('.content');
+      
+      content.innerHTML = `
+        <div class="result-container">
+          <div class="result-header">
+            <h2 class="result-title">${analysis.title}</h2>
+            <p class="result-metaphor">"${analysis.metaphor}"</p>
+          </div>
+
+          <div class="analysis-section">
+            <h3>🌟 당신의 마음 풍경</h3>
+            <div class="analysis-content">${analysis.mindscape}</div>
+            <div class="keywords-container">
+              ${analysis.topKeywords.map(keyword => `<span class="keyword">${keyword}</span>`).join('')}
+            </div>
+          </div>
+
+          <div class="analysis-section">
+            <h3>💭 영혼의 깊은 이야기</h3>
+            <div class="analysis-content">${analysis.deepAnalysis}</div>
+          </div>
+
+          <div class="analysis-section">
+            <h3>🌱 성장의 나침반</h3>
+            <div class="analysis-content">${analysis.growthGuidance}</div>
+          </div>
+
+          <div class="comfort-message">
+            <h4>💝 당신에게만 전하는 특별한 메시지</h4>
+            <div class="comfort-content">${analysis.personalMessage}</div>
+          </div>
+
+          <div class="share-section">
+            <h4>🌈 소중한 마음 이야기 나누기</h4>
+            <p>이 특별한 여정을 소중한 사람들과 함께 나누어보세요</p>
+            <div class="share-buttons">
+              <button class="btn kakao-btn" onclick="shareToKakao()">📱 카카오톡 공유</button>
+              <button class="btn" onclick="downloadPDF()">📄 PDF 저장</button>
+              <button class="btn btn-secondary" onclick="restartSurvey()">🔄 다시 진단받기</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // AI 기반 개인화 분석 생성
+    function generatePersonalizedAnalysis() {
+      // 가장 높은 가중치를 가진 성격 특성 찾기
+      const dominantTrait = Object.keys(personalityWeights).reduce((a, b) => 
+        personalityWeights[a] > personalityWeights[b] ? a : b
+      );
+
+      // 키워드 빈도 계산
+      const keywordCount = {};
+      userKeywords.forEach(keyword => {
+        keywordCount[keyword] = (keywordCount[keyword] || 0) + 1;
+      });
+
+      const topKeywords = Object.entries(keywordCount)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 6)
+        .map(([keyword]) => keyword);
+
+      // 주관식 답변들 수집
+      const textAnswers = Object.values(answers)
+        .filter(answer => answer.type === 'text')
+        .map(answer => answer.answer);
+
+      // 성격 유형별 개인화된 분석 - AI 기반으로 주관식 내용 반영
+      return generatePersonalizedContent(dominantTrait, topKeywords, textAnswers);
+    }
+
+    // 성격 유형별 개인화된 콘텐츠 생성 (문학적 감수성 강화)
+    function generatePersonalizedContent(dominantTrait, keywords, textAnswers) {
+      const personalityTypes = {
+        cosmic_wonder: {
+          title: "별들 사이를 걷는 영혼의 탐험가",
+          metaphor: "우주의 비밀을 품고 은하수를 건너는 고독한 여행자",
+          mindscape: `당신의 마음은 광활한 우주와 같습니다. ${extractPersonalElement(textAnswers, '변화')} 경이로움으로 가득 찬 당신의 내면은 평범한 일상에서도 숨겨진 기적을 발견하는 특별한 능력을 가지고 있습니다. 별빛처럼 반짝이는 호기심은 당신을 끊임없는 탐구의 여정으로 이끌며, 그 과정에서 다른 이들이 보지 못하는 아름다운 진실들을 발견하게 됩니다.`,
+          deepAnalysis: `당신은 본질적으로 시인이자 철학자의 영혼을 가진 사람입니다. ${extractPersonalElement(textAnswers, '용서')} 표면적인 현상에 만족하지 않고 늘 더 깊은 의미를 찾으려 하며, 이러한 성향은 때로 외로움을 가져다주기도 하지만 동시에 삶을 무한히 풍요롭게 만들어주는 선물이기도 합니다. 당신의 사고는 선형적이지 않고 나선형을 그리며, 마치 우주의 팽창처럼 계속해서 새로운 차원으로 확장되어 갑니다.`,
+          growthGuidance: `당신의 우주적 사고는 놀라운 자산이지만, 때로는 지구의 중력도 필요합니다. 높은 이상을 추구하되 현실과의 다리를 놓는 것을 두려워하지 마세요. 당신이 발견한 별빛 같은 통찰들을 다른 이들과 나누는 것이야말로 진정한 우주적 사명일지도 모릅니다. 고독 속에서 얻은 지혜를 세상과 연결시키는 번역가가 되어보세요.`,
+          personalMessage: `${extractPersonalQuote(textAnswers)} 별을 바라보며 꿈꾸는 당신을 바라보니, 인간이라는 존재가 얼마나 신비로운지 새삼 깨닫게 됩니다. 당신의 호기심 어린 눈빛은 이 세상에 마법을 불어넣고, 당신이 던지는 질문들은 많은 이들의 영혼에 작은 우주를 열어줍니다. 때로는 혼자라고 느끼실 수도 있겠지만, 진정한 탐험가는 언제나 미지의 영역에서 빛을 발견하는 법입니다. 당신은 이미 충분히 빛나고 있어요.`
+        },
+        humble_depth: {
+          title: "지혜의 바다에 잠긴 조용한 현자",
+          metaphor: "깊은 바다 밑에서 진주를 키우며 침묵으로 말하는 영혼",
+          mindscape: `당신의 마음은 깊고 조용한 바다의 심연과 같습니다. ${extractPersonalElement(textAnswers, '변화')} 겸손함으로 무장한 당신의 내면은 소란스러운 세상 속에서도 고요한 중심을 잃지 않으며, 진정한 지혜가 무엇인지를 체득하고 있습니다. 당신의 침묵은 공허한 것이 아니라 깊은 성찰로 가득 찬 황금같은 고요함입니다.`,
+          deepAnalysis: `당신은 '아는 것'의 한계를 아는 진정한 지혜자입니다. ${extractPersonalElement(textAnswers, '용서')} 자신의 작음을 인정하기 때문에 오히려 더 큰 세상을 볼 수 있고, 겸손함이라는 렌즈를 통해 삶의 진실을 더욱 선명하게 바라봅니다. 당신의 존재 자체가 주변 사람들에게는 하나의 안식처가 되며, 말하지 않아도 전해지는 따뜻함을 품고 있습니다.`,
+          growthGuidance: `당신의 겸손함은 아름다운 덕목이지만, 때로는 자신의 빛을 더 당당하게 드러내는 용기도 필요합니다. 스스로를 과소평가하지 마시고, 당신의 조용한 지혜가 이 세상에 얼마나 소중한 기여를 하고 있는지 인식해 주세요. 깊은 바다도 때로는 파도를 일으켜 그 존재를 알리는 법입니다.`,
+          personalMessage: `${extractPersonalQuote(textAnswers)} 조용히 빛나는 당신의 모습에서 진정한 아름다움이란 무엇인지 배우게 됩니다. 당신의 겸손함과 깊이 있는 성찰은 이 시끄러운 세상에서 찾기 어려운 보물과 같습니다. 스스로를 작다고 여기지 마세요. 바다의 깊이는 표면의 넓이보다 훨씬 더 신비롭고 소중하니까요. 당신은 이미 충분히 깊고 아름다운 존재입니다.`
+        },
+        wandering_soul: {
+          title: "바람을 벗삼아 떠나는 자유로운 유목민",
+          metaphor: "경계 없는 하늘을 나는 새처럼, 자유 그 자체인 영혼",
+          mindscape: `당신의 마음은 끝없이 펼쳐진 하늘과 같이 자유롭고 무한합니다. ${extractPersonalElement(textAnswers, '변화')} 제약을 거부하고 새로운 지평을 향해 끊임없이 날아가려는 당신의 영혼은 삶을 하나의 거대한 모험으로 바라보며, 매 순간을 새로운 발견의 기회로 여깁니다. 당신의 내면에는 바람의 노래가 울려 퍼지고 있습니다.`,
+          deepAnalysis: `당신은 타고난 자유인이며 영혼의 유목민입니다. ${extractPersonalElement(textAnswers, '용서')} 물리적 자유뿐만 아니라 정신적, 감정적 해방을 추구하며, 고정된 틀이나 편견에 맞서 자신만의 길을 개척하려 합니다. 이러한 자유로운 정신은 때로 불안정함을 가져다주기도 하지만, 동시에 삶을 무한히 다채롭고 의미 있게 만드는 원동력이기도 합니다.`,
+          growthGuidance: `자유를 추구하는 것은 아름다운 일이지만, 때로는 깊이 뿌리내릴 수 있는 터전도 필요합니다. 너무 높이 날다가 지치지 않도록 가끔은 쉬어갈 수 있는 둥지도 마련해 두세요. 진정한 자유는 책임감과 만날 때 더욱 의미를 갖게 되며, 당신의 자유로운 에너지를 세상을 위해 건설적으로 사용할 때 더욱 빛날 것입니다.`,
+          personalMessage: `${extractPersonalQuote(textAnswers)} 바람처럼 자유로운 당신의 모습을 보며, 삶이란 얼마나 아름다운 여행인지 새삼 깨닫게 됩니다. 당신의 자유로운 정신과 모험을 두려워하지 않는 용기는 많은 이들에게 새로운 가능성을 보여줍니다. 때로는 혼자 날아가는 길이 외로울 수도 있겠지만, 진정한 자유인은 어디서든 집을 만들고 어디서든 사랑을 찾는 법을 아는 사람입니다. 계속해서 당신만의 하늘을 마음껏 날아가세요.`
+        },
+        serene_peace: {
+          title: "달빛 아래 고요히 명상하는 평화의 수호자",
+          metaphor: "고요한 호수처럼 깊고 잔잔하며, 모든 것을 품는 평온한 영혼",
+          mindscape: `당신의 마음은 달빛이 비치는 고요한 호수와 같습니다. ${extractPersonalElement(textAnswers, '변화')} 어떤 폭풍이 불어도 깊은 곳은 언제나 평온을 유지하는 당신은 내면의 평화를 통해 세상의 소란함을 견디어 냅니다. 당신의 존재 자체가 주변 사람들에게는 하나의 안식처가 되며, 조화와 균형을 추구하는 아름다운 영혼입니다.`,
+          deepAnalysis: `당신은 진정한 평화가 무엇인지 아는 지혜로운 사람입니다. ${extractPersonalElement(textAnswers, '용서')} 단순한 조용함이 아니라 내면 깊은 곳에서 우러나오는 고요함을 체득하고 있으며, 갈등과 대립보다는 화해와 상생의 길을 찾으려 노력합니다. 당신의 평온함은 많은 사람들이 갈망하지만 쉽게 얻을 수 없는 귀한 선물이며, 그 자체로 치유의 힘을 가지고 있습니다.`,
+          growthGuidance: `당신의 평화로운 마음은 세상에 꼭 필요한 선물이지만, 때로는 더 적극적으로 자신의 목소리를 내는 것도 중요합니다. 평화를 지키려는 마음이 자신의 진정한 감정을 억누르지 않도록 주의하시고, 건전한 표현과 소통을 통해 더욱 깊은 평화를 만들어 가세요. 고요한 호수도 때로는 잔잔한 물결을 일으키며 생명력을 보여주는 법입니다.`,
+          personalMessage: `${extractPersonalQuote(textAnswers)} 고요한 호수처럼 평온한 당신의 마음을 바라보며, 진정한 평화란 무엇인지 배우게 됩니다. 당신의 존재만으로도 이 복잡한 세상에 안식을 가져다주며, 당신이 있는 곳은 어디든 작은 성역이 됩니다. 때로는 너무 조용해서 자신이 보이지 않는다고 느낄 수도 있겠지만, 진정한 힘은 소리 없이 흐르는 강물처럼 조용하면서도 지속적인 것입니다. 당신의 평화로운 에너지를 계속 간직하며 살아가세요.`
+        },
+        creative_flow: {
+          title: "무한한 상상의 원천에서 길어올리는 창조의 마법사",
+          metaphor: "끝없이 솟아오르는 영감의 샘물처럼, 무에서 유를 만드는 예술혼",
+          mindscape: `당신의 마음은 창조의 에너지로 끓어오르는 마법의 도가니입니다. ${extractPersonalElement(textAnswers, '변화')} 평범한 순간들 속에서도 특별한 아름다움을 발견하고, 상상력이라는 붓으로 현실에 새로운 색채를 입히는 능력을 가지고 있습니다. 당신의 내면에는 아직 태어나지 않은 수많은 작품들이 기다리고 있으며, 매 순간이 새로운 창조의 가능성으로 가득합니다.`,
+          deepAnalysis: `당신은 세상을 예술가의 눈으로 바라보는 타고난 창조자입니다. ${extractPersonalElement(textAnswers, '용서')} 일상의 작은 경험들도 당신의 손을 거치면 의미 있는 이야기가 되고, 감정은 색깔로, 생각은 형태로, 경험은 작품으로 변환시키는 연금술사와 같은 능력을 가지고 있습니다. 이러한 창조적 에너지는 때로 혼란스럽기도 하지만, 동시에 삶을 무한히 풍요롭게 만들어주는 신성한 선물입니다.`,
+          growthGuidance: `창조적 에너지는 방향성과 만날 때 더욱 강력해집니다. 당신의 넘치는 영감을 체계적으로 정리하고 실현할 수 있는 방법을 찾아보세요. 완벽함보다는 진정성을, 결과보다는 과정을 즐기며, 실패도 창조의 일부라는 것을 받아들이세요. 다른 창조자들과의 교류를 통해 서로의 영감을 나누고 발전시켜 나가시기 바랍니다.`,
+          personalMessage: `${extractPersonalQuote(textAnswers)} 끝없이 샘솟는 창조의 에너지를 품은 당신을 보며, 인간의 상상력이 얼마나 위대한지 새삼 깨닫게 됩니다. 당신의 예술적 감성과 독창적인 시각은 이 세상을 더 아름답고 흥미로운 곳으로 만들어갑니다. 때로는 남들이 이해하지 못할 수도 있겠지만, 진정한 예술가는 언제나 시대를 앞서가는 법입니다. 계속해서 용감하게 창조하고 표현하세요. 세상은 당신만의 독특한 아름다움을 기다리고 있어요.`
+        }
+      };
+
+      // 기본 타입이 없는 경우 평화 타입으로 설정
+      const selectedType = personalityTypes[dominantTrait] || personalityTypes.serene_peace;
+      
+      // 주관식 답변을 바탕으로 개인화된 메시지 추가
+      const personalizedElements = analyzeTextResponses(textAnswers);
+      
+      // 키워드를 바탕으로 추가 개인화
+      const enhancedAnalysis = enhanceWithKeywords(selectedType, keywords, personalizedElements);
+      
+      return {
+        ...enhancedAnalysis,
+        topKeywords: keywords
+      };
+    }
+
+    // 주관식 답변에서 개인적 요소 추출 (AI 시뮬레이션)
+    function extractPersonalElement(textAnswers, theme) {
+      if (!textAnswers || textAnswers.length === 0) return '';
+      
+      const responses = textAnswers.filter(answer => answer && answer.trim().length > 0);
+      if (responses.length === 0) return '';
+      
+      // 간단한 키워드 매칭으로 개인화 요소 생성
+      const personalElements = {
+        '변화': [
+          '당신이 언급하신 변화의 순간들을 보니',
+          '당신만의 특별한 변화 경험에서 느껴지는',
+          '당신이 겪으신 전환점들에서 드러나는'
+        ],
+        '용서': [
+          '당신의 용서에 대한 깊은 철학을 보니',
+          '당신만의 용서관에서 나타나는',
+          '당신이 표현한 용서의 의미에서'
+        ]
+      };
+      
+      const elements = personalElements[theme] || ['당신의 진솔한 답변에서'];
+      return elements[Math.floor(Math.random() * elements.length)];
+    }
+
+    // 주관식 답변에서 개인적 인용구 생성 (AI 시뮬레이션)
+    function extractPersonalQuote(textAnswers) {
+      if (!textAnswers || textAnswers.length === 0) return '';
+      
+      const responses = textAnswers.filter(answer => answer && answer.trim().length > 0);
+      if (responses.length === 0) return '';
+      
+      // 개인적 메시지를 위한 템플릿
+      const personalQuotes = [
+        '당신이 진솔하게 나누어 주신 이야기를 읽으며,',
+        '당신의 깊이 있는 성찰을 보며,',
+        '당신만의 특별한 경험담에서',
+        '당신의 솔직한 마음을 느끼며,'
+      ];
+      
+      return personalQuotes[Math.floor(Math.random() * personalQuotes.length)];
+    }
+
+    // 주관식 답변 분석
+    function analyzeTextResponses(textAnswers) {
+      const elements = {
+        emotional_depth: 0,
+        self_reflection: 0,
+        resilience: 0,
+        creativity: 0,
+        relationships: 0
+      };
+
+      textAnswers.forEach(answer => {
+        if (!answer) return;
+        
+        const text = answer.toLowerCase();
+        
+        // 감정적 깊이 키워드
+        if (text.includes('느꼈') || text.includes('감정') || text.includes('마음') || text.includes('아팠') || text.includes('슬펐') || text.includes('기뻤')) {
+          elements.emotional_depth++;
+        }
+        
+        // 자기성찰 키워드
+        if (text.includes('깨달았') || text.includes('배웠') || text.includes('성장') || text.includes('변화') || text.includes('반성')) {
+          elements.self_reflection++;
+        }
+        
+        // 회복력 키워드
+        if (text.includes('극복') || text.includes('견뎠') || text.includes('이겨냈') || text.includes('강해졌') || text.includes('버텼')) {
+          elements.resilience++;
+        }
+        
+        // 창조성 키워드
+        if (text.includes('만들') || text.includes('창작') || text.includes('상상') || text.includes('꿈꿨') || text.includes('그렸')) {
+          elements.creativity++;
+        }
+        
+        // 관계성 키워드
+        if (text.includes('가족') || text.includes('친구') || text.includes('사랑') || text.includes('함께') || text.includes('소통')) {
+          elements.relationships++;
+        }
+      });
+
+      return elements;
+    }
+
+    // 키워드를 바탕으로 분석 강화
+    function enhanceWithKeywords(baseType, keywords, elements) {
+      let enhanced = { ...baseType };
+      
+      // 감정적 깊이가 높은 경우
+      if (elements.emotional_depth >= 1) {
+        enhanced.deepAnalysis += " 특히 당신의 답변에서 감정에 대한 깊은 이해와 섬세한 감수성이 느껴지는데, 이는 당신이 삶을 표면적으로 살지 않고 진정으로 깊이 있게 경험하고 있다는 증거입니다.";
+      }
+      
+      // 자기성찰이 강한 경우
+      if (elements.self_reflection >= 1) {
+        enhanced.growthGuidance += " 당신의 뛰어난 성찰 능력은 계속해서 성장할 수 있는 든든한 원동력입니다. 이러한 통찰력을 바탕으로 더욱 의미 있는 삶의 방향을 설정해 나가세요.";
+      }
+      
+      // 회복력이 강한 경우
+      if (elements.resilience >= 1) {
+        enhanced.personalMessage += " 당신이 지금까지 겪어온 어려움들을 극복해낸 내면의 힘이 정말 놀라워요. 그 소중한 경험들이 지금의 강인하고 아름다운 당신을 만들어냈습니다.";
+      }
+
+      return enhanced;
+    }
+
+    // 카카오톡 공유
+    function shareToKakao() {
+      const shareText = `🧭 마음의 나침반에서 AI 심층 분석을 받았어요!\n\n저는 "${document.querySelector('.result-title').textContent}" 유형이래요.\n\n당신만의 마음 이야기도 들어보세요!`;
+      const currentUrl = window.location.href;
+      
+      // 카카오 SDK 사용 시도
+      if (typeof Kakao !== 'undefined' && Kakao.isInitialized()) {
+        Kakao.Share.sendDefault({
+          objectType: 'text',
+          text: shareText,
+          link: {
+            mobileWebUrl: currentUrl,
+            webUrl: currentUrl
+          }
+        });
+      } else {
+        // 대체 공유 방법
+        if (navigator.share) {
+          navigator.share({
+            title: '마음의 나침반 - AI 심리 분석',
+            text: shareText,
+            url: currentUrl
+          });
+        } else {
+          // 클립보드 복사
+          navigator.clipboard.writeText(shareText + '\n' + currentUrl).then(() => {
+            alert('공유 텍스트가 클립보드에 복사되었습니다!');
+          }).catch(() => {
+            alert('공유 기능을 사용할 수 없습니다. 링크를 직접 복사해주세요.');
+          });
+        }
+      }
+    }
+
+    // PDF 다운로드
+    function downloadPDF() {
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // 기본 폰트 설정
+        doc.setFont('helvetica');
+        doc.setFontSize(16);
+        doc.text('마음의 나침반 - AI 심리 분석 결과', 20, 30);
+        
+        doc.setFontSize(12);
+        doc.text('당신만의 특별한 마음 이야기', 20, 50);
+        doc.text('분석 날짜: ' + new Date().toLocaleDateString('ko-KR'), 20, 70);
+        
+        // 결과 제목
+        const resultTitle = document.querySelector('.result-title').textContent;
+        doc.setFontSize(14);
+        doc.text('유형: ' + resultTitle, 20, 100);
+        
+        const resultMetaphor = document.querySelector('.result-metaphor').textContent;
+        doc.setFontSize(10);
+        doc.text(resultMetaphor, 20, 120);
+        
+        doc.text('자세한 분석 내용은 웹사이트에서 확인하세요.', 20, 150);
+        doc.text('이 문서는 당신의 소중한 마음 여정의 기록입니다.', 20, 170);
+        
+        doc.save('마음의나침반_AI분석결과.pdf');
+      } catch (error) {
+        alert('PDF 생성 중 오류가 발생했습니다. 브라우저에서 인쇄 기능을 이용해주세요.');
+      }
+    }
+
+    // 설문조사 재시작
+    function restartSurvey() {
+      if (confirm('새로운 마음의 여정을 시작하시겠습니까?')) {
+        currentQuestionIndex = 0;
+        answers = {};
+        userKeywords = [];
+        personalityWeights = {
+          cosmic_wonder: 0, humble_depth: 0, wandering_soul: 0, serene_peace: 0,
+          maternal_warmth: 0, contemplative_solitude: 0, ancestral_comfort: 0, secret_sanctuary: 0,
+          creative_flow: 0, deep_connection: 0, nature_meditation: 0, intellectual_discovery: 0,
+          infinite_expansion: 0, complex_psyche: 0, safe_haven: 0, grounded_realism: 0,
+          deep_melancholy: 0, foggy_numbness: 0, fiery_passion: 0, void_darkness: 0,
+          nostalgic_reflection: 0, future_dreaming: 0, practical_solving: 0, existential_inquiry: 0,
+          separation_fear: 0, unfulfilled_potential: 0, ultimate_abandonment: 0, loss_of_control: 0,
+          deep_understanding: 0, inner_peace: 0, growth_opportunity: 0, life_purpose: 0
+        };
+        init();
+      }
+    }
+
+    // 카카오 SDK 로드 (선택사항)
+    function loadKakaoSDK() {
+      if (typeof Kakao === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+        script.onload = function() {
+          // 실제 앱 키로 교체 필요
+          // Kakao.init('YOUR_APP_KEY');
+        };
+        document.head.appendChild(script);
+      }
+    }
+
+    // 앱 시작
+    init();
+    loadKakaoSDK();
+  </script>
+</body>
+</html><!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>마음의 나침반</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI 기반 심층 심리 분석으로 당신만의 마음 이야기를 들려드립니다">
+  <meta name="keywords" content="AI심리분석, 마음치유, 개인맞춤분석, 위로">
+  
+  <meta property="og:title" content="마음의 나침반 - AI 심층 심리 분석">
+  <meta property="og:description" content="당신만의 마음 이야기를 AI가 섬세하게 들려드립니다">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://via.placeholder.com/1200x630/667eea/ffffff?text=마음의+나침반">
+  
+  <title>마음의 나침반 | AI 심층 심리 분석</title>
+  
+  <!-- 한글 폰트 최적화 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
   <style>
+    :root {
+      --bg-primary: linear-gradient(135deg, #0f0c29 0%, #24243e 50%, #302b63 100%);
+      --bg-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --accent-warm: linear-gradient(135deg, #ff9a8b 0%, #a8d8ea 100%);
+      --accent-cool: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      --accent-magic: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+      
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.9);
+      --text-muted: rgba(255, 255, 255, 0.7);
+      --text-accent: #ffd89b;
+      
+      --surface-glass: rgba(255, 255, 255, 0.1);
+      --surface-glass-hover: rgba(255, 255, 255, 0.15);
+      --surface-warm: rgba(255, 248, 240, 0.95);
+      --surface-card: rgba(0, 0, 0, 0.2);
+      
+      --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --shadow-warm: 0 8px 40px rgba(255, 154, 139, 0.3);
+      --shadow-magic: 0 12px 48px rgba(210, 153, 194, 0.4);
+      
+      --border-glass: 1px solid rgba(255, 255, 255, 0.2);
+      --border-radius: 24px;
+      --border-radius-sm: 16px;
+      
+      --transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+      --transition-fast: all 0.3s ease;
+    }
+
     * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background: linear-gradient(to bottom right, #d6eaff, #f8f0ff);
-      color: #333;
       margin: 0;
-      padding: 1rem;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
-    #app {
-      max-width: 720px;
-      margin: 3rem auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease-in-out;
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+      background: var(--bg-primary);
+      background-size: 400% 400%;
+      animation: dreamyGradient 20s ease infinite;
+      background-attachment: fixed;
+      min-height: 100vh;
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+      position: relative;
+      font-weight: 400;
+      letter-spacing: -0.01em;
     }
-    #question-box {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      min-height: 3rem;
-    }
-    textarea {
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      resize: vertical;
-      background-color: #fdfdfd;
-      color: #222;
+      height: 100%;
+      background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 1;
     }
-    .btn {
-      margin-top: 1.5rem;
-      margin-right: 0.5rem;
-      display: inline-block;
-      background-color: #6c63ff;
-      color: white;
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
+
+    @keyframes dreamyGradient {
+      0%, 100% { background-position: 0% 50%; }
+      25% { background-position: 100% 50%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 50% 0%; }
     }
-    @keyframes fadeIn {
+
+    #app {
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 20px);
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(40px);
       }
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
+
+    .glass-card {
+      background: var(--surface-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--border-radius);
+      border: var(--border-glass);
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+    }
+
+    .header {
+      background: var(--surface-glass);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: var(--border-radius);
+      border: var(--border-glass);
+      color: var(--text-primary);
+      padding: 40px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin: 20px 0;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 0%, #ffd89b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      letter-spacing: -0.02em;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .header .subtitle {
+      font-size: 16px;
+      opacity: 0.95;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      word-break: keep-all;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .content {
+      background: var(--surface-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--border-radius);
+      border: var(--border-glass);
+      padding: 32px 24px;
+      margin: 20px 0;
+      box-shadow: var(--shadow-soft);
+      min-height: 500px;
+      position: relative;
+    }
+
+    .progress-container {
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent-warm);
+      border-radius: 2px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-text {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .question-container {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .question-number {
+      font-size: 14px;
+      color: var(--text-accent);
+      margin-bottom: 16px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    #question-box {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      line-height: 1.4;
+      word-break: keep-all;
+      letter-spacing: -0.01em;
+      font-family: 'Noto Serif KR', serif;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .question-description {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      font-style: italic;
+      line-height: 1.6;
+      word-break: keep-all;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .choice-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .choice-option {
+      background: var(--surface-card);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: var(--border-glass);
+      border-radius: var(--border-radius-sm);
+      padding: 20px 18px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .choice-option:hover {
+      background: var(--surface-glass-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-warm);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .choice-option.selected {
+      background: var(--surface-warm);
+      border-color: rgba(255, 154, 139, 0.6);
+      transform: scale(1.02);
+      box-shadow: var(--shadow-magic);
+    }
+
+    .choice-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .choice-option:hover::before {
+      left: 100%;
+    }
+
+    .option-text {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+      word-break: keep-all;
+      font-family: 'Noto Sans KR', sans-serif;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .choice-option.selected .option-text {
+      color: #2d3436;
+      font-weight: 600;
+      text-shadow: none;
+    }
+
+    .text-input-container {
+      margin-bottom: 32px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 20px;
+      font-size: 16px;
+      font-family: 'Noto Serif KR', serif;
+      border: var(--border-glass);
+      border-radius: var(--border-radius-sm);
+      background: var(--surface-card);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: var(--text-primary);
+      line-height: 1.7;
+      resize: vertical;
+      transition: var(--transition);
+    }
+
+    textarea:focus {
+      outline: none;
+      background: var(--surface-glass-hover);
+      box-shadow: var(--shadow-warm);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    textarea::placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .btn {
+      background: var(--accent-warm);
+      color: #2d3436;
+      border: none;
+      padding: 16px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-block;
+      text-decoration: none;
+      margin: 8px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-warm);
+      font-family: 'Noto Sans KR', sans-serif;
+      letter-spacing: -0.01em;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-magic);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface-glass);
+      color: var(--text-primary);
+      border: var(--border-glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-glass-hover);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      gap: 16px;
+    }
+
+    .navigation .btn {
+      flex: 1;
+      margin: 0;
+      text-align: center;
+      max-width: 140px;
+    }
+
+    .loading-screen {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--text-primary);
+    }
+
+    .loading-animation {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+
+    .loading-circle {
+      width: 100%;
+      height: 100%;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top: 3px solid var(--text-accent);
+      border-radius: 50%;
+      animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    }
+
+    .loading-inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%;
+      height: 60%;
+      border: 2px solid rgba(255, 154, 139, 0.2);
+      border-top: 2px solid #ff9a8b;
+      border-radius: 50%;
+      animation: spin 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite reverse;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-family: 'Noto Serif KR', serif;
+      color: var(--text-accent);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .loading-subtext {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-style: italic;
+      line-height: 1.6;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .result-container {
+      animation: resultFadeIn 1s ease-out;
+      color: var(--text-primary);
+    }
+
+    @keyframes resultFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .result-header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 32px 24px;
+      background: var(--surface-warm);
+      border-radius: var(--border-radius);
+      border: var(--border-glass);
+      color: #2d3436;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,154,139,0.1) 0%, transparent 70%);
+      animation: rotate 40s linear infinite;
+    }
+
+    .result-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+      font-family: 'Noto Serif KR', serif;
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+      line-height: 1.3;
+    }
+
+    .result-metaphor {
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 500;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      font-family: 'Noto Serif KR', serif;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .analysis-section {
+      background: var(--surface-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--border-radius);
+      border: var(--border-glass);
+      padding: 24px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .analysis-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent-warm);
+    }
+
+    .analysis-section h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-accent);
+      margin-bottom: 16px;
+      padding-left: 16px;
+      font-family: 'Noto Serif KR', serif;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .analysis-content {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      padding-left: 16px;
+      font-family: 'Noto Serif KR', serif;
+      text-align: justify;
+      word-break: keep-all;
+    }
+
+    .keywords-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+      padding-left: 16px;
+    }
+
+    .keyword {
+      background: var(--accent-magic);
+      color: #2d3436;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(210, 153, 194, 0.3);
+      transition: var(--transition-fast);
+      letter-spacing: -0.01em;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .keyword:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(210, 153, 194, 0.4);
+    }
+
+    .comfort-message {
+      background: var(--surface-warm);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      margin: 16px 0;
+      color: #2d3436;
+      position: relative;
+      border: var(--border-glass);
+      box-shadow: var(--shadow-warm);
+    }
+
+    .comfort-message::before {
+      content: '💝';
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 24px;
+      opacity: 0.7;
+    }
+
+    .comfort-message h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      font-family: 'Noto Serif KR', serif;
+      color: #d63384;
+      word-break: keep-all;
+    }
+
+    .comfort-content {
+      font-size: 15px;
+      line-height: 1.8;
+      font-family: 'Noto Serif KR', serif;
+      text-align: justify;
+      word-break: keep-all;
+    }
+
+    .share-section {
+      background: var(--surface-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--border-radius);
+      border: var(--border-glass);
+      padding: 24px;
+      text-align: center;
+      margin-top: 24px;
+      color: var(--text-primary);
+    }
+
+    .share-section h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-family: 'Noto Serif KR', serif;
+      color: var(--text-accent);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .share-section p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .share-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .share-buttons .btn {
+      width: 100%;
+      max-width: 280px;
+      margin: 0;
+    }
+
+    .kakao-btn {
+      background: #FEE500;
+      color: #191919;
+      font-weight: 700;
+    }
+
+    .kakao-btn:hover {
+      background: #FFEB3B;
+      transform: translateY(-2px);
+    }
+
+    /* 반응형 최적화 */
+    @media screen and (max-width: 480px) {
+      #app {
+        padding: 10px;
+      }
+
+      .header,
+      .content {
+        margin: 10px 0;
+        padding: 24px 20px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .header .subtitle {
+        font-size: 15px;
+      }
+
+      #question-box {
+        font-size: 20px;
+      }
+
+      .question-description {
+        font-size: 14px;
+      }
+
+      .choice-option {
+        padding: 18px 16px;
+      }
+
+      .option-text {
+        font-size: 15px;
+      }
+
+      .analysis-section,
+      .comfort-message {
+        padding: 20px 16px;
+      }
+
+      .result-header {
+        padding: 24px 20px;
+      }
+
+      .result-title {
+        font-size: 22px;
+      }
+
+      .result-metaphor {
+        font-size: 15px;
+      }
+    }
+
+    @media screen and (max-width: 360px) {
+      .header h1 {
+        font-size: 22px;
+      }
+
+      #question-box {
+        font-size: 18px;
+      }
+
+      .choice-option {
+        padding: 16px 14px;
+      }
+
+      .option-text {
+        font-size: 14px;
+      }
+    }
+
+    /* iOS Safari 최적화 */
+    @supports (-webkit-touch-callout: none) {
+      body {
+        min-height: -webkit-fill-available;
+      }
+      
+      #app {
+        min-height: -webkit-fill-available;
+      }
+    }
+
+    /* 접근성 */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* 로딩 애니메이션 개선 */
+    .loading-dots {
+      display: inline-flex;
+      gap: 4px;
+      margin-left: 8px;
+    }
+
+    .loading-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--text-accent);
+      border-radius: 50%;
+      animation: loadingDots 1.4s infinite ease-in-out both;
+    }
+
+    .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes loadingDots {
+      0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="app">
-    <div id="question-box">로딩 중...</div>
-    <div id="answer-box"></div>
+    <div class="header glass-card">
+      <div class="header-content">
+        <h1>🧭 마음의 나침반</h1>
+        <p class="subtitle">
+          AI가 당신만의 마음 이야기를<br>
+          섬세하게 들려드립니다
+        </p>
+      </div>
+    </div>
+
+    <div class="content glass-card">
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">마음의 여정을 시작합니다</div>
+      </div>
+
+      <div class="question-container">
+        <div class="question-number" id="question-number"></div>
+        <div id="question-box"></div>
+        <div class="question-description" id="question-description"></div>
+      </div>
+
+      <div id="answer-box"></div>
+    </div>
   </div>
 
   <script>
-    const questions = [...Array(50).keys()].map(i => `질문 ${i + 1}. 감정에 대한 질문 예시입니다.`); // 예시 대체 가능
-
-    let current = 0;
-    const responses = [];
-
-    function showQuestion() {
-      const qBox = document.getElementById("question-box");
-      const aBox = document.getElementById("answer-box");
-
-      qBox.innerHTML = "";
-      aBox.innerHTML = "";
-
-      const q = questions[current];
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < q.length) {
-          qBox.innerHTML += q[i++];
-        } else {
-          clearInterval(interval);
-          createAnswerInput();
-        }
-      }, 30);
-    }
-
-    function createAnswerInput() {
-      const input = document.createElement("textarea");
-      input.rows = 3;
-      input.placeholder = "여기에 답변을 입력하세요... (Enter로 다음)";
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          responses.push(input.value.trim());
-          nextQuestion();
-        }
-      });
-      document.getElementById("answer-box").appendChild(input);
-      input.focus();
-    }
-
-    function nextQuestion() {
-      current++;
-      if (current < questions.length) {
-        showQuestion();
-      } else {
-        showResult();
-      }
-    }
-
-    function showResult() {
-      const joined = responses.join("\n");
-      const keywords = [];
-      if (joined.includes("불안")) keywords.push("불안 해소");
-      if (joined.includes("감사")) keywords.push("감사와 회복");
-      if (joined.includes("고독") || joined.includes("혼자")) keywords.push("고독과 연결");
-      if (joined.includes("자존감")) keywords.push("자존감 회복");
-      if (joined.includes("웃음") || joined.includes("행복")) keywords.push("긍정과 웃음");
-
-      const summary = keywords.length > 0 ? keywords.join(", ") : "마음의 흐름 인식";
-
-      const resultHTML = `
-        <div class="text-2xl font-bold mb-4">🧭 마음의 나침반 결과 보기</div>
-        <p class="mb-2">당신의 감정 흐름과 마음의 방향을 바탕으로 작성된 위로 메시지입니다.</p>
-        <div style="background:#f5f5ff; padding:1.5rem; border-radius:12px;">
-          <p><strong>한줄 요약:</strong> 당신은 지금 스스로를 탐색하며 성장하는 중입니다.</p>
-          <p><strong>핵심 키워드:</strong> ${summary}</p>
-          <p><strong>전문가 위로:</strong><br>
-          감정은 억누르지 않아도 괜찮습니다. 지금 느끼는 모든 마음은 당신이 살아가고 있다는 증거입니다.<br>
-          당신이 스스로를 돌아본 이 시간, 그것만으로도 충분히 의미 있고 가치 있습니다.</p>
-        </div>
-        <button class="btn" onclick="downloadPDF()">📄 PDF로 저장하기</button>
-        <button class="btn" onclick="shareResult()">🔗 결과 공유하기</button>
-      `;
-
-      document.getElementById("app").innerHTML = resultHTML;
-    }
-
-    function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const content = `마음의 나침반 설문 결과\n\n${responses.map((r, i) => `${i + 1}. ${questions[i]}\n답변: ${r}\n`).join("\n")}`;
-      doc.text(content, 10, 10);
-      doc.save("마음의_나침반_결과.pdf");
-    }
-
-    function shareResult() {
-      const shareData = {
-        title: "마음의 나침반 결과",
-        text: "내 마음을 돌아본 결과를 확인해보세요.",
-        url: window.location.href
-      };
-      if (navigator.share) {
-        navigator.share(shareData).catch(console.error);
-      } else {
-        alert("공유 기능이 이 브라우저에서 지원되지 않습니다.");
-      }
-    }
-
-    window.onload = showQuestion;
-  </script>
-</body>
-</html>
+    // AI 기반 심층 심리 분석 질문들
+    const questions = [
+      {
+        id: 1,
+        type: "choice",
+        question: "밤하늘의 별을 바라볼 때, 당신의 마음에 가장 먼저 스며드는 감정은?",
+        description: "별빛이 당신의 영혼에 닿는 그 순간을 떠올려보세요",
+        options: [
+          { text: "무한한 우주 앞에서 느끼는
