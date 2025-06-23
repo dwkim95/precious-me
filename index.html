@@ -20,9 +20,8 @@
             --border-color: rgba(176, 196, 255, 0.1);
             --blur-bg: rgba(18, 24, 41, 0.5);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background: var(--bg-color);
@@ -33,7 +32,6 @@
             position: relative;
             letter-spacing: -0.01em;
         }
-
         body::before {
             content: '';
             position: fixed;
@@ -45,23 +43,19 @@
             z-index: 1;
             animation: pulse 18s infinite alternate ease-in-out;
         }
-
         @keyframes pulse {
             from { opacity: 0.7; transform: scale(1); }
             to { opacity: 1; transform: scale(1.03); }
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
         @keyframes dive {
             0% { opacity: 1; transform: translateY(0); }
             50% { opacity: 0; transform: translateY(40px); }
             100% { opacity: 0; transform: translateY(40px); }
         }
-
         .container {
             max-width: 460px;
             margin: 0 auto;
@@ -73,10 +67,7 @@
             position: relative;
             z-index: 2;
         }
-
         .screen { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; animation: fadeIn 1.2s ease-out; }
-
-        /* --- 프롤로그 (시작 화면) --- */
         .prologue-title {
             font-family: 'Noto Serif KR', serif;
             font-size: 2.5rem;
@@ -99,27 +90,14 @@
         }
         .intro-text strong { font-weight: 500; color: var(--primary-text); }
         .btn-primary {
-            width: 100%;
-            padding: 18px 32px;
-            background: linear-gradient(135deg, var(--accent-deep) 0%, #3b82f6 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.05rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(119, 139, 235, 0.2);
-            letter-spacing: 0.05em;
+            width: 100%; padding: 18px 32px; background: linear-gradient(135deg, var(--accent-deep) 0%, #3b82f6 100%);
+            color: white; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 500; cursor: pointer;
+            transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(119, 139, 235, 0.2); letter-spacing: 0.05em;
         }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(59, 130, 246, 0.3); }
-
-        /* --- 잠수 화면 --- */
         .diving-screen { text-align: center; animation: dive 2s forwards; }
         .diving-screen p { font-family: 'Noto Serif KR', serif; font-size: 1.1rem; color: var(--secondary-text); }
         .diving-screen .depth { font-size: 1.5rem; color: var(--primary-text); font-weight: 400; display: block; margin-top: 8px; }
-
-        /* --- 질문 화면 --- */
         .progress-section { margin-bottom: 32px; }
         .depth-indicator { font-size: 0.9rem; color: var(--secondary-text); text-align: center; margin-bottom: 12px; font-weight: 400; letter-spacing: 0.05em; }
         .progress-bar { height: 4px; background: rgba(176, 196, 255, 0.1); border-radius: 4px; overflow: hidden; }
@@ -128,30 +106,17 @@
         .question-text { font-family: 'Noto Serif KR', serif; font-size: 1.35rem; line-height: 1.7; color: var(--primary-text); text-align: center; font-weight: 400; }
         .options { display: flex; flex-direction: column; gap: 14px; }
         .option-btn {
-            background: var(--blur-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-            color: #cacedb;
-            font-size: 1rem;
-            line-height: 1.6;
+            background: var(--blur-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 20px 24px; cursor: pointer; transition: all 0.3s ease; text-align: left;
+            color: #cacedb; font-size: 1rem; line-height: 1.6;
         }
         .option-btn:hover { background: rgba(30, 41, 59, 0.7); border-color: rgba(176, 196, 255, 0.3); transform: translateX(5px); color: white; }
-
-        /* --- 로딩 화면 --- */
         .loading-container { text-align: center; }
         .wave-loader { display: flex; justify-content: center; gap: 10px; margin-bottom: 32px; }
         .wave-dot { width: 10px; height: 10px; background: var(--accent-light); border-radius: 50%; animation: wave 1.5s infinite ease-in-out; }
         @keyframes wave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-        .wave-dot:nth-child(2) { animation-delay: 0.2s; }
-        .wave-dot:nth-child(3) { animation-delay: 0.4s; }
+        .wave-dot:nth-child(2) { animation-delay: 0.2s; } .wave-dot:nth-child(3) { animation-delay: 0.4s; }
         .loading-message { font-family: 'Noto Serif KR', serif; font-size: 1.1rem; color: var(--secondary-text); }
-
-        /* --- 에필로그 (결과 화면) --- */
         .result-header { text-align: center; margin-bottom: 40px; }
         .result-badge { display: inline-block; padding: 8px 18px; background: rgba(176, 196, 255, 0.1); border: 1px solid rgba(176, 196, 255, 0.2); border-radius: 20px; font-size: 0.85rem; color: var(--accent-light); margin-bottom: 20px; font-weight: 500; letter-spacing: 0.1em; }
         .result-title { font-family: 'Noto Serif KR', serif; font-size: 2.1rem; font-weight: 500; line-height: 1.4; color: white; margin-bottom: 12px; }
@@ -163,14 +128,17 @@
         .epilogue-content { font-family: 'Noto Serif KR', serif; font-size: 1.05rem; text-align: center; }
         .epilogue-content strong { color: var(--accent-light); font-weight: 500; }
         .action-buttons { display: flex; gap: 12px; margin-top: 32px; }
-        .btn-secondary { flex: 1; padding: 16px 24px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; color: var(--primary-text); font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; letter-spacing: 0.05em; }
+        .btn-secondary {
+            flex: 1; padding: 16px 24px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px; color: var(--primary-text); font-size: 0.95rem; font-weight: 500; cursor: pointer;
+            transition: all 0.3s ease; letter-spacing: 0.05em;
+        }
         .btn-secondary:hover { background: rgba(30, 41, 59, 0.8); border-color: rgba(148, 163, 184, 0.4); }
         .btn-text { display: block; margin: 24px auto 0; background: none; border: none; color: var(--secondary-text); font-size: 0.95rem; cursor: pointer; transition: color 0.3s; }
         .btn-text:hover { color: var(--primary-text); }
         .hidden { display: none !important; }
     </style>
 </head>
-
 <body>
     <audio id="bgm" loop>
         <source src="" type="audio/mpeg">
@@ -199,22 +167,16 @@
         <div class="screen hidden" id="questionScreen">
             <div class="progress-section">
                 <div class="depth-indicator" id="depthIndicator"></div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             </div>
-            <div class="question-card">
-                <p class="question-text" id="questionText"></p>
-            </div>
+            <div class="question-card"><p class="question-text" id="questionText"></p></div>
             <div class="options" id="optionsContainer"></div>
         </div>
 
         <div class="screen hidden" id="loadingScreen">
             <div class="loading-container">
                 <div class="wave-loader">
-                    <div class="wave-dot"></div>
-                    <div class="wave-dot"></div>
-                    <div class="wave-dot"></div>
+                    <div class="wave-dot"></div><div class="wave-dot"></div><div class="wave-dot"></div>
                 </div>
                 <p class="loading-message">심연의 신호를 분석하는 중...</p>
             </div>
@@ -226,21 +188,15 @@
                 <h2 class="result-title" id="resultTitle"></h2>
                 <p class="result-subtitle" id="resultSubtitle"></p>
             </div>
-
             <div class="result-section">
-                <h3>당신의 모습</h3>
-                <p id="resultEssence"></p>
+                <h3>당신의 모습</h3><p id="resultEssence"></p>
             </div>
-
             <div class="result-section">
-                <h3>당신을 위한 기록</h3>
-                <p id="resultAdvice"></p>
+                <h3>당신을 위한 기록</h3><p id="resultAdvice"></p>
             </div>
-
             <div class="result-section epilogue">
                 <p class="epilogue-content" id="resultComfort"></p>
             </div>
-
             <div class="action-buttons">
                 <button class="btn-secondary" id="shareButton">탐사 결과 공유</button>
                 <button class="btn-secondary" id="copyButton">링크 복사</button>
@@ -250,9 +206,6 @@
     </div>
 
     <script>
-    // 페이지의 모든 HTML 요소가 로드된 후 스크립트를 실행합니다. (오류 방지)
-    document.addEventListener('DOMContentLoaded', function() {
-
         // --- DOM Elements ---
         const screens = {
             welcome: document.getElementById('welcomeScreen'),
@@ -268,14 +221,12 @@
             restart: document.getElementById('restartButton')
         };
         const bgm = document.getElementById('bgm');
-        
         const divingMessage = document.getElementById('divingMessage');
         const divingDepth = document.getElementById('divingDepth');
         const depthIndicator = document.getElementById('depthIndicator');
         const progressFill = document.getElementById('progressFill');
         const questionText = document.getElementById('questionText');
         const optionsContainer = document.getElementById('optionsContainer');
-        
         const resultTitle = document.getElementById('resultTitle');
         const resultSubtitle = document.getElementById('resultSubtitle');
         const resultEssence = document.getElementById('resultEssence');
@@ -286,7 +237,7 @@
         let currentQuestionIndex = 0;
         let scores = { internal: 0, external: 0, stable: 0, fluid: 0 };
 
-        // --- Data (Questions and Results are identical to previous version) ---
+        // --- Data ---
         const questions = [
             { depth: "10m", zone: "빛이 스미는 표층", text: "고요한 바다에 처음 발을 담급니다.\n수면에 비친 당신의 모습에서 가장 먼저 눈에 들어오는 것은 무엇인가요?", options: [{ t: "잔잔하게 일렁이는 윤슬", s: { external: 1, fluid: 1 } }, { t: "알 수 없는 깊이의 푸른색", s: { internal: 1, stable: 1 } }, { t: "하늘과 구름의 경계 없는 비침", s: { external: 1, stable: 1 } }, { t: "내 안으로 가라앉는 나의 시선", s: { internal: 1, fluid: 1 } }] },
             { depth: "50m", zone: "빛이 스미는 표층", text: "주변으로 작은 물고기 떼가 모여듭니다.\n당신은 어떤 행동을 보이나요?", options: [{ t: "손을 뻗어 함께 유영하려 한다", s: { external: 1, fluid: 1 } }, { t: "그들의 움직임을 가만히 관찰한다", s: { internal: 1, stable: 1 } }, { t: "내가 갈 길을 향해 묵묵히 나아간다", s: { internal: 1, fluid: 1 } }, { t: "더 많은 생물이 있을 곳을 찾아 움직인다", s: { external: 1, stable: 1 } }] },
@@ -336,7 +287,7 @@
                 const button = document.createElement('button');
                 button.className = 'option-btn';
                 button.innerHTML = option.t;
-                button.onclick = () => handleAnswer(option.s);
+                button.addEventListener('click', () => handleAnswer(option.s));
                 optionsContainer.appendChild(button);
             });
         }
@@ -364,8 +315,9 @@
             const primaryAxis = scores.internal >= scores.external ? 'internal' : 'external';
             const secondaryAxis = scores.stable >= scores.fluid ? 'stable' : 'fluid';
             let resultKey = `${primaryAxis}-${secondaryAxis}`;
-            if (scores[primaryAxis] > scores[primaryAxis === 'internal' ? 'external' : 'internal'] * 1.5 ||
-                scores[secondaryAxis] > scores[secondaryAxis === 'stable' ? 'fluid' : 'stable'] * 1.5) {
+            const primaryDiff = Math.abs(scores.internal - scores.external);
+            const secondaryDiff = Math.abs(scores.stable - scores.fluid);
+            if (primaryDiff > 2 || secondaryDiff > 2) {
                  resultKey += '-alt';
             }
             const resultData = results[resultKey] || results[`${primaryAxis}-${secondaryAxis}`];
@@ -378,16 +330,14 @@
         }
         
         function startDive() {
-            // BGM 재생 시도 (오류가 발생해도 다음 코드는 실행됨)
             try {
-                if (bgm && bgm.querySelector('source') && bgm.querySelector('source').getAttribute('src')) {
+                const audioSource = bgm.querySelector('source');
+                if (audioSource && audioSource.getAttribute('src')) {
                     bgm.play();
                 }
             } catch (error) {
-                console.error("BGM 재생 중 오류가 발생했습니다:", error);
+                console.error("BGM 재생 오류: ", error);
             }
-
-            // 테스트 시작
             currentQuestionIndex = 0;
             scores = { internal: 0, external: 0, stable: 0, fluid: 0 };
             switchScreen(screens.welcome, screens.question);
@@ -395,6 +345,7 @@
         }
 
         function restartDive() {
+            if(bgm) bgm.pause();
             switchScreen(screens.result, screens.welcome);
         }
         
@@ -413,7 +364,6 @@
         buttons.share.addEventListener('click', shareResult);
         buttons.copy.addEventListener('click', copyLink);
         buttons.restart.addEventListener('click', restartDive);
-    });
     </script>
 </body>
 </html>
