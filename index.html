@@ -4,58 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIND DIVE</title>
-    <meta name="description" content="당신의 마음 깊은 곳에 숨겨진 진짜 모습을 찾아서">
+    <meta name="description" content="고요한 심연으로의 탐사, 아직 만나지 못한 당신을 발견하세요.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-color: #030611;
+            --primary-text: #E0E6F1;
+            --secondary-text: #8A9CB0;
+            --accent-light: #a5b4fc;
+            --accent-deep: #6366f1;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --blur-bg: rgba(18, 24, 41, 0.5);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background: #0a0f1b;
-            color: #e8ecf1;
-            line-height: 1.65;
+            background: var(--bg-color);
+            color: var(--primary-text);
+            line-height: 1.75;
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
         }
 
-        /* 배경 효과 */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 15% 25%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(59, 130, 246, 0.06) 0%, transparent 40%);
             pointer-events: none;
             z-index: 1;
+            animation: pulse 15s infinite alternate ease-in-out;
         }
 
-        /* 물결 애니메이션 */
-        @keyframes wave {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @keyframes pulse {
+            from { opacity: 0.8; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.05); }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes dive {
+            0% { opacity: 1; transform: translateY(0); }
+            50% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 0; transform: translateY(50px); }
         }
 
         .container {
-            max-width: 420px;
+            max-width: 450px;
             margin: 0 auto;
             padding: 24px;
             min-height: 100vh;
@@ -66,400 +73,107 @@
             z-index: 2;
         }
 
-        /* 시작 화면 */
-        .screen {
-            animation: fadeIn 0.8s ease;
-        }
+        .screen { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; animation: fadeIn 1s ease-out; }
 
-        .logo {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
+        /* --- 시작 화면 --- */
+        .logo { text-align: center; margin-bottom: 40px; }
         .logo h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            letter-spacing: -0.03em;
-            background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%);
+            font-family: 'Noto Serif KR', serif;
+            font-size: 2.6rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            background: linear-gradient(135deg, #c4b5fd 0%, #818cf8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
-
-        .logo p {
-            font-size: 0.95rem;
-            color: #94a3b8;
-            font-weight: 300;
-        }
-
+        .logo p { font-size: 1rem; color: var(--secondary-text); font-weight: 300; }
         .intro-text {
             font-family: 'Noto Serif KR', serif;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: #cbd5e1;
+            font-size: 1.1rem;
+            color: #cacedb;
             text-align: center;
             margin-bottom: 48px;
             font-weight: 300;
         }
-
-        .intro-text em {
-            font-style: normal;
-            color: #e8ecf1;
-            font-weight: 400;
-        }
+        .intro-text strong { font-weight: 400; color: var(--primary-text); }
 
         .btn-primary {
             width: 100%;
             padding: 18px 32px;
-            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            background: linear-gradient(135deg, var(--accent-deep) 0%, #3b82f6 100%);
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
         }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(59, 130, 246, 0.3); }
 
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
+        /* --- 잠수 화면 --- */
+        .diving-screen { text-align: center; animation: dive 2s forwards; }
+        .diving-screen p { font-family: 'Noto Serif KR', serif; font-size: 1.1rem; color: var(--secondary-text); }
+        .diving-screen .depth { font-size: 1.5rem; color: var(--primary-text); font-weight: 400; display: block; margin-top: 8px; }
 
-        .btn-primary:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.3);
-        }
-
-        /* 진행 상태 */
-        .progress-section {
-            margin-bottom: 40px;
-        }
-
-        .depth-indicator {
-            font-size: 0.85rem;
-            color: #64748b;
-            text-align: center;
-            margin-bottom: 16px;
-            font-weight: 400;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .progress-bar {
-            height: 3px;
-            background: rgba(148, 163, 184, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
-            border-radius: 3px;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 100px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100px); }
-            100% { transform: translateX(100px); }
-        }
-
-        /* 질문 카드 */
-        .question-card {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 16px;
-            padding: 32px 28px;
-            margin-bottom: 32px;
-        }
-
-        .question-text {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 1.25rem;
-            line-height: 1.7;
-            color: #f1f5f9;
-            text-align: center;
-            font-weight: 400;
-        }
-
-        /* 선택지 */
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
+        /* --- 질문 화면 --- */
+        .progress-section { margin-bottom: 32px; }
+        .depth-indicator { font-size: 0.9rem; color: var(--secondary-text); text-align: center; margin-bottom: 12px; font-weight: 400; }
+        .progress-bar { height: 4px; background: rgba(148, 163, 184, 0.15); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent-light) 0%, var(--accent-deep) 100%); border-radius: 4px; transition: width 1s ease-out; }
+        
+        .question-card { background: var(--blur-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+        .question-text { font-family: 'Noto Serif KR', serif; font-size: 1.3rem; line-height: 1.7; color: var(--primary-text); text-align: center; font-weight: 400; }
+        
+        .options { display: flex; flex-direction: column; gap: 14px; }
         .option-btn {
-            background: rgba(30, 41, 59, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(148, 163, 184, 0.15);
+            background: var(--blur-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px 24px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             text-align: left;
-            color: #e2e8f0;
-            font-size: 0.95rem;
+            color: #cacedb;
+            font-size: 1rem;
             line-height: 1.6;
-            position: relative;
-            overflow: hidden;
         }
+        .option-btn:hover { background: rgba(30, 41, 59, 0.7); border-color: rgba(99, 102, 241, 0.3); transform: translateX(5px); color: white; }
 
-        .option-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .option-btn:hover::before {
-            left: 100%;
-        }
-
-        .option-btn:hover {
-            background: rgba(30, 41, 59, 0.5);
-            border-color: rgba(99, 102, 241, 0.3);
-            transform: translateX(4px);
-        }
-
-        .option-btn.selected {
-            background: rgba(99, 102, 241, 0.15);
-            border-color: rgba(99, 102, 241, 0.5);
-        }
-
-        /* 로딩 화면 */
-        .loading-container {
-            text-align: center;
-            padding: 60px 0;
-        }
-
-        .wave-loader {
-            display: inline-flex;
-            gap: 8px;
-            margin-bottom: 32px;
-        }
-
-        .wave-dot {
-            width: 8px;
-            height: 8px;
-            background: #60a5fa;
-            border-radius: 50%;
-            animation: wave 1.4s ease-in-out infinite;
-        }
-
+        /* --- 로딩 화면 --- */
+        .loading-container { text-align: center; }
+        .wave-loader { display: flex; justify-content: center; gap: 10px; margin-bottom: 32px; }
+        .wave-dot { width: 10px; height: 10px; background: var(--accent-light); border-radius: 50%; animation: wave 1.5s infinite ease-in-out; }
+        @keyframes wave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         .wave-dot:nth-child(2) { animation-delay: 0.2s; }
         .wave-dot:nth-child(3) { animation-delay: 0.4s; }
-        .wave-dot:nth-child(4) { animation-delay: 0.6s; }
-        .wave-dot:nth-child(5) { animation-delay: 0.8s; }
+        .loading-message { font-family: 'Noto Serif KR', serif; font-size: 1.1rem; color: var(--secondary-text); }
 
-        .loading-message {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 1rem;
-            line-height: 1.8;
-            color: #94a3b8;
-            font-weight: 300;
-        }
+        /* --- 결과 화면 --- */
+        .result-header { text-align: center; margin-bottom: 40px; }
+        .result-badge { display: inline-block; padding: 8px 18px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 20px; font-size: 0.85rem; color: var(--accent-light); margin-bottom: 20px; font-weight: 500; }
+        .result-title { font-family: 'Noto Serif KR', serif; font-size: 2.2rem; font-weight: 500; line-height: 1.4; color: white; margin-bottom: 12px; }
+        .result-subtitle { font-size: 1.05rem; color: var(--secondary-text); font-weight: 300; }
 
-        /* 결과 화면 */
-        .result-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
+        .result-section { background: var(--blur-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 28px; margin-bottom: 20px; }
+        .result-section h3 { font-size: 1.1rem; font-weight: 500; color: var(--primary-text); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .result-section h3 svg { width: 20px; height: 20px; fill: var(--accent-light); }
+        .result-section p { font-size: 1rem; line-height: 1.8; color: #cacedb; font-weight: 300; }
+        
+        .letter-section { background: linear-gradient(145deg, rgba(59, 130, 246, 0.05) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(99, 102, 241, 0.2); }
+        .letter-content { font-family: 'Noto Serif KR', serif; font-size: 1.05rem; color: var(--primary-text); }
+        .letter-content strong { color: var(--accent-light); font-weight: 500; }
 
-        .result-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #a5b4fc;
-            margin-bottom: 16px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-        }
+        .action-buttons { display: flex; gap: 12px; margin-top: 32px; }
+        .btn-secondary { flex: 1; padding: 16px 24px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; color: var(--primary-text); font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+        .btn-secondary:hover { background: rgba(30, 41, 59, 0.8); border-color: rgba(148, 163, 184, 0.4); }
+        .btn-text { display: block; margin: 24px auto 0; background: none; border: none; color: var(--secondary-text); font-size: 0.95rem; cursor: pointer; transition: color 0.3s; }
+        .btn-text:hover { color: var(--primary-text); }
 
-        .result-title {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 2rem;
-            font-weight: 400;
-            line-height: 1.3;
-            color: #f8fafc;
-            margin-bottom: 12px;
-        }
-
-        .result-subtitle {
-            font-size: 1rem;
-            color: #94a3b8;
-            font-weight: 300;
-            line-height: 1.6;
-        }
-
-        .result-section {
-            background: rgba(30, 41, 59, 0.3);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 20px;
-        }
-
-        .result-section h3 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #e8ecf1;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .result-section p {
-            font-size: 0.95rem;
-            line-height: 1.8;
-            color: #cbd5e1;
-            font-weight: 300;
-        }
-
-        .letter-section {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
-            border: 1px solid rgba(99, 102, 241, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .letter-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .letter-content {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 1rem;
-            line-height: 1.9;
-            color: #e8ecf1;
-            position: relative;
-            z-index: 1;
-        }
-
-        .letter-content strong {
-            color: #a5b4fc;
-            font-weight: 400;
-        }
-
-        /* 공유 버튼 */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 32px;
-        }
-
-        .btn-secondary {
-            flex: 1;
-            padding: 14px 24px;
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            border-radius: 12px;
-            color: #e2e8f0;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(30, 41, 59, 0.7);
-            border-color: rgba(148, 163, 184, 0.3);
-        }
-
-        .btn-text {
-            display: block;
-            margin: 24px auto 0;
-            background: none;
-            border: none;
-            color: #64748b;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .btn-text:hover {
-            color: #94a3b8;
-        }
-
-        /* 숨김 */
-        .hidden {
-            display: none !important;
-        }
-
-        /* 모바일 최적화 */
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-
-            .logo h1 {
-                font-size: 2.2rem;
-            }
-
-            .question-text {
-                font-size: 1.15rem;
-            }
-
-            .result-title {
-                font-size: 1.75rem;
-            }
-
-            .option-btn {
-                padding: 18px 20px;
-            }
-        }
+        .hidden { display: none !important; }
     </style>
 </head>
 
@@ -468,35 +182,40 @@
         <div class="screen" id="welcomeScreen">
             <div class="logo">
                 <h1>MIND DIVE</h1>
-                <p>마음의 심해로 떠나는 여행</p>
+                <p>당신의 심연으로 떠나는 탐사</p>
             </div>
-            
             <div class="intro-text">
-                가장 깊은 바다 속에는<br>
-                아직 발견되지 않은 생명체들이 살고 있습니다.<br><br>
-                
-                당신의 마음도 마찬가지예요.<br>
-                표면 아래 깊은 곳에는<br>
-                <em>아직 만나지 못한 당신</em>이 기다리고 있습니다.<br><br>
-                
-                지금부터 함께 잠수해볼까요?
+                수면 아래, 빛이 닿지 않는 깊은 곳.<br>
+                그곳엔 아직 발견되지 않은 세계가 펼쳐져 있습니다.
+                <br><br>
+                <strong>당신의 마음 또한 그렇습니다.</strong>
+                <br>
+                일상의 소란 너머, 고요한 심연 속에는<br>
+                아직 만나지 못한 진짜 당신이 숨 쉬고 있습니다.
+                <br><br>
+                저는 당신의 잠수를 도울 가이드입니다.<br>
+                함께, 마음의 가장 깊은 곳으로 향해볼까요?
             </div>
-            
-            <button class="btn-primary" id="startButton">심해로 잠수하기</button>
+            <button class="btn-primary" id="startButton">탐사 시작하기</button>
+        </div>
+        
+        <div class="screen hidden" id="divingScreen">
+            <div class="diving-screen">
+                 <p id="divingMessage">더 깊은 곳으로 내려갑니다...</p>
+                 <span class="depth" id="divingDepth"></span>
+            </div>
         </div>
 
         <div class="screen hidden" id="questionScreen">
             <div class="progress-section">
-                <div class="depth-indicator" id="depthIndicator">수심 0m</div>
+                <div class="depth-indicator" id="depthIndicator"></div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
             </div>
-            
             <div class="question-card">
-                <div class="question-text" id="questionText"></div>
+                <p class="question-text" id="questionText"></p>
             </div>
-            
             <div class="options" id="optionsContainer"></div>
         </div>
 
@@ -506,12 +225,8 @@
                     <div class="wave-dot"></div>
                     <div class="wave-dot"></div>
                     <div class="wave-dot"></div>
-                    <div class="wave-dot"></div>
-                    <div class="wave-dot"></div>
                 </div>
-                <div class="loading-message" id="loadingMessage">
-                    심해에서 무언가를 발견했습니다...
-                </div>
+                <p class="loading-message">심연의 신호를 분석하고 있습니다...</p>
             </div>
         </div>
 
@@ -523,36 +238,44 @@
             </div>
 
             <div class="result-section">
-                <h3>✨ 빛이 닿는 곳</h3>
-                <p id="lightSide"></p>
+                <h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0V2.75A.75.75 0 0110 2zM5.404 4.343a.75.75 0 010 1.06l-1.5 1.5a.75.75 0 11-1.06-1.06l1.5-1.5a.75.75 0 011.06 0zm9.192 0a.75.75 0 011.06 0l1.5 1.5a.75.75 0 11-1.06 1.06l-1.5-1.5a.75.75 0 010-1.06zM2 10a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm11.25 0a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5h-3.5a.75.75 0 01-.75-.75zM5.404 15.657a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 011.06-1.06l1.5 1.5a.75.75 0 010 1.06zm9.192 0a.75.75 0 010-1.06l1.5-1.5a.75.75 0 011.06 1.06l-1.5 1.5a.75.75 0 01-1.06 0zM10 18a.75.75 0 01-.75-.75v-3.5a.75.75 0 011.5 0v3.5A.75.75 0 0110 18z" clip-rule="evenodd" /></svg>
+                    당신의 본질
+                </h3>
+                <p id="resultEssence"></p>
             </div>
 
             <div class="result-section">
-                <h3>🌑 그림자가 드리운 곳</h3>
-                <p id="shadowSide"></p>
+                <h3>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3.75a2 2 0 100 4 2 2 0 000-4zM9.25 8.5a.75.75 0 000 1.5h1.5a.75.75 0 000-1.5h-1.5zM10 12a4 4 0 100 8 4 4 0 000-8zM7.106 14.894a.75.75 0 00-1.06 1.06l.94.94a2.5 2.5 0 003.536 0l.94-.94a.75.75 0 10-1.06-1.06l-.94.94a1 1 0 01-1.414 0l-.94-.94z" /></svg>
+                    당신을 위한 한마디
+                </h3>
+                <p id="resultAdvice"></p>
             </div>
 
             <div class="result-section letter-section">
-                <div class="letter-content" id="letterContent"></div>
+                <div class="letter-content" id="resultComfort"></div>
             </div>
 
             <div class="action-buttons">
-                <button class="btn-secondary" onclick="shareResult()">발견 공유하기</button>
+                <button class="btn-secondary" onclick="shareResult()">탐사 결과 공유</button>
                 <button class="btn-secondary" onclick="copyLink()">링크 복사</button>
             </div>
-
             <button class="btn-text" onclick="restartDive()">다시 잠수하기</button>
         </div>
     </div>
 
     <script>
-        // DOM 요소 가져오기
-        const startButton = document.getElementById('startButton');
+        // --- DOM Elements ---
         const welcomeScreen = document.getElementById('welcomeScreen');
+        const divingScreen = document.getElementById('divingScreen');
         const questionScreen = document.getElementById('questionScreen');
         const loadingScreen = document.getElementById('loadingScreen');
         const resultScreen = document.getElementById('resultScreen');
-
+        const startButton = document.getElementById('startButton');
+        
+        const divingMessage = document.getElementById('divingMessage');
+        const divingDepth = document.getElementById('divingDepth');
         const depthIndicator = document.getElementById('depthIndicator');
         const progressFill = document.getElementById('progressFill');
         const questionText = document.getElementById('questionText');
@@ -560,238 +283,38 @@
         
         const resultTitle = document.getElementById('resultTitle');
         const resultSubtitle = document.getElementById('resultSubtitle');
-        const lightSide = document.getElementById('lightSide');
-        const shadowSide = document.getElementById('shadowSide');
-        const letterContent = document.getElementById('letterContent');
+        const resultEssence = document.getElementById('resultEssence');
+        const resultAdvice = document.getElementById('resultAdvice');
+        const resultComfort = document.getElementById('resultComfort');
 
-        // 상태 관리
+        // --- State ---
         let currentQuestionIndex = 0;
         let scores = {
-            pearl: 0,
-            current: 0,
-            abyss: 0,
-            coral: 0
+            internal: 0, // 내면 지향
+            external: 0, // 외면 지향
+            stable: 0,   // 안정 추구
+            fluid: 0     // 유동성/변화 추구
         };
 
-        // 질문 데이터
+        // --- Data ---
         const questions = [
-            {
-                depth: 0,
-                text: "수면에 비친 당신의 모습은\n어떤 표정을 하고 있나요?",
-                options: [
-                    { text: "조용히 미소 짓고 있어요", type: "pearl" },
-                    { text: "무언가를 기대하는 눈빛이에요", type: "coral" },
-                    { text: "깊은 생각에 잠겨 있어요", type: "abyss" },
-                    { text: "끊임없이 변하고 있어요", type: "current" }
-                ]
-            },
-            {
-                depth: 50,
-                text: "빛이 희미해지는 수심.\n불안할 때 당신은?",
-                options: [
-                    { text: "차분히 숨을 고르며 기다려요", type: "pearl" },
-                    { text: "문제를 해결할 방법을 찾아요", type: "coral" },
-                    { text: "불안의 원인을 깊이 파헤쳐요", type: "abyss" },
-                    { text: "다른 것에 집중하려 노력해요", type: "current" }
-                ]
-            },
-            {
-                depth: 150,
-                text: "압력이 느껴지기 시작합니다.\n가장 견디기 힘든 순간은?",
-                options: [
-                    { text: "나를 이해해주는 사람이 없을 때", type: "pearl" },
-                    { text: "목표를 이루지 못했을 때", type: "coral" },
-                    { text: "나 자신이 낯설게 느껴질 때", type: "abyss" },
-                    { text: "선택의 기로에 서 있을 때", type: "current" }
-                ]
-            },
-            {
-                depth: 300,
-                text: "어둠이 당신을 감쌉니다.\n두려움의 정체는 무엇인가요?",
-                options: [
-                    { text: "소중한 것을 잃는 것", type: "pearl" },
-                    { text: "아무것도 이루지 못하는 것", type: "coral" },
-                    { text: "진짜 나를 마주하는 것", type: "abyss" },
-                    { text: "변하지 못하고 멈춰있는 것", type: "current" }
-                ]
-            },
-            {
-                depth: 500,
-                text: "고요한 심해.\n여기서 찾고 싶은 것은?",
-                options: [
-                    { text: "잃어버린 평온함", type: "pearl" },
-                    { text: "숨겨진 가능성", type: "coral" },
-                    { text: "존재의 의미", type: "abyss" },
-                    { text: "새로운 시작점", type: "current" }
-                ]
-            },
-            {
-                depth: 800,
-                text: "압도적인 정적.\n당신의 내면의 목소리는?",
-                options: [
-                    { text: "\"괜찮아, 천천히 가도 돼\"", type: "pearl" },
-                    { text: "\"더 강해질 수 있어\"", type: "coral" },
-                    { text: "\"진실을 마주해야 해\"", type: "abyss" },
-                    { text: "\"변화를 받아들여\"", type: "current" }
-                ]
-            },
-            {
-                depth: 1200,
-                text: "심해의 바닥이 가까워집니다.\n가장 소중한 것은?",
-                options: [
-                    { text: "마음의 평화", type: "pearl" },
-                    { text: "끊임없는 성장", type: "coral" },
-                    { text: "진정한 이해", type: "abyss" },
-                    { text: "자유로운 영혼", type: "current" }
-                ]
-            },
-            {
-                depth: 1500,
-                text: "마침내 바닥에 도착했습니다.\n여기서 발견한 것은?",
-                options: [
-                    { text: "빛나는 진주", type: "pearl" },
-                    { text: "살아있는 산호", type: "coral" },
-                    { text: "깊은 균열", type: "abyss" },
-                    { text: "따뜻한 해류", type: "current" }
-                ]
-            }
+            // Stage 1: Sunlight Zone (표층)
+            { depth: "10m", zone: "빛이 스미는 표층", text: "고요한 바다에 처음 발을 담급니다.\n수면에 비친 당신의 모습에서 가장 먼저 눈에 들어오는 것은 무엇인가요?", options: [{ t: "잔잔하게 일렁이는 윤슬", s: { external: 1, fluid: 1 } }, { t: "알 수 없는 깊이의 푸른색", s: { internal: 1, stable: 1 } }, { t: "하늘과 구름의 경계 없는 비침", s: { external: 1, stable: 1 } }, { t: "내 안으로 가라앉는 나의 시선", s: { internal: 1, fluid: 1 } }] },
+            { depth: "50m", zone: "빛이 스미는 표층", text: "주변으로 작은 물고기 떼가 모여듭니다.\n당신은 어떤 행동을 보이나요?", options: [{ t: "손을 뻗어 함께 유영하려 한다", s: { external: 1, fluid: 1 } }, { t: "그들의 움직임을 가만히 관찰한다", s: { internal: 1, stable: 1 } }, { t: "내가 갈 길을 향해 묵묵히 나아간다", s: { internal: 1, fluid: 1 } }, { t: "더 많은 생물이 있을 곳을 찾아 움직인다", s: { external: 1, stable: 1 } }] },
+            // Stage 2: Twilight Zone (미광층)
+            { depth: "200m", zone: "희미한 빛의 미광층", text: "익숙했던 햇빛이 아득해지고, 위인지 아래인지 감각이 흐릿해집니다. 이때 당신의 마음은?", options: [{ t: "불안하기보다, 오히려 아늑하다", s: { internal: 1, stable: 1 } }, { t: "새로운 풍경에 대한 기대로 가득 찬다", s: { external: 1, fluid: 1 } }, { t: "나아갈 방향을 다시금 확인한다", s: { external: 1, stable: 1 } }, { t: "이 고요함의 의미를 조용히 사색한다", s: { internal: 1, fluid: 1 } }] },
+            { depth: "500m", zone: "희미한 빛의 미광층", text: "저 멀리, 거대한 무언가의 그림자가 스쳐 지나갑니다. 당신의 첫 반응은?", options: [{ t: "정체를 확인하기 위해 가까이 다가간다", s: { external: 1, fluid: 1 } }, { t: "위험할 수 있으니, 조용히 숨어 지나가길 기다린다", s: { internal: 1, stable: 1 } }, { t: "나와는 다른 존재의 경이로움을 느낀다", s: { internal: 1, fluid: 1 } }, { t: "나의 탐사에 미칠 영향을 계산한다", s: { external: 1, stable: 1 } }] },
+            // Stage 3: Midnight Zone (심해층)
+            { depth: "1,000m", zone: "어둠과 고요의 심해층", text: "완전한 어둠 속, 오직 당신의 숨소리만이 들려옵니다. 이 압도적인 고요함은 당신에게 무엇과 같나요?", options: [{ t: "모든 것으로부터의 자유", s: { internal: 1, fluid: 1 } }, { t: "스스로를 마주하게 하는 거울", s: { internal: 1, stable: 1 } }, { t: "새로운 발견을 앞둔 전조", s: { external: 1, fluid: 1 } }, { t: "포근하게 나를 감싸는 담요", s: { external: 1, stable: 1 } }] },
+            { depth: "2,000m", zone: "어둠과 고요의 심해층", text: "어둠 속에서 스스로 빛을 내는 생명체를 마주칩니다. 그 빛을 보며 당신은 어떤 생각을 하나요?", options: [{ t: "어둠이 깊을수록 빛은 더 선명하구나", s: { internal: 1, stable: 1 } }, { t: "나 또한 나만의 빛을 가지고 있을까?", s: { internal: 1, fluid: 1 } }, { t: "저 빛은 다른 이들을 위한 등대일까?", s: { external: 1, stable: 1 } }, { t: "어떤 상황에서도 살아남는 생명력이 놀랍다", s: { external: 1, fluid: 1 } }] },
+            // Stage 4: The Abyss (심연)
+            { depth: "4,000m", zone: "미지의 심연", text: "마침내 심해의 바닥에 도착했습니다. 탐사를 계속할지, 아니면 이곳에 머물지 선택해야 합니다. 당신의 마음이 향하는 곳은?", options: [{ t: "이 평온함 속에 잠시 머물고 싶다", s: { internal: 1, stable: 1 } }, { t: "아직 발견하지 못한 무언가를 찾아 더 나아간다", s: { external: 1, fluid: 1 } }, { t: "이곳의 지도를 그려 다른 탐사자에게 알린다", s: { external: 1, stable: 1 } }, { t: "지금까지의 여정을 되짚어보며 의미를 찾는다", s: { internal: 1, fluid: 1 } }] },
+            { depth: "6,000m", zone: "미지의 심연", text: "탐사의 끝에서, 당신은 무언가를 발견합니다. 그것은 당신에게 어떤 의미로 다가오나요?", options: [{ t: "오랜 시간 지켜온 변치 않는 가치", s: { stable: 2 } }, { t: "세상과 나를 연결하는 따뜻한 온기", s: { external: 2 } }, { t: "내 안에 숨겨져 있던 또 다른 나의 모습", s: { internal: 2 } }, { t: "자유롭게 흘러갈 새로운 시작점", s: { fluid: 2 } }] }
         ];
 
-        // 결과 데이터
         const results = {
-            pearl: {
-                title: "심해의 진주",
-                subtitle: "고요함 속에서 빛을 품은 영혼",
-                light: "당신은 폭풍우 속에서도 중심을 잃지 않는 사람입니다. 주변이 아무리 혼란스러워도 내면의 평화를 유지할 줄 아는 능력은 당신의 가장 큰 강점이에요. 사람들은 당신의 차분함에서 위안을 찾고, 당신의 조용한 지혜에서 답을 얻습니다.",
-                shadow: "때로는 너무 많은 것을 혼자 품으려 합니다. 모든 상처와 아픔을 조용히 감싸안다가 정작 자신은 돌보지 못할 때가 있어요. 당신의 고요함이 때로는 고립으로 이어질 수 있다는 것을 기억하세요.",
-                letter: "심해에 잠든 진주처럼, 당신은 어둠 속에서도 빛을 잃지 않는 사람입니다.<br><br>당신의 고요함은 나약함이 아니라 <strong>가장 깊은 곳에서 나오는 힘</strong>이에요. 세상이 당신에게 더 빠르게, 더 크게 반응하라고 요구해도, 당신만의 속도로 걸어가세요.<br><br>진주가 모래알의 아픔에서 시작되듯, 당신의 상처들도 언젠가는 아름다운 빛이 될 거예요. 그 과정을 서두르지 마세요.<br><br>가끔은 당신의 빛을 필요로 하는 사람들에게 마음을 열어주세요. 당신이 생각하는 것보다 훨씬 많은 사람들이 당신의 존재에 감사하고 있답니다."
-            },
-            current: {
-                title: "심해의 해류",
-                subtitle: "끊임없이 흐르며 변화하는 영혼",
-                light: "당신은 정체되지 않는 삶을 살아갑니다. 새로운 경험을 두려워하지 않고, 변화를 기회로 만들 줄 아는 유연함이 있어요. 당신의 적응력과 창의성은 막힌 곳에 새로운 길을 만들어내는 힘이 됩니다.",
-                shadow: "계속 움직이다 보니 때로는 방향을 잃을 때가 있습니다. 변화 자체가 목적이 되어버려, 정작 중요한 것을 놓치기도 해요. 모든 것을 바꾸려다가 아무것도 완성하지 못할 수 있다는 것을 조심하세요.",
-                letter: "깊은 바다를 순환하는 해류처럼, 당신은 세상에 생명을 불어넣는 사람입니다.<br><br>당신의 변화는 변덕이 아니라 <strong>살아있다는 증거</strong>예요. 멈춰있는 물이 썩듯이, 계속 흐르는 당신의 본성은 당신을 항상 신선하게 만들어줍니다.<br><br>다만 가끔은 잠시 멈춰서 지나온 길을 돌아보세요. 당신이 만들어낸 변화들이 얼마나 아름다운지, 당신이 흘러가며 만난 풍경들이 얼마나 소중한지를 느껴보세요.<br><br>해류가 대륙을 연결하듯, 당신도 사람과 사람을, 과거와 미래를 연결하는 특별한 존재입니다."
-            },
-            abyss: {
-                title: "심해의 심연",
-                subtitle: "깊이를 두려워하지 않는 영혼",
-                light: "당신은 표면적인 것에 만족하지 않습니다. 불편한 진실도 마주할 용기가 있고, 남들이 피하는 깊은 질문들을 던질 줄 아는 사람이에요. 당신의 통찰력은 복잡한 문제의 본질을 꿰뚫어봅니다.",
-                shadow: "깊이 파고들다 보니 때로는 어둠에 압도될 때가 있습니다. 모든 것을 의심하고 분석하다가 단순한 기쁨을 놓치기도 해요. 심연을 들여다보는 자는 심연도 자신을 들여다본다는 것을 기억하세요.",
-                letter: "가장 깊은 심연까지 내려갈 용기를 가진 당신은 특별한 사람입니다.<br><br>당신의 깊이는 우울함이 아니라 <strong>진실을 향한 용기</strong>예요. 남들이 외면하는 것들을 직시하는 당신의 시선은 세상을 더 정직하게 만듭니다.<br><br>하지만 가끔은 수면 위로 올라와 햇빛을 쬐어주세요. 깊이를 아는 사람만이 높이의 가치도 알 수 있습니다. 어둠을 이해하는 당신이기에 빛을 더 소중히 여길 수 있어요.<br><br>심연은 끝이 아니라 새로운 시작점입니다. 당신이 그 깊은 곳에서 발견한 진실들이 언젠가 많은 사람들에게 등대가 될 거예요."
-            },
-            coral: {
-                title: "심해의 산호초",
-                subtitle: "생명력으로 가득한 영혼",
-                light: "당신은 어떤 환경에서도 꽃을 피우는 사람입니다. 도전을 성장의 기회로 바꾸고, 실패에서도 교훈을 찾아내는 회복력이 있어요. 당신의 열정은 주변 사람들에게도 살아갈 용기를 전염시킵니다.",
-                shadow: "너무 많은 것을 이루려다 지칠 때가 있습니다. 쉬는 것을 죄책감으로 느끼고, 멈춰있으면 불안해해요. 산호초도 때로는 조류에 몸을 맡기고 쉬어간다는 것을 기억하세요.",
-                letter: "깊은 바다에서도 생명을 피워내는 당신은 희망의 증거입니다.<br><br>당신의 성장욕구는 욕심이 아니라 <strong>삶을 향한 순수한 열정</strong>이에요. 매일 조금씩 나아가려는 당신의 노력이 얼마나 아름다운지 아시나요?<br><br>하지만 기억하세요. 산호초의 아름다움은 빠른 성장이 아니라 꾸준한 인내에서 나옵니다. 때로는 그 자리에 머물며 뿌리를 내리는 것도 성장의 한 방법이에요.<br><br>당신이 만들어가는 작은 변화들이 모여 언젠가는 거대한 생태계가 될 거예요. 그 과정 자체를 즐기며 가세요."
-            }
-        };
-
-        // 화면 전환 함수
-        function switchScreen(hide, show) {
-            hide.classList.add('hidden');
-            show.classList.remove('hidden');
-        }
-        
-        // 질문 표시 함수
-        function showQuestion() {
-            const question = questions[currentQuestionIndex];
-            progressFill.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
-            depthIndicator.textContent = `수심 ${question.depth}m`;
-            questionText.innerHTML = question.text.replace(/\n/g, '<br>');
-            
-            optionsContainer.innerHTML = '';
-            question.options.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'option-btn';
-                button.innerHTML = option.text;
-                button.onclick = () => handleAnswer(option.type);
-                optionsContainer.appendChild(button);
-            });
-        }
-
-        // 답변 처리 함수
-        function handleAnswer(type) {
-            scores[type]++;
-            currentQuestionIndex++;
-            
-            if (currentQuestionIndex < questions.length) {
-                showQuestion();
-            } else {
-                showLoadingAndResult();
-            }
-        }
-
-        // 로딩 및 결과 표시 함수
-        function showLoadingAndResult() {
-            switchScreen(questionScreen, loadingScreen);
-            
-            setTimeout(() => {
-                calculateAndShowResult();
-            }, 3000); // 3초 후 결과 표시
-        }
-        
-        // 결과 계산 및 표시 함수
-        function calculateAndShowResult() {
-            let resultType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
-            const resultData = results[resultType];
-            
-            resultTitle.innerHTML = resultData.title;
-            resultSubtitle.innerHTML = resultData.subtitle;
-            lightSide.innerHTML = resultData.light;
-            shadowSide.innerHTML = resultData.shadow;
-            letterContent.innerHTML = resultData.letter;
-            
-            switchScreen(loadingScreen, resultScreen);
-        }
-
-        // 테스트 시작 함수
-        function startDive() {
-            switchScreen(welcomeScreen, questionScreen);
-            showQuestion();
-        }
-
-        // 다시 시작 함수
-        function restartDive() {
-            currentQuestionIndex = 0;
-            scores = { pearl: 0, current: 0, abyss: 0, coral: 0 };
-            switchScreen(resultScreen, welcomeScreen);
-        }
-        
-        // 공유하기 함수
-        async function shareResult() {
-            const resultData = results[Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b)];
-            const shareData = {
-                title: 'MIND DIVE 결과',
-                text: `나의 마음 속 심해에는 '${resultData.title}'이(가) 살고 있었어요! 당신의 마음도 확인해보세요.`,
-                url: window.location.href
-            };
-            try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                } else {
-                    alert("이 브라우저에서는 공유하기 기능을 지원하지 않습니다.");
-                }
-            } catch (err) {
-                console.error("공유 실패:", err);
-            }
-        }
-
-        // 링크 복사 함수
-        function copyLink() {
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                alert('링크가 복사되었습니다!');
-            }).catch(err => {
-                console.error('복사 실패:', err);
-                alert('링크 복사에 실패했습니다.');
-            });
-        }
-        
-        // 시작 버튼에 이벤트 리스너 추가
-        startButton.addEventListener('click', startDive);
-
-    </script>
-</body>
-</html>
+            'internal-stable': { title: "고요히 빛을 머금은, 심해의 진주", sub: "내면의 아픔을 단단한 아름다움으로 승화시키는 영혼", essence: "당신은 외부의 소란에 쉽게 흔들리지 않는 깊은 내면의 힘을 지녔습니다. 혼자만의 시간을 통해 에너지를 얻고, 복잡한 세상 속에서 자신만의 중심을 지키려 노력하죠. 상처와 고독을 회피하기보다, 그것을 끌어안고 단단한 진주로 만들어내는 성숙함을 가지고 있습니다.", advice: "당신의 깊이는 때로 스스로를 고립시킬 수 있습니다. 괜찮다면, 당신이 오랜 시간 품어온 그 영롱한 빛을 가끔은 세상에 보여주세요. 당신의 고요한 위로가 필요한 사람이 분명 있을 거예요.", comfort: "진주가 되기 위해 모래알이 겪었을 수많은 밤을 기억하세요. <strong>당신의 모든 상처와 인내는 결코 헛되지 않았습니다.</strong> 이미 당신은 세상에 단 하나뿐인 보석입니다." },
+            'internal-fluid': { title: "어둠 속을 유영하는, 미광 해파리", sub: "자유로운 사유와 직관으로 내면의 우주를 탐험하는 영혼", essence: "당신은 정해진 길을 따르기보다, 내면의 흐름과 직관에 몸을 맡기는 자유로운 영혼입니다. 생각의 경계가 없고, 예술적인 감수성이 풍부하죠. 혼자만의 사색과 상상 속에서 누구보다 화려한 빛을 발하며, 당신의 존재 자체가 하나의 신비로운 예술 작품과 같습니다.", advice: "자유로운 당신의 흐름은 때로 현실의 뭍과 부딪히며 상처받을 수 있습니다. 당신의 연약한 빛을 지켜줄 단단한 무언가를 곁에 두는 것을 잊지 마세요. 그것이 사람이든, 신념이든, 혹은 작은 습관이든 좋습니다.", comfort: "세상의 속도에 맞출 필요 없어요. <strong>당신만의 박자로 유영할 때 가장 아름답게 빛나니까요.</strong> 당신의 여린 빛이 누군가에겐 어둠을 밝히는 유일한 희망일 수 있습니다." },
+            'external-stable': { title: "생명을 보듬는, 빛의 산호 군락", sub: "견고한 신념으로 주변에 따뜻한 세계를 일구어내는 영혼", essence: "당신은 자신만의 단단한 신념을 바탕으로 주변에 긍정적인 영향력을 미치는 사람입니다. 안정적인 관계를 소중히 여기며, 당신이 아끼는 사람들을 위한 든든한 안식처가 되어주고 싶어 하죠. 당신의 노력은 황량한 바닥을 다채로운 생명이 넘실대는 산호 군락으로 바꾸는 힘이 있습니다.", advice: "모든 것을 지키려는 책임감에 스스로 지치지 않도록 조심하세요. 때로는 조류에 몸을 맡기듯, 주변의 도움을 청하고 함께 나아가는 법을 배워보세요. 당신은 혼자가 아닙니다.", comfort: "당신이 오랜 시간 공들여 만든 그 아름다운 세계를 보세요. <strong>당신의 존재만으로도 수많은 생명이 위로받고 있습니다.</strong> 당신은 세상을 더 따뜻한 곳으로 만드는 사람입니다." },
+            'external-fluid': { title: "온기를 전하는, 심해의 해류", sub: "세상과 끊임없이 교류하며 새로운 길을 만들어내는 영혼", essence: "당신은 한곳에 머무르기보다, 세상과 끊임없이 소통하며 에너지를 얻는 사람입니다. 새로운 만남과 경험을 두려워하지 않으며, 당신의 유연함과 따뜻함은 차가운 심해에 온기를 불어넣는 해류와 같습니다. 당신이 흐르는 곳마다 새로운 생명과 가능성이 싹틉니다.", advice: "끊임없이 흐르다 보면, 정작 당신의 마음이 어디로 향하고 있는지 잊을 때가 있습니다. 가끔은 잠시 멈춰, 당신의 내면의 소리에 귀 기울여 주세요. 당신이 진정으로 원하는 것은 무엇인가요?", comfort: "정체되지 않고 끊임없이 흐르는 것이야말로 살아있다는 가장 큰 증거입니다. <strong>당신은 세상의 막힌 곳을 뚫고, 차가운 곳을 데우는 소중한 존재입니다.</strong> 당신의 여정은 언제나 옳습니다." },
+            'internal-stable-alt': { title: "오래된 침몰선의 닻", sub: "시간의 무게를 견디며 변치 않는 가치를 지키는 영혼", essence: "당신은 시간의 흐름 속에서도 변치 않는 자신만의 가치와 신념을 굳건히 지키는 사람입니다. 역경은 당신을 더 단단하게 만들며, 그 깊이와 무게감은 주변 사람들에게 신뢰와 안정감을 줍니다. 당신의 존재는 격랑 속에서도 배를 지탱하는 묵직한 닻과 같습니다.", advice: "때로는 그 묵직함이 스스로를 얽매는 족쇄가 될 수 있습니다. 과거의 영광이나 상처에 너무 얽매이지 말고, 새로운 항해를 위해 닻을 올릴 용기를 내보는 건 어떨까요?", comfort: "모든 풍파를 견뎌낸 당신의 단단함을 존경합니다. <strong>당신이 지켜온 시간과 가치는 그 무엇과도 바
