@@ -465,7 +465,6 @@
 
 <body>
     <div class="container">
-        <!-- 시작 화면 -->
         <div class="screen" id="welcomeScreen">
             <div class="logo">
                 <h1>MIND DIVE</h1>
@@ -486,7 +485,6 @@
             <button class="btn-primary" id="startButton">심해로 잠수하기</button>
         </div>
 
-        <!-- 질문 화면 -->
         <div class="screen hidden" id="questionScreen">
             <div class="progress-section">
                 <div class="depth-indicator" id="depthIndicator">수심 0m</div>
@@ -502,7 +500,6 @@
             <div class="options" id="optionsContainer"></div>
         </div>
 
-        <!-- 로딩 화면 -->
         <div class="screen hidden" id="loadingScreen">
             <div class="loading-container">
                 <div class="wave-loader">
@@ -513,12 +510,11 @@
                     <div class="wave-dot"></div>
                 </div>
                 <div class="loading-message" id="loadingMessage">
-                    심해에서 무언가를 발견했습니다
+                    심해에서 무언가를 발견했습니다...
                 </div>
             </div>
         </div>
 
-        <!-- 결과 화면 -->
         <div class="screen hidden" id="resultScreen">
             <div class="result-header">
                 <div class="result-badge">DEEP SEA DISCOVERY</div>
@@ -527,12 +523,12 @@
             </div>
 
             <div class="result-section">
-                <h3>빛이 닿는 곳</h3>
+                <h3>✨ 빛이 닿는 곳</h3>
                 <p id="lightSide"></p>
             </div>
 
             <div class="result-section">
-                <h3>그림자가 드리운 곳</h3>
+                <h3>🌑 그림자가 드리운 곳</h3>
                 <p id="shadowSide"></p>
             </div>
 
@@ -550,9 +546,26 @@
     </div>
 
     <script>
+        // DOM 요소 가져오기
+        const startButton = document.getElementById('startButton');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const questionScreen = document.getElementById('questionScreen');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const resultScreen = document.getElementById('resultScreen');
+
+        const depthIndicator = document.getElementById('depthIndicator');
+        const progressFill = document.getElementById('progressFill');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        
+        const resultTitle = document.getElementById('resultTitle');
+        const resultSubtitle = document.getElementById('resultSubtitle');
+        const lightSide = document.getElementById('lightSide');
+        const shadowSide = document.getElementById('shadowSide');
+        const letterContent = document.getElementById('letterContent');
+
         // 상태 관리
-        let currentDepth = 0;
-        let responses = [];
+        let currentQuestionIndex = 0;
         let scores = {
             pearl: 0,
             current: 0,
@@ -674,3 +687,111 @@
                 shadow: "너무 많은 것을 이루려다 지칠 때가 있습니다. 쉬는 것을 죄책감으로 느끼고, 멈춰있으면 불안해해요. 산호초도 때로는 조류에 몸을 맡기고 쉬어간다는 것을 기억하세요.",
                 letter: "깊은 바다에서도 생명을 피워내는 당신은 희망의 증거입니다.<br><br>당신의 성장욕구는 욕심이 아니라 <strong>삶을 향한 순수한 열정</strong>이에요. 매일 조금씩 나아가려는 당신의 노력이 얼마나 아름다운지 아시나요?<br><br>하지만 기억하세요. 산호초의 아름다움은 빠른 성장이 아니라 꾸준한 인내에서 나옵니다. 때로는 그 자리에 머물며 뿌리를 내리는 것도 성장의 한 방법이에요.<br><br>당신이 만들어가는 작은 변화들이 모여 언젠가는 거대한 생태계가 될 거예요. 그 과정 자체를 즐기며 가세요."
             }
+        };
+
+        // 화면 전환 함수
+        function switchScreen(hide, show) {
+            hide.classList.add('hidden');
+            show.classList.remove('hidden');
+        }
+        
+        // 질문 표시 함수
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            progressFill.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+            depthIndicator.textContent = `수심 ${question.depth}m`;
+            questionText.innerHTML = question.text.replace(/\n/g, '<br>');
+            
+            optionsContainer.innerHTML = '';
+            question.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.innerHTML = option.text;
+                button.onclick = () => handleAnswer(option.type);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // 답변 처리 함수
+        function handleAnswer(type) {
+            scores[type]++;
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showLoadingAndResult();
+            }
+        }
+
+        // 로딩 및 결과 표시 함수
+        function showLoadingAndResult() {
+            switchScreen(questionScreen, loadingScreen);
+            
+            setTimeout(() => {
+                calculateAndShowResult();
+            }, 3000); // 3초 후 결과 표시
+        }
+        
+        // 결과 계산 및 표시 함수
+        function calculateAndShowResult() {
+            let resultType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const resultData = results[resultType];
+            
+            resultTitle.innerHTML = resultData.title;
+            resultSubtitle.innerHTML = resultData.subtitle;
+            lightSide.innerHTML = resultData.light;
+            shadowSide.innerHTML = resultData.shadow;
+            letterContent.innerHTML = resultData.letter;
+            
+            switchScreen(loadingScreen, resultScreen);
+        }
+
+        // 테스트 시작 함수
+        function startDive() {
+            switchScreen(welcomeScreen, questionScreen);
+            showQuestion();
+        }
+
+        // 다시 시작 함수
+        function restartDive() {
+            currentQuestionIndex = 0;
+            scores = { pearl: 0, current: 0, abyss: 0, coral: 0 };
+            switchScreen(resultScreen, welcomeScreen);
+        }
+        
+        // 공유하기 함수
+        async function shareResult() {
+            const resultData = results[Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b)];
+            const shareData = {
+                title: 'MIND DIVE 결과',
+                text: `나의 마음 속 심해에는 '${resultData.title}'이(가) 살고 있었어요! 당신의 마음도 확인해보세요.`,
+                url: window.location.href
+            };
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    alert("이 브라우저에서는 공유하기 기능을 지원하지 않습니다.");
+                }
+            } catch (err) {
+                console.error("공유 실패:", err);
+            }
+        }
+
+        // 링크 복사 함수
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('링크가 복사되었습니다!');
+            }).catch(err => {
+                console.error('복사 실패:', err);
+                alert('링크 복사에 실패했습니다.');
+            });
+        }
+        
+        // 시작 버튼에 이벤트 리스너 추가
+        startButton.addEventListener('click', startDive);
+
+    </script>
+</body>
+</html>
