@@ -173,7 +173,7 @@
 
 <body>
     <audio id="bgm" loop>
-        <source src="path/to/your/audio.mp3" type="audio/mpeg">
+        <source src="" type="audio/mpeg">
     </audio>
 
     <div class="container">
@@ -242,24 +242,31 @@
             </div>
 
             <div class="action-buttons">
-                <button class="btn-secondary" onclick="shareResult()">탐사 결과 공유</button>
-                <button class="btn-secondary" onclick="copyLink()">링크 복사</button>
+                <button class="btn-secondary" id="shareButton">탐사 결과 공유</button>
+                <button class="btn-secondary" id="copyButton">링크 복사</button>
             </div>
-            <button class="btn-text" onclick="restartDive()">다시 잠수하기</button>
+            <button class="btn-text" id="restartButton">다시 잠수하기</button>
         </div>
     </div>
 
     <script>
-    // 페이지의 모든 HTML 요소가 로드된 후 스크립트를 실행합니다. (버튼 클릭 오류 방지)
+    // 페이지의 모든 HTML 요소가 로드된 후 스크립트를 실행합니다. (오류 방지)
     document.addEventListener('DOMContentLoaded', function() {
 
         // --- DOM Elements ---
-        const welcomeScreen = document.getElementById('welcomeScreen');
-        const divingScreen = document.getElementById('divingScreen');
-        const questionScreen = document.getElementById('questionScreen');
-        const loadingScreen = document.getElementById('loadingScreen');
-        const resultScreen = document.getElementById('resultScreen');
-        const startButton = document.getElementById('startButton');
+        const screens = {
+            welcome: document.getElementById('welcomeScreen'),
+            diving: document.getElementById('divingScreen'),
+            question: document.getElementById('questionScreen'),
+            loading: document.getElementById('loadingScreen'),
+            result: document.getElementById('resultScreen')
+        };
+        const buttons = {
+            start: document.getElementById('startButton'),
+            share: document.getElementById('shareButton'),
+            copy: document.getElementById('copyButton'),
+            restart: document.getElementById('restartButton')
+        };
         const bgm = document.getElementById('bgm');
         
         const divingMessage = document.getElementById('divingMessage');
@@ -279,7 +286,7 @@
         let currentQuestionIndex = 0;
         let scores = { internal: 0, external: 0, stable: 0, fluid: 0 };
 
-        // --- Data ---
+        // --- Data (Questions and Results are identical to previous version) ---
         const questions = [
             { depth: "10m", zone: "빛이 스미는 표층", text: "고요한 바다에 처음 발을 담급니다.\n수면에 비친 당신의 모습에서 가장 먼저 눈에 들어오는 것은 무엇인가요?", options: [{ t: "잔잔하게 일렁이는 윤슬", s: { external: 1, fluid: 1 } }, { t: "알 수 없는 깊이의 푸른색", s: { internal: 1, stable: 1 } }, { t: "하늘과 구름의 경계 없는 비침", s: { external: 1, stable: 1 } }, { t: "내 안으로 가라앉는 나의 시선", s: { internal: 1, fluid: 1 } }] },
             { depth: "50m", zone: "빛이 스미는 표층", text: "주변으로 작은 물고기 떼가 모여듭니다.\n당신은 어떤 행동을 보이나요?", options: [{ t: "손을 뻗어 함께 유영하려 한다", s: { external: 1, fluid: 1 } }, { t: "그들의 움직임을 가만히 관찰한다", s: { internal: 1, stable: 1 } }, { t: "내가 갈 길을 향해 묵묵히 나아간다", s: { internal: 1, fluid: 1 } }, { t: "더 많은 생물이 있을 곳을 찾아 움직인다", s: { external: 1, stable: 1 } }] },
@@ -290,7 +297,6 @@
             { depth: "4,000m", zone: "미지의 심연", text: "마침내 심해의 바닥에 도착했습니다. 탐사를 계속할지, 아니면 이곳에 머물지 선택해야 합니다. 당신의 마음이 향하는 곳은?", options: [{ t: "이 평온함 속에 잠시 머물고 싶다", s: { internal: 1, stable: 1 } }, { t: "아직 발견하지 못한 무언가를 찾아 더 나아간다", s: { external: 1, fluid: 1 } }, { t: "이곳의 지도를 그려 다른 탐사자에게 알린다", s: { external: 1, stable: 1 } }, { t: "지금까지의 여정을 되짚어보며 의미를 찾는다", s: { internal: 1, fluid: 1 } }] },
             { depth: "6,000m", zone: "미지의 심연", text: "탐사의 끝에서, 당신은 무언가를 발견합니다. 그것은 당신에게 어떤 의미로 다가오나요?", options: [{ t: "오랜 시간 지켜온 변치 않는 가치", s: { stable: 2 } }, { t: "세상과 나를 연결하는 따뜻한 온기", s: { external: 2 } }, { t: "내 안에 숨겨져 있던 또 다른 나의 모습", s: { internal: 2 } }, { t: "자유롭게 흘러갈 새로운 시작점", s: { fluid: 2 } }] }
         ];
-
         const results = {
             'internal-stable': { title: "심해의 진주", sub: "고요히 빛을 머금은 영혼", essence: "당신은 외부의 소란에 쉽게 흔들리지 않는 깊은 내면의 힘을 지녔습니다. 혼자만의 시간을 통해 에너지를 얻고, 복잡한 세상 속에서 자신만의 중심을 지키려 노력하죠. 상처와 고독을 회피하기보다, 그것을 끌어안고 단단한 아름다움으로 만들어내는 성숙함을 가지고 있습니다.", advice: "당신의 깊이는 때로 스스로를 고립시킬 수 있습니다. 괜찮다면, 당신이 오랜 시간 품어온 그 영롱한 빛을 가끔은 세상에 보여주세요. 당신의 고요한 위로가 필요한 사람이 분명 있을 거예요.", comfort: "진주가 되기 위해 모래알이 겪었을 수많은 밤을 기억하세요.<br><strong>당신의 모든 상처와 인내는 결코 헛되지 않았습니다.</strong>" },
             'internal-fluid': { title: "미광 해파리", sub: "어둠 속을 유영하는 자유로운 영혼", essence: "당신은 정해진 길을 따르기보다, 내면의 흐름과 직관에 몸을 맡기는 자유로운 영혼입니다. 생각의 경계가 없고, 예술적인 감수성이 풍부하죠. 혼자만의 사색과 상상 속에서 누구보다 화려한 빛을 발하며, 당신의 존재 자체가 하나의 신비로운 예술 작품과 같습니다.", advice: "자유로운 당신의 흐름은 때로 현실의 뭍과 부딪히며 상처받을 수 있습니다. 당신의 연약한 빛을 지켜줄 단단한 무언가를 곁에 두는 것을 잊지 마세요. 그것이 사람이든, 신념이든, 혹은 작은 습관이든 좋습니다.", comfort: "세상의 속도에 맞출 필요 없어요.<br><strong>당신만의 박자로 유영할 때 가장 아름답게 빛나니까요.</strong>" },
@@ -313,9 +319,9 @@
             const question = questions[currentQuestionIndex];
             divingMessage.textContent = `${question.zone}으로...`;
             divingDepth.textContent = `수심 ${question.depth}`;
-            switchScreen(questionScreen, divingScreen);
+            switchScreen(screens.question, screens.diving);
             setTimeout(() => {
-                switchScreen(divingScreen, questionScreen);
+                switchScreen(screens.diving, screens.question);
                 callback();
             }, 1800);
         }
@@ -350,7 +356,7 @@
         }
         
         function showLoadingAndResult() {
-            switchScreen(questionScreen, loadingScreen);
+            switchScreen(screens.question, screens.loading);
             setTimeout(calculateAndShowResult, 3000);
         }
 
@@ -368,34 +374,45 @@
             resultEssence.innerHTML = resultData.essence;
             resultAdvice.innerHTML = resultData.advice;
             resultComfort.innerHTML = resultData.comfort;
-            switchScreen(loadingScreen, resultScreen);
+            switchScreen(screens.loading, screens.result);
         }
         
         function startDive() {
-            bgm.play().catch(e => console.log("BGM 자동 재생이 차단되었습니다. 사용자 상호작용이 필요합니다."));
+            // BGM 재생 시도 (오류가 발생해도 다음 코드는 실행됨)
+            try {
+                if (bgm && bgm.querySelector('source') && bgm.querySelector('source').getAttribute('src')) {
+                    bgm.play();
+                }
+            } catch (error) {
+                console.error("BGM 재생 중 오류가 발생했습니다:", error);
+            }
+
+            // 테스트 시작
             currentQuestionIndex = 0;
             scores = { internal: 0, external: 0, stable: 0, fluid: 0 };
-            switchScreen(welcomeScreen, questionScreen);
+            switchScreen(screens.welcome, screens.question);
             showQuestion();
         }
 
         function restartDive() {
-            switchScreen(resultScreen, welcomeScreen);
+            switchScreen(screens.result, screens.welcome);
         }
-
-        // --- Global Functions for onclick ---
-        window.shareResult = async function() {
+        
+        async function shareResult() {
             try {
                 await navigator.share({ title: 'MIND DIVE - 나의 탐사 결과', text: `나의 마음 속 심해에서 '${resultTitle.textContent}'을(를) 발견했어요.`, url: window.location.href });
             } catch (err) { alert("공유하기를 지원하지 않는 환경입니다."); }
         }
-        window.copyLink = function() {
+
+        function copyLink() {
             navigator.clipboard.writeText(window.location.href).then(() => alert('탐사 기록 링크가 복사되었습니다!'));
         }
-        window.restartDive = restartDive;
 
         // --- Event Listeners ---
-        startButton.addEventListener('click', startDive);
+        buttons.start.addEventListener('click', startDive);
+        buttons.share.addEventListener('click', shareResult);
+        buttons.copy.addEventListener('click', copyLink);
+        buttons.restart.addEventListener('click', restartDive);
     });
     </script>
 </body>
