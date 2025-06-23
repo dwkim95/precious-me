@@ -1,4 +1,383 @@
-<!DOCTYPE html>
+// DOM 요소들
+        const elements = {
+            welcomeScreen: document.getElementById('welcomeScreen'),
+            questionScreen: document.getElementById('questionScreen'),
+            loadingScreen: document.getElementById('loadingScreen'),
+            resultScreen: document.getElementById('resultScreen'),
+            startButton: document.getElementById('startButton'),
+            progressText: document.getElementById('progressText'),
+            progressFill: document.getElementById('progressFill'),
+            questionText: document.getElementById('questionText'),
+            optionsContainer: document.getElementById('optionsContainer'),
+            loadingText: document.getElementById('loadingText'),
+            landscapeTitle: document.getElementById('landscapeTitle'),
+            landscapeSubtitle: document.getElementById('landscapeSubtitle'),
+            lightTitle: document.getElementById('lightTitle'),
+            lightText: document.getElementById('lightText'),
+            shadowTitle: document.getElementById('shadowTitle'),
+            shadowText: document.getElementById('shadowText'),
+            comfortMessage: document.getElementById('comfortMessage'),
+            shareBtn: document.getElementById('shareBtn'),
+            copyBtn: document.getElementById('copyBtn'),
+            restartBtn: document.getElementById('restartBtn')
+        };
+
+        // 초기화
+        function init() {
+            createBubbles();
+            bindEvents();
+            showWelcomeScreen();
+        }
+
+        // 배경 기포 생성
+        function createBubbles() {
+            const bubblesContainer = document.getElementById('bubbles');
+            if (!bubblesContainer) return;
+            
+            for (let i = 0; i < 15; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.width = (Math.random() * 8 + 4) + 'px';
+                bubble.style.height = bubble.style.width;
+                bubble.style.animationDelay = Math.random() * 8 + 's';
+                bubble.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+
+        // 이벤트 바인딩
+        function bindEvents() {
+            if (elements.startButton) {
+                elements.startButton.addEventListener('click', startSurvey);
+            }
+            if (elements.restartBtn) {
+                elements.restartBtn.addEventListener('click', restartSurvey);
+            }
+            if (elements.shareBtn) {
+                elements.shareBtn.addEventListener('click', shareResult);
+            }
+            if (elements.copyBtn) {
+                elements.copyBtn.addEventListener('click', copyLink);
+            }
+        }
+
+        // 시작 화면 표시
+        function showWelcomeScreen() {
+            hideAllScreens();
+            if (elements.welcomeScreen) {
+                elements.welcomeScreen.style.display = 'block';
+            }
+        }
+
+        // 설문 시작
+        function startSurvey() {
+            hideAllScreens();
+            if (elements.questionScreen) {
+                elements.questionScreen.classList.add('active');
+            }
+            AppState.currentQuestion = 0;
+            AppState.scores = {};
+            AppState.answers = {};
+            showQuestion();
+        }
+
+        // 질문 표시
+        function showQuestion() {
+            if (!questions || AppState.currentQuestion >= questions.length) return;
+            
+            const question = questions[AppState.currentQuestion];
+            const progress = ((AppState.currentQuestion + 1) / questions.length) * 100;
+            
+            // 진행률 업데이트
+            if (elements.progressText) {
+                elements.progressText.textContent = `${question.depth} 탐험 중... (${AppState.currentQuestion + 1}/${questions.length})`;
+            }
+            if (elements.progressFill) {
+                elements.progressFill.style.width = progress + '%';
+            }
+            
+            // 질문 텍스트 표시 (애니메이션과 함께)
+            if (elements.questionText) {
+                elements.questionText.style.opacity = '0';
+                elements.questionText.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    elements.questionText.textContent = question.question;
+                    elements.questionText.style.opacity = '1';
+                    elements.questionText.style.transform = 'translateY(0)';
+                    elements.questionText.style.transition = 'all 0.6s ease';
+                }, 200);
+            }
+            
+            // 옵션 생성 (순차적 애니메이션)
+            if (elements.optionsContainer) {
+                elements.optionsContainer.innerHTML = '';
+                question.options.forEach((option, index) => {
+                    const optionEl = document.createElement('div');
+                    optionEl.className = 'option';
+                    optionEl.textContent = option.text;
+                    optionEl.style.opacity = '0';
+                    optionEl.style.transform = 'translateY(30px)';
+                    optionEl.addEventListener('click', () => selectOption(option, index));
+                    elements.optionsContainer.appendChild(optionEl);
+                    
+                    // 순차적 애니메이션
+                    setTimeout(() => {
+                        optionEl.style.opacity = '1';
+                        optionEl.style.transform = 'translateY(0)';
+                        optionEl.style.transition = 'all 0.5s ease';
+                    }, 400 + (index * 100));
+                });
+            }
+        }
+
+        // 옵션 선택
+        function selectOption(option, index) {
+            // 점수 업데이트
+            AppState.scores[option.weight] = (AppState.scores[option.weight] || 0) + 1;
+            AppState.answers[AppState.currentQuestion] = option;
+            
+            // 선택 효과
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i !== index) {
+                    opt.style.opacity = '0.4';
+                    opt.style.transform = 'scale(0.98)';
+                }
+            });
+            
+            const selectedOption = options[index];
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+                selectedOption.style.transform = 'scale(1.03)';
+                selectedOption.style.boxShadow = '0 8px 25px rgba(15, 118, 110, 0.4)';
+                
+                // 리플 효과
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(15, 118, 110, 0.6)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.marginLeft = '-10px';
+                ripple.style.marginTop = '-10px';
+                selectedOption.style.position = 'relative';
+                selectedOption.appendChild(ripple);
+            }
+            
+            // 다음 질문으로 이동
+            setTimeout(() => {
+                AppState.currentQuestion++;
+                if (AppState.currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showLoading();
+                }
+            }, 800);
+        }
+
+        // 로딩 화면 표시
+        function showLoading() {
+            hideAllScreens();
+            if (elements.loadingScreen) {
+                elements.loadingScreen.classList.add('active');
+            }
+            
+            // 로딩 텍스트 변화
+            const loadingTexts = [
+                "아스트라가 당신의 마음을 깊이 분석하고 있어요...<br>심해에서 특별한 무언가를 발견했습니다 ✨",
+                "당신의 답변에서 특별한 패턴을 찾았어요.<br>마음의 더 깊은 층으로 내려가는 중...",
+                "마음의 가장 깊은 곳에서<br>당신만의 고유한 풍경을 발견했습니다...",
+                "아스트라가 최종 분석을 마무리하고 있어요.<br>곧 당신의 진짜 모습을 보여드릴게요 🌊"
+            ];
+            
+            let textIndex = 0;
+            const textInterval = setInterval(() => {
+                if (textIndex < loadingTexts.length && elements.loadingText) {
+                    elements.loadingText.style.opacity = '0';
+                    setTimeout(() => {
+                        elements.loadingText.innerHTML = loadingTexts[textIndex];
+                        elements.loadingText.style.opacity = '1';
+                        textIndex++;
+                    }, 300);
+                }
+            }, 2000);
+            
+            // 8초 후 결과 표시
+            setTimeout(() => {
+                clearInterval(textInterval);
+                showResult();
+            }, 8000);
+        }
+
+        // 결과 분석
+        function analyzeResult() {
+            const sortedScores = Object.entries(AppState.scores)
+                .sort(([,a], [,b]) => b - a);
+            
+            return sortedScores.length > 0 ? sortedScores[0][0] : 'depths';
+        }
+
+        // 결과 표시
+        function showResult() {
+            const resultType = analyzeResult();
+            const landscape = landscapes[resultType];
+            
+            if (!landscape) return;
+            
+            hideAllScreens();
+            if (elements.resultScreen) {
+                elements.resultScreen.classList.add('active');
+            }
+            
+            // 결과 내용 업데이트
+            if (elements.landscapeTitle) {
+                elements.landscapeTitle.textContent = landscape.title;
+            }
+            if (elements.landscapeSubtitle) {
+                elements.landscapeSubtitle.textContent = landscape.subtitle;
+            }
+            if (elements.lightTitle) {
+                elements.lightTitle.textContent = landscape.lightTitle;
+            }
+            if (elements.lightText) {
+                elements.lightText.textContent = landscape.lightText;
+            }
+            if (elements.shadowTitle) {
+                elements.shadowTitle.textContent = landscape.shadowTitle;
+            }
+            if (elements.shadowText) {
+                elements.shadowText.textContent = landscape.shadowText;
+            }
+            if (elements.comfortMessage) {
+                elements.comfortMessage.innerHTML = landscape.comfort;
+            }
+        }
+
+        // 모든 화면 숨기기
+        function hideAllScreens() {
+            if (elements.welcomeScreen) {
+                elements.welcomeScreen.style.display = 'none';
+            }
+            if (elements.questionScreen) {
+                elements.questionScreen.classList.remove('active');
+            }
+            if (elements.loadingScreen) {
+                elements.loadingScreen.classList.remove('active');
+            }
+            if (elements.resultScreen) {
+                elements.resultScreen.classList.remove('active');
+            }
+        }
+
+        // 다시 시작
+        function restartSurvey() {
+            AppState.currentQuestion = 0;
+            AppState.scores = {};
+            AppState.answers = {};
+            showWelcomeScreen();
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const resultType = analyzeResult();
+            const landscape = landscapes[resultType];
+            
+            if (!landscape) return;
+            
+            const shareText = `🌊 MIND DIVE 결과 🌊\n\n내 마음 깊은 곳에서 발견한 풍경은...\n\n${landscape.title}\n${landscape.subtitle}\n\n당신의 마음속에는 어떤 풍경이 펼쳐져 있을까요?`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'MIND DIVE - 마음의 심해 여행',
+                    text: shareText,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                copyToClipboard(shareText + '\n\n' + window.location.href);
+                showMessage('공유 텍스트가 복사되었습니다! 🌊✨');
+            }
+        }
+
+        // 링크 복사
+        function copyLink() {
+            copyToClipboard(window.location.href);
+            
+            // 복사 완료 애니메이션
+            if (elements.copyBtn) {
+                const originalText = elements.copyBtn.textContent;
+                elements.copyBtn.textContent = '복사 완료! ✨';
+                elements.copyBtn.style.background = 'rgba(34, 197, 94, 0.2)';
+                elements.copyBtn.style.borderColor = '#22c55e';
+                
+                setTimeout(() => {
+                    elements.copyBtn.textContent = originalText;
+                    elements.copyBtn.style.background = 'rgba(255, 255, 255, 0.15)';
+                    elements.copyBtn.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                }, 2000);
+            }
+        }
+
+        // 클립보드 복사
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).catch(() => {
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        // 폴백 복사 방법
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('복사 실패:', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // 메시지 표시
+        function showMessage(message) {
+            // 모바일에서 alert 대신 사용할 수 있는 간단한 토스트 메시지
+            if (typeof alert === 'function') {
+                alert(message);
+            }
+        }
+
+        // 앱 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM이 완전히 로드된 후 초기화
+            setTimeout(init, 100);
+        });
+
+        // 오류 처리
+        window.addEventListener('error', function(e) {
+            console.error('앱 오류:', e.error);
+            // 오류 발생시 시작 화면으로 돌아가기
+            showWelcomeScreen();
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -17,17 +396,22 @@
             box-sizing: border-box;
         }
 
+        html {
+            font-size: 16px;
+        }
+
         body {
             font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 20%, #1d4ed8 40%, #2563eb 60%, #3b82f6 80%, #60a5fa 100%);
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 20%, #334155 40%, #475569 60%, #64748b 80%, #94a3b8 100%);
             color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
+            font-weight: 400;
         }
 
-        /* 물결 애니메이션 */
+        /* 차분한 물결 애니메이션 */
         body::before {
             content: '';
             position: fixed;
@@ -36,10 +420,10 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
-            animation: underwater 15s ease-in-out infinite;
+                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+            animation: underwater 20s ease-in-out infinite;
             pointer-events: none;
             z-index: 1;
         }
@@ -47,11 +431,11 @@
         @keyframes underwater {
             0%, 100% { 
                 transform: translateY(0px) scale(1);
-                opacity: 0.7;
+                opacity: 0.5;
             }
             50% { 
-                transform: translateY(-20px) scale(1.02);
-                opacity: 0.9;
+                transform: translateY(-10px) scale(1.01);
+                opacity: 0.7;
             }
         }
 
@@ -68,7 +452,7 @@
             z-index: 10;
         }
 
-        /* 기포 효과 */
+        /* 부드러운 기포 효과 */
         .bubbles {
             position: fixed;
             top: 0;
@@ -81,11 +465,11 @@
 
         .bubble {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.3);
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            animation: float-up 6s infinite ease-in-out;
+            animation: float-up 8s infinite ease-in-out;
         }
 
         @keyframes float-up {
@@ -95,22 +479,22 @@
                 transform: translateX(0) scale(1);
             }
             20% {
-                opacity: 1;
+                opacity: 0.7;
             }
             80% {
-                opacity: 1;
+                opacity: 0.7;
             }
             100% {
                 bottom: 100vh;
                 opacity: 0;
-                transform: translateX(50px) scale(0.5);
+                transform: translateX(30px) scale(0.3);
             }
         }
 
         /* 시작 화면 */
         .welcome-screen {
             text-align: center;
-            animation: fadeIn 1s ease-out;
+            animation: fadeIn 1.5s ease-out;
             width: 100%;
             max-width: 500px;
         }
@@ -120,61 +504,64 @@
         }
 
         .welcome-title {
-            font-size: 48px;
+            font-size: 3rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ffffff, #e0f2fe, #b3e5fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
-            animation: glow 3s ease-in-out infinite alternate;
+            margin-bottom: 1.5rem;
+            color: #e2e8f0;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+            animation: glow 4s ease-in-out infinite alternate;
+            letter-spacing: 0.1em;
         }
 
         @keyframes glow {
-            from { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3)); }
-            to { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6)); }
+            from { 
+                filter: drop-shadow(0 0 10px rgba(226, 232, 240, 0.3));
+                transform: scale(1);
+            }
+            to { 
+                filter: drop-shadow(0 0 20px rgba(226, 232, 240, 0.5));
+                transform: scale(1.02);
+            }
         }
 
         .prologue {
             font-family: 'Noto Serif KR', serif;
-            font-size: 18px;
+            font-size: 1.125rem;
             line-height: 1.8;
-            margin-bottom: 40px;
+            margin-bottom: 2.5rem;
             opacity: 0;
-            animation: slideUp 1s ease-out 0.5s forwards;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: 15px;
+            animation: slideUp 1.5s ease-out 0.8s forwards;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2rem;
+            border-radius: 1rem;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f1f5f9;
+            font-weight: 300;
         }
 
         .start-button {
-            background: linear-gradient(135deg, #0ea5e9, #0284c7, #0369a1);
+            background: linear-gradient(135deg, #1e40af, #1d4ed8, #2563eb);
             color: white;
             border: none;
-            padding: 18px 36px;
-            font-size: 18px;
+            padding: 1.125rem 2.25rem;
+            font-size: 1.125rem;
             font-weight: 600;
-            border-radius: 50px;
+            border-radius: 3rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             opacity: 0;
-            animation: slideUp 1s ease-out 1.5s forwards, pulse 2s infinite 2.5s;
+            animation: slideUp 1.5s ease-out 2s forwards;
             font-family: 'Noto Sans KR', sans-serif;
-            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.05em;
         }
 
         .start-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.6);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
+            background: linear-gradient(135deg, #1d4ed8, #2563eb, #3b82f6);
         }
 
         /* 질문 화면 */
@@ -190,75 +577,80 @@
         }
 
         .progress-container {
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
             text-align: center;
         }
 
         .progress-text {
-            font-size: 16px;
-            color: #e0f2fe;
-            margin-bottom: 15px;
+            font-size: 1rem;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
             font-weight: 500;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.05em;
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #06b6d4, #0891b2, #0e7490);
-            border-radius: 4px;
-            transition: width 0.8s ease;
+            background: linear-gradient(90deg, #0f766e, #0d9488, #14b8a6);
+            border-radius: 3px;
+            transition: width 1s ease;
             width: 0%;
-            box-shadow: 0 2px 10px rgba(6, 182, 212, 0.5);
+            box-shadow: 0 2px 8px rgba(15, 118, 110, 0.4);
         }
 
         .question-text {
             font-family: 'Noto Serif KR', serif;
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 1.375rem;
+            font-weight: 500;
             text-align: center;
-            margin-bottom: 30px;
-            line-height: 1.5;
+            margin-bottom: 2rem;
+            line-height: 1.6;
             white-space: pre-line;
             transition: all 0.6s ease;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2rem;
+            border-radius: 1rem;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #f8fafc;
+            font-weight: 400;
         }
 
         .options-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .option {
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.25);
-            border-radius: 15px;
-            padding: 20px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.875rem;
+            padding: 1.25rem 1.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: left;
-            font-size: 16px;
-            line-height: 1.5;
+            font-size: 1rem;
+            line-height: 1.6;
             transform: translateY(0);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
+            color: #f1f5f9;
+            font-weight: 400;
         }
 
         .option::before {
@@ -268,15 +660,15 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
         }
 
         .option:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
         }
 
         .option:hover::before {
@@ -284,10 +676,10 @@
         }
 
         .option.selected {
-            background: rgba(6, 182, 212, 0.3);
-            border-color: #06b6d4;
+            background: rgba(15, 118, 110, 0.25);
+            border-color: #0f766e;
             transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+            box-shadow: 0 8px 25px rgba(15, 118, 110, 0.3);
         }
 
         /* 리플 효과 */
@@ -312,27 +704,27 @@
         }
 
         .loading-spinner {
-            width: 100px;
-            height: 100px;
-            border: 5px solid rgba(255, 255, 255, 0.2);
-            border-top: 5px solid #06b6d4;
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 255, 255, 0.15);
+            border-top: 4px solid #0f766e;
             border-radius: 50%;
-            animation: spin 2s linear infinite, depth-pulse 3s ease-in-out infinite;
-            margin: 0 auto 30px;
+            animation: spin 2.5s linear infinite, depth-pulse 4s ease-in-out infinite;
+            margin: 0 auto 2rem;
             position: relative;
         }
 
         .loading-spinner::after {
             content: '';
             position: absolute;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            bottom: 15px;
-            border: 3px solid rgba(14, 116, 144, 0.3);
-            border-top: 3px solid #0e7490;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            border: 3px solid rgba(20, 184, 166, 0.2);
+            border-top: 3px solid #14b8a6;
             border-radius: 50%;
-            animation: spin 1.5s linear infinite reverse;
+            animation: spin 2s linear infinite reverse;
         }
 
         @keyframes spin {
@@ -343,29 +735,30 @@
         @keyframes depth-pulse {
             0%, 100% { 
                 transform: scale(1);
-                box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+                box-shadow: 0 0 15px rgba(15, 118, 110, 0.3);
             }
             50% { 
-                transform: scale(1.1);
-                box-shadow: 0 0 40px rgba(6, 182, 212, 0.6);
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(15, 118, 110, 0.5);
             }
         }
 
         .loading-text {
             font-family: 'Noto Serif KR', serif;
-            font-size: 18px;
+            font-size: 1.125rem;
             line-height: 1.8;
-            color: #e0f2fe;
-            animation: breathe 2s ease-in-out infinite;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
+            color: #e2e8f0;
+            animation: breathe 3s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 1.5rem;
+            border-radius: 1rem;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-weight: 300;
         }
 
         @keyframes breathe {
-            0%, 100% { opacity: 0.8; }
+            0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
         }
 
@@ -382,30 +775,30 @@
         }
 
         .result-card {
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
             backdrop-filter: blur(15px);
-            animation: slideInFromBottom 0.8s ease-out;
-            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+            animation: slideInFromBottom 1s ease-out;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .result-card:nth-child(2) {
-            animation-delay: 0.3s;
+            animation-delay: 0.4s;
             animation-fill-mode: both;
         }
 
         .result-card:nth-child(3) {
-            animation-delay: 0.6s;
+            animation-delay: 0.8s;
             animation-fill-mode: both;
         }
 
         @keyframes slideInFromBottom {
             from {
                 opacity: 0;
-                transform: translateY(50px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -415,98 +808,106 @@
 
         .landscape-title {
             font-family: 'Noto Serif KR', serif;
-            font-size: 36px;
+            font-size: 2.25rem;
             font-weight: 700;
             text-align: center;
-            margin-bottom: 15px;
-            color: #ffffff;
-            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
-            animation: glow 3s ease-in-out infinite alternate;
+            margin-bottom: 1rem;
+            color: #f8fafc;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+            animation: glow 4s ease-in-out infinite alternate;
+            letter-spacing: 0.05em;
         }
 
         .landscape-subtitle {
-            font-size: 18px;
+            font-size: 1.125rem;
             text-align: center;
-            margin-bottom: 30px;
-            color: #e0f2fe;
+            margin-bottom: 2rem;
+            color: #cbd5e1;
             font-style: italic;
             line-height: 1.6;
             opacity: 0.9;
+            font-weight: 300;
         }
 
         .section-title {
             font-family: 'Noto Serif KR', serif;
-            font-size: 22px;
+            font-size: 1.375rem;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
             color: #67e8f9;
-            text-shadow: 0 2px 10px rgba(103, 232, 249, 0.3);
+            text-shadow: 0 2px 10px rgba(103, 232, 249, 0.2);
+            letter-spacing: 0.03em;
         }
 
         .section-content {
-            font-size: 16px;
+            font-size: 1rem;
             line-height: 1.8;
-            margin-bottom: 25px;
-            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            font-weight: 400;
         }
 
         .comfort-message {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(14, 165, 233, 0.1));
-            border-left: 4px solid #06b6d4;
-            padding: 30px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.15), rgba(20, 184, 166, 0.08));
+            border-left: 4px solid #0f766e;
+            padding: 2rem;
+            border-radius: 1rem;
             font-family: 'Noto Sans KR', sans-serif;
-            font-size: 16px;
-            line-height: 2;
+            font-size: 1rem;
+            line-height: 1.9;
             white-space: pre-line;
-            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
+            box-shadow: 0 4px 20px rgba(15, 118, 110, 0.15);
             backdrop-filter: blur(10px);
+            color: #f1f5f9;
+            font-weight: 400;
         }
 
         .share-buttons {
             display: flex;
-            gap: 15px;
+            gap: 1rem;
             justify-content: center;
-            margin-top: 30px;
+            margin-top: 2rem;
             flex-wrap: wrap;
         }
 
         .share-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            padding: 15px 30px;
-            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            padding: 0.875rem 1.5rem;
+            border-radius: 2rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 500;
             backdrop-filter: blur(10px);
+            letter-spacing: 0.03em;
         }
 
         .share-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
         }
 
         .restart-btn {
             display: block;
-            margin: 25px auto 0;
+            margin: 1.5rem auto 0;
             background: transparent;
-            color: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            padding: 12px 25px;
-            border-radius: 25px;
+            color: rgba(255, 255, 255, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 1.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 400;
         }
 
         .restart-btn:hover {
             color: white;
             border-color: white;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         /* 애니메이션 */
@@ -526,75 +927,213 @@
             }
         }
 
-        /* 반응형 디자인 */
+        /* 반응형 디자인 - 모바일 우선 */
         @media (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+
             .container {
-                padding: 15px;
+                padding: 1rem;
             }
 
             .welcome-title {
-                font-size: 36px;
+                font-size: 2.5rem;
+                margin-bottom: 1.5rem;
+                line-height: 1.2;
             }
 
             .prologue {
-                font-size: 16px;
-                padding: 20px;
+                font-size: 1rem;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                line-height: 1.7;
+            }
+
+            .start-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
             }
 
             .question-text {
-                font-size: 20px;
-                padding: 20px;
+                font-size: 1.25rem;
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+                line-height: 1.5;
             }
 
             .option {
-                padding: 18px 20px;
-                font-size: 15px;
+                padding: 1rem 1.25rem;
+                font-size: 0.95rem;
+                line-height: 1.5;
             }
 
             .landscape-title {
-                font-size: 28px;
+                font-size: 2rem;
+                margin-bottom: 1rem;
+                line-height: 1.3;
+            }
+
+            .landscape-subtitle {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+                line-height: 1.5;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+                margin-bottom: 0.875rem;
+            }
+
+            .section-content {
+                font-size: 0.95rem;
+                line-height: 1.7;
+                margin-bottom: 1.25rem;
+            }
+
+            .comfort-message {
+                padding: 1.5rem;
+                font-size: 0.95rem;
+                line-height: 1.8;
             }
 
             .result-card {
-                padding: 25px;
+                padding: 1.5rem;
+                margin-bottom: 1.25rem;
             }
 
             .share-buttons {
                 flex-direction: column;
                 align-items: center;
+                gap: 0.875rem;
             }
 
             .share-btn {
-                width: 250px;
+                width: 100%;
+                max-width: 250px;
+                padding: 1rem 1.5rem;
+            }
+
+            .loading-spinner {
+                width: 60px;
+                height: 60px;
+                border-width: 3px;
+            }
+
+            .loading-spinner::after {
+                top: 8px;
+                left: 8px;
+                right: 8px;
+                bottom: 8px;
+                border-width: 2px;
+            }
+
+            .loading-text {
+                font-size: 1rem;
+                padding: 1.25rem;
             }
         }
 
         @media (max-width: 480px) {
+            html {
+                font-size: 13px;
+            }
+
+            .container {
+                padding: 0.875rem;
+            }
+
             .welcome-title {
-                font-size: 28px;
+                font-size: 2.25rem;
+                margin-bottom: 1.25rem;
             }
 
             .prologue {
-                font-size: 15px;
-                padding: 18px;
+                font-size: 0.95rem;
+                padding: 1.25rem;
+                margin-bottom: 1.75rem;
+            }
+
+            .start-button {
+                padding: 0.875rem 1.75rem;
+                font-size: 0.95rem;
             }
 
             .question-text {
-                font-size: 18px;
-                padding: 18px;
+                font-size: 1.125rem;
+                padding: 1.25rem;
+                margin-bottom: 1.25rem;
             }
 
             .option {
-                padding: 16px 18px;
-                font-size: 14px;
+                padding: 0.875rem 1rem;
+                font-size: 0.9rem;
             }
 
             .landscape-title {
-                font-size: 24px;
+                font-size: 1.75rem;
+                margin-bottom: 0.875rem;
+            }
+
+            .landscape-subtitle {
+                font-size: 0.95rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .section-title {
+                font-size: 1.125rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .section-content {
+                font-size: 0.9rem;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            }
+
+            .comfort-message {
+                padding: 1.25rem;
+                font-size: 0.9rem;
+                line-height: 1.7;
             }
 
             .result-card {
-                padding: 20px;
+                padding: 1.25rem;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            html {
+                font-size: 12px;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .prologue {
+                font-size: 0.9rem;
+                padding: 1rem;
+            }
+
+            .question-text {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+
+            .option {
+                padding: 0.75rem 0.875rem;
+                font-size: 0.85rem;
+            }
+
+            .result-card {
+                padding: 1rem;
+            }
+
+            .comfort-message {
+                padding: 1rem;
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -607,18 +1146,17 @@
     <div class="container">
         <!-- 시작 화면 -->
         <div class="welcome-screen" id="welcomeScreen">
-            <h1 class="welcome-title">🌊 MIND DIVE 🌊</h1>
+            <h1 class="welcome-title">🌊 MIND DIVE</h1>
             <div class="prologue">
-                안녕하세요, 저는 당신의 마음 여행 가이드 **아스트라**입니다.<br><br>
+                안녕하세요, 저는 당신의 마음 여행 가이드 <strong>아스트라</strong>입니다.<br><br>
                 
                 오늘은 특별한 여행을 함께 떠나볼까요?<br>
-                바로 **당신의 마음 깊은 곳**으로의 여행입니다.<br><br>
+                바로 <strong>당신의 마음 깊은 곳</strong>으로의 여행입니다.<br><br>
                 
-                마음의 표면부터 시작해서<br>
-                점점 더 깊은 곳까지 내려가며<br>
-                당신이 몰랐던 **진짜 자신의 모습**을 발견해보세요.<br><br>
+                마음의 표면부터 시작해서 점점 더 깊은 곳까지 내려가며<br>
+                당신이 몰랐던 <strong>진짜 자신의 모습</strong>을 발견해보세요.<br><br>
                 
-                준비되셨나요? 🤿
+                천천히, 차분하게 준비되셨나요?
             </div>
             <button class="start-button" id="startButton">🌊 마음 속으로 다이빙!</button>
         </div>
@@ -640,8 +1178,8 @@
         <div class="loading-screen" id="loadingScreen">
             <div class="loading-spinner"></div>
             <div class="loading-text" id="loadingText">
-                아스트라가 당신의 마음을 분석하고 있어요...<br>
-                깊은 곳에서 특별한 무언가를 발견했습니다 ✨
+                아스트라가 당신의 마음을 깊이 분석하고 있어요...<br>
+                심해에서 특별한 무언가를 발견했습니다 ✨
             </div>
         </div>
 
@@ -687,289 +1225,7 @@
             scores: {},
             answers: {},
             isLoading: false
-        // DOM 요소들
-        const elements = {
-            welcomeScreen: document.getElementById('welcomeScreen'),
-            questionScreen: document.getElementById('questionScreen'),
-            loadingScreen: document.getElementById('loadingScreen'),
-            resultScreen: document.getElementById('resultScreen'),
-            startButton: document.getElementById('startButton'),
-            progressText: document.getElementById('progressText'),
-            progressFill: document.getElementById('progressFill'),
-            questionText: document.getElementById('questionText'),
-            optionsContainer: document.getElementById('optionsContainer'),
-            loadingText: document.getElementById('loadingText'),
-            landscapeTitle: document.getElementById('landscapeTitle'),
-            landscapeSubtitle: document.getElementById('landscapeSubtitle'),
-            lightTitle: document.getElementById('lightTitle'),
-            lightText: document.getElementById('lightText'),
-            shadowTitle: document.getElementById('shadowTitle'),
-            shadowText: document.getElementById('shadowText'),
-            comfortMessage: document.getElementById('comfortMessage'),
-            shareBtn: document.getElementById('shareBtn'),
-            copyBtn: document.getElementById('copyBtn'),
-            restartBtn: document.getElementById('restartBtn')
         };
-
-        // 초기화
-        function init() {
-            createBubbles();
-            bindEvents();
-            showWelcomeScreen();
-        }
-
-        // 배경 기포 생성
-        function createBubbles() {
-            const bubblesContainer = document.getElementById('bubbles');
-            for (let i = 0; i < 20; i++) {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                bubble.style.left = Math.random() * 100 + '%';
-                bubble.style.width = (Math.random() * 10 + 5) + 'px';
-                bubble.style.height = bubble.style.width;
-                bubble.style.animationDelay = Math.random() * 6 + 's';
-                bubble.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                bubblesContainer.appendChild(bubble);
-            }
-        }
-
-        // 이벤트 바인딩
-        function bindEvents() {
-            elements.startButton.addEventListener('click', startSurvey);
-            elements.restartBtn.addEventListener('click', restartSurvey);
-            elements.shareBtn.addEventListener('click', shareResult);
-            elements.copyBtn.addEventListener('click', copyLink);
-        }
-
-        // 시작 화면 표시
-        function showWelcomeScreen() {
-            hideAllScreens();
-            elements.welcomeScreen.style.display = 'block';
-        }
-
-        // 설문 시작
-        function startSurvey() {
-            hideAllScreens();
-            elements.questionScreen.classList.add('active');
-            AppState.currentQuestion = 0;
-            AppState.scores = {};
-            AppState.answers = {};
-            showQuestion();
-        }
-
-        // 질문 표시
-        function showQuestion() {
-            const question = questions[AppState.currentQuestion];
-            const progress = ((AppState.currentQuestion + 1) / questions.length) * 100;
-            
-            // 진행률 업데이트
-            elements.progressText.textContent = `${question.depth} 탐험 중... (${AppState.currentQuestion + 1}/${questions.length})`;
-            elements.progressFill.style.width = progress + '%';
-            
-            // 질문 텍스트 표시 (애니메이션과 함께)
-            elements.questionText.style.opacity = '0';
-            elements.questionText.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                elements.questionText.textContent = question.question;
-                elements.questionText.style.opacity = '1';
-                elements.questionText.style.transform = 'translateY(0)';
-                elements.questionText.style.transition = 'all 0.6s ease';
-            }, 200);
-            
-            // 옵션 생성 (순차적 애니메이션)
-            elements.optionsContainer.innerHTML = '';
-            question.options.forEach((option, index) => {
-                const optionEl = document.createElement('div');
-                optionEl.className = 'option';
-                optionEl.textContent = option.text;
-                optionEl.style.opacity = '0';
-                optionEl.style.transform = 'translateY(30px)';
-                optionEl.addEventListener('click', () => selectOption(option, index));
-                elements.optionsContainer.appendChild(optionEl);
-                
-                // 순차적 애니메이션
-                setTimeout(() => {
-                    optionEl.style.opacity = '1';
-                    optionEl.style.transform = 'translateY(0)';
-                    optionEl.style.transition = 'all 0.5s ease';
-                }, 400 + (index * 100));
-            });
-        }
-
-        // 옵션 선택
-        function selectOption(option, index) {
-            // 점수 업데이트
-            AppState.scores[option.weight] = (AppState.scores[option.weight] || 0) + 1;
-            AppState.answers[AppState.currentQuestion] = option;
-            
-            // 선택 효과 (파도 애니메이션)
-            const options = document.querySelectorAll('.option');
-            options.forEach((opt, i) => {
-                opt.classList.remove('selected');
-                if (i !== index) {
-                    opt.style.opacity = '0.3';
-                    opt.style.transform = 'scale(0.95)';
-                }
-            });
-            
-            const selectedOption = options[index];
-            selectedOption.classList.add('selected');
-            selectedOption.style.transform = 'scale(1.05)';
-            selectedOption.style.boxShadow = '0 8px 25px rgba(6, 182, 212, 0.5)';
-            
-            // 리플 효과
-            const ripple = document.createElement('div');
-            ripple.style.position = 'absolute';
-            ripple.style.borderRadius = '50%';
-            ripple.style.background = 'rgba(6, 182, 212, 0.6)';
-            ripple.style.transform = 'scale(0)';
-            ripple.style.animation = 'ripple 0.6s linear';
-            ripple.style.left = '50%';
-            ripple.style.top = '50%';
-            ripple.style.width = '20px';
-            ripple.style.height = '20px';
-            ripple.style.marginLeft = '-10px';
-            ripple.style.marginTop = '-10px';
-            selectedOption.style.position = 'relative';
-            selectedOption.appendChild(ripple);
-            
-            // 다음 질문으로 이동
-            setTimeout(() => {
-                AppState.currentQuestion++;
-                if (AppState.currentQuestion < questions.length) {
-                    showQuestion();
-                } else {
-                    showLoading();
-                }
-            }, 800);
-        }
-
-        // 로딩 화면 표시
-        function showLoading() {
-            hideAllScreens();
-            elements.loadingScreen.classList.add('active');
-            
-            // 로딩 텍스트 변화
-            const loadingTexts = [
-                "아스트라가 당신의 마음을 분석하고 있어요...<br>깊은 곳에서 특별한 무언가를 발견했습니다 ✨",
-                "당신의 답변에서 특별한 패턴을 찾았어요.<br>마음의 더 깊은 층으로 내려가는 중...",
-                "마음의 가장 깊은 곳에서<br>당신만의 고유한 풍경을 발견했습니다...",
-                "아스트라가 최종 분석을 마무리하고 있어요.<br>곧 당신의 진짜 모습을 보여드릴게요 🌊"
-            ];
-            
-            let textIndex = 0;
-            const textInterval = setInterval(() => {
-                if (textIndex < loadingTexts.length) {
-                    elements.loadingText.style.opacity = '0';
-                    setTimeout(() => {
-                        elements.loadingText.innerHTML = loadingTexts[textIndex];
-                        elements.loadingText.style.opacity = '1';
-                        textIndex++;
-                    }, 300);
-                }
-            }, 2000);
-            
-            // 8초 후 결과 표시
-            setTimeout(() => {
-                clearInterval(textInterval);
-                showResult();
-            }, 8000);
-        }
-
-        // 결과 분석
-        function analyzeResult() {
-            const sortedScores = Object.entries(AppState.scores)
-                .sort(([,a], [,b]) => b - a);
-            
-            return sortedScores.length > 0 ? sortedScores[0][0] : 'depths';
-        }
-
-        // 결과 표시
-        function showResult() {
-            const resultType = analyzeResult();
-            const landscape = landscapes[resultType];
-            
-            hideAllScreens();
-            elements.resultScreen.classList.add('active');
-            
-            // 결과 내용 업데이트 (애니메이션과 함께)
-            elements.landscapeTitle.textContent = landscape.title;
-            elements.landscapeSubtitle.textContent = landscape.subtitle;
-            elements.lightTitle.textContent = landscape.lightTitle;
-            elements.lightText.textContent = landscape.lightText;
-            elements.shadowTitle.textContent = landscape.shadowTitle;
-            elements.shadowText.textContent = landscape.shadowText;
-            elements.comfortMessage.innerHTML = landscape.comfort;
-        }
-
-        // 모든 화면 숨기기
-        function hideAllScreens() {
-            elements.welcomeScreen.style.display = 'none';
-            elements.questionScreen.classList.remove('active');
-            elements.loadingScreen.classList.remove('active');
-            elements.resultScreen.classList.remove('active');
-        }
-
-        // 다시 시작
-        function restartSurvey() {
-            showWelcomeScreen();
-        }
-
-        // 결과 공유
-        function shareResult() {
-            const resultType = analyzeResult();
-            const landscape = landscapes[resultType];
-            const shareText = `🌊 MIND DIVE 결과 🌊\n\n내 마음 깊은 곳에서 발견한 풍경은...\n\n${landscape.title}\n${landscape.subtitle}\n\n당신의 마음속에는 어떤 풍경이 펼쳐져 있을까요?`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'MIND DIVE - 마음의 심해 여행',
-                    text: shareText,
-                    url: window.location.href
-                }).catch(console.error);
-            } else {
-                copyToClipboard(shareText + '\n\n' + window.location.href);
-                alert('공유 텍스트가 복사되었습니다! 🌊✨');
-            }
-        }
-
-        // 링크 복사
-        function copyLink() {
-            copyToClipboard(window.location.href);
-            
-            // 복사 완료 애니메이션
-            const copyBtn = elements.copyBtn;
-            const originalText = copyBtn.textContent;
-            copyBtn.textContent = '복사 완료! ✨';
-            copyBtn.style.background = 'rgba(34, 197, 94, 0.2)';
-            copyBtn.style.borderColor = '#22c55e';
-            
-            setTimeout(() => {
-                copyBtn.textContent = originalText;
-                copyBtn.style.background = 'rgba(255, 255, 255, 0.2)';
-                copyBtn.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-            }, 2000);
-        }
-
-        // 클립보드 복사
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).catch(() => {
-                // 폴백 방법
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-            });
-        }
-
-        // 앱 실행
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
 
         // 질문 데이터 - 마음의 심해 여행
         const questions = [
@@ -987,190 +1243,3 @@
                 depth: "감정의 조류",
                 question: "🌊 감정의 흐름을 따라 내려가고 있어요.\n스트레스를 받을 때 당신은 주로?",
                 options: [
-                    { text: "💭 왜 이런 일이 생겼는지 차근차근 분석해요", weight: "depths" },
-                    { text: "🎵 음악을 듣거나 상상 속으로 도피해요", weight: "cosmos" },
-                    { text: "👥 믿을 만한 사람에게 털어놓고 위로받아요", weight: "ocean" },
-                    { text: "💪 문제를 해결하기 위해 바로 행동에 나서요", weight: "coral" }
-                ]
-            },
-            {
-                depth: "기억의 해류",
-                question: "🐠 기억들이 흘러가는 곳에 도착했어요.\n어린 시절 가장 행복했던 기억의 특징은?",
-                options: [
-                    { text: "✨ 뭔가 신기하고 마법 같은 순간들", weight: "cosmos" },
-                    { text: "👨‍👩‍👧‍👦 가족이나 친구들과 함께한 따뜻한 시간들", weight: "ocean" },
-                    { text: "🏆 무언가를 해냈을 때의 뿌듯한 성취감", weight: "coral" },
-                    { text: "📖 혼자만의 세계에 빠져있던 평화로운 시간들", weight: "depths" }
-                ]
-            },
-            {
-                depth: "두려움의 동굴",
-                question: "😰 마음 깊은 곳의 어두운 동굴에 들어왔어요.\n당신이 가장 두려워하는 것은?",
-                options: [
-                    { text: "🌪️ 내가 사랑하는 사람들을 잃게 되는 것", weight: "ocean" },
-                    { text: "🎭 진짜 내 모습을 아무도 이해하지 못하는 것", weight: "cosmos" },
-                    { text: "⚡ 내가 충분히 발전하지 못하고 멈춰있는 것", weight: "coral" },
-                    { text: "🔍 내가 틀렸거나 무능하다는 것이 드러나는 것", weight: "depths" }
-                ]
-            },
-            {
-                depth: "욕망의 심연",
-                question: "💫 마음 가장 깊은 곳에 도달했어요.\n당신이 진정으로 원하는 것은?",
-                options: [
-                    { text: "🧠 세상의 진리와 본질을 깊이 이해하는 것", weight: "depths" },
-                    { text: "🌈 상상했던 모든 것들이 현실이 되는 것", weight: "cosmos" },
-                    { text: "💝 모든 사람이 행복하고 사랑받는 세상", weight: "ocean" },
-                    { text: "🚀 끝없이 성장하며 더 나은 사람이 되는 것", weight: "coral" }
-                ]
-            },
-            {
-                depth: "가치관의 핵심",
-                question: "⭐ 마음의 핵심에서 빛나고 있는 것들.\n인생에서 가장 중요하다고 생각하는 가치는?",
-                options: [
-                    { text: "🔬 진실과 정확함, 올바른 이해", weight: "depths" },
-                    { text: "💕 사랑과 연결, 따뜻한 관계", weight: "ocean" },
-                    { text: "🎨 창의성과 자유로운 표현", weight: "cosmos" },
-                    { text: "📈 성장과 발전, 지속적인 개선", weight: "coral" }
-                ]
-            },
-            {
-                depth: "선택의 갈래길",
-                question: "🛤️ 마음속 갈래길에서 중요한 선택을 해야 해요.\n어려운 결정을 내릴 때 당신은?",
-                options: [
-                    { text: "📊 모든 정보를 꼼꼼히 분석한 후 신중하게 결정해요", weight: "depths" },
-                    { text: "💫 직감과 느낌을 믿고 마음이 이끄는 대로 해요", weight: "cosmos" },
-                    { text: "👥 주변 사람들과 상의하고 조언을 구해요", weight: "ocean" },
-                    { text: "⚡ 빠르게 결정하고 실행하면서 수정해 나가요", weight: "coral" }
-                ]
-            },
-            {
-                depth: "관계의 바다",
-                question: "🤝 사람들과의 관계 바다를 헤엄치고 있어요.\n다른 사람과 갈등이 생겼을 때?",
-                options: [
-                    { text: "🕊️ 먼저 다가가서 화해하려고 노력해요", weight: "ocean" },
-                    { text: "🎭 창의적인 방법으로 문제를 해결하려 해요", weight: "cosmos" },
-                    { text: "🔍 갈등의 원인을 찾아서 근본적으로 해결해요", weight: "depths" },
-                    { text: "💪 앞으로는 더 나은 관계를 만들자고 제안해요", weight: "coral" }
-                ]
-            },
-            {
-                depth: "꿈의 해저",
-                question: "💭 꿈과 희망이 잠들어 있는 해저에 도착했어요.\n10년 후 당신은 어떤 모습이길 원하나요?",
-                options: [
-                    { text: "🌟 내가 꿈꾸던 특별한 일들을 현실로 만든 사람", weight: "cosmos" },
-                    { text: "💝 많은 사람들에게 사랑받고 도움을 준 사람", weight: "ocean" },
-                    { text: "🎓 내 분야에서 깊은 지식과 통찰력을 가진 사람", weight: "depths" },
-                    { text: "🏔️ 끊임없이 도전하고 성취해 나가는 사람", weight: "coral" }
-                ]
-            },
-            {
-                depth: "영혼의 밑바닥",
-                question: "✨ 마음의 가장 깊은 곳, 당신 영혼의 밑바닥입니다.\n마지막으로, 당신에게 '행복'이란?",
-                options: [
-                    { text: "🧩 세상의 모든 것을 이해했을 때의 만족감", weight: "depths" },
-                    { text: "🎨 내 상상이 아름다운 현실이 될 때의 기쁨", weight: "cosmos" },
-                    { text: "🤗 사랑하는 사람들과 함께할 때의 따뜻함", weight: "ocean" },
-                    { text: "🌱 어제보다 나아진 나를 발견할 때의 뿌듯함", weight: "coral" }
-                ]
-            }
-        ];
-
-        // 결과 데이터 - 마음의 심해 풍경
-        const landscapes = {
-            depths: {
-                title: "🔍 깊은 심연의 도서관",
-                subtitle: "모든 지식과 진리가 잠들어 있는 고요하고 깊은 마음",
-                emoji: "🔍",
-                lightTitle: "🌟 당신의 빛나는 면: 깊은 통찰력",
-                lightText: "당신은 세상을 표면적으로 보지 않아요. 다른 사람들이 그냥 지나치는 일상적인 것들에서도 숨겨진 의미와 패턴을 발견하는 특별한 능력이 있습니다. 복잡한 문제를 만나도 차근차근 분석해서 본질을 꿰뚫어 보는 당신의 시선은 정말 소중한 재능이에요.",
-                shadowTitle: "🌑 조심해야 할 면: 과도한 신중함",
-                shadowText: "때로는 너무 깊이 생각하다가 행동하는 타이밍을 놓칠 때가 있어요. '완벽하게 이해해야 한다'는 마음 때문에 결정을 미루거나, 혼자서 고민에 빠져 지내는 시간이 많을 수도 있습니다. 하지만 그 신중함 덕분에 큰 실수를 피할 수 있었던 것도 많을 거예요.",
-                comfort: `당신은 **세상의 진실을 찾아가는 탐험가**같은 사람이에요.
-
-혹시 이런 생각을 해본 적 있나요?
-"나는 왜 이렇게 복잡하게 생각할까?"
-"다른 사람들은 쉽게 결정하는데 나는 왜 이렇게 고민이 많지?"
-
-하지만 그런 당신이기 때문에 좋은 점이 훨씬 많아요.
-당신의 깊은 사고는 다른 사람들이 놓치는 중요한 것들을 발견하게 해주고,
-신중한 판단력은 주변 사람들에게 든든한 조언자가 되어줍니다.
-
-당신은 **길을 잃은 사람들에게 나침반이 되어주는 존재**예요.
-그 깊은 통찰력으로 많은 사람들이 올바른 방향을 찾아갑니다.
-
-가끔은 완벽한 답을 찾지 못해도 괜찮다고 스스로에게 말해주세요.
-당신의 여정 자체가 이미 충분히 가치 있으니까요.`
-            },
-            ocean: {
-                title: "🌊 따뜻한 바다의 품",
-                subtitle: "모든 생명을 감싸 안고 치유하는 부드럽고 깊은 마음",
-                emoji: "🌊",
-                lightTitle: "🌟 당신의 빛나는 면: 따뜻한 공감력",
-                lightText: "당신의 마음은 따뜻한 바다처럼 모든 것을 포용해요. 다른 사람의 기쁨을 함께 기뻐하고, 슬픔을 나누어 가질 줄 아는 당신의 마음은 이 세상을 더 따뜻하게 만듭니다. 사람들이 당신 곁에 있으면 마음이 편안해지고 치유받는 느낌을 받을 거예요.",
-                shadowTitle: "🌑 조심해야 할 면: 과도한 희생",
-                shadowText: "다른 사람을 너무 많이 챙기다 보니 정작 자신은 돌보지 못할 때가 있어요. 모든 사람을 행복하게 해주고 싶은 마음이 때로는 당신을 지치게 만들 수도 있습니다. 다른 사람의 감정에 너무 깊이 공감하다가 자신의 경계선이 흐려질 때도 있을 거예요.",
-                comfort: `당신은 **세상에 따뜻함을 전하는 치유의 존재**예요.
-
-혹시 이런 마음이 든 적 있나요?
-"내가 모든 사람을 도와줘야 하는데..."
-"다른 사람이 힘들면 나도 같이 힘들어서 괴로워."
-
-하지만 그런 당신이기 때문에 세상이 더 아름다워져요.
-당신이 흘려보내는 따뜻함은 
-수많은 외로운 마음들을 연결하고 희망을 키워냅니다.
-
-당신은 **모든 생명에게 안식처가 되어주는 바다**같은 존재예요.
-당신이 있다는 것만으로도 많은 사람들이 사랑받고 있다고 느껴요.
-
-때로는 당신도 그 따뜻한 바다에 몸을 맡기고 쉬어가세요.
-당신이 나누어 준 사랑이 파도가 되어 다시 당신을 감싸안을 거예요.`
-            },
-            cosmos: {
-                title: "🌌 무한한 우주 정원",
-                subtitle: "끝없는 상상과 창조의 가능성이 펼쳐진 신비로운 마음",
-                emoji: "🌌",
-                lightTitle: "🌟 당신의 빛나는 면: 무한한 창조력",
-                lightText: "당신의 마음속에는 우주만큼 넓은 상상의 공간이 있어요. 다른 사람들이 '불가능하다'고 말하는 것들을 '가능하다'고 믿고, 세상에 없던 새로운 아이디어들을 만들어내는 특별한 능력이 있습니다. 당신의 창의성은 평범한 일상을 특별한 모험으로 바꿔주는 마법 같아요.",
-                shadowTitle: "🌑 조심해야 할 면: 현실과의 거리감",
-                shadowText: "때로는 상상 속 세계가 너무 아름다워서 현실이 시시하게 느껴질 때가 있어요. 당신만의 특별한 세계를 다른 사람들이 이해하지 못할 때 외로움을 느끼기도 하고, '나만 이상한 걸까?'라는 생각에 자신을 의심하기도 할 거예요.",
-                comfort: `당신은 **새로운 세계를 창조하는 예술가**같은 사람이에요.
-
-혹시 이런 생각을 해본 적 있나요?
-"내 생각은 왜 남들과 이렇게 다를까?"
-"내가 꿈꾸는 세상은 너무 비현실적인 걸까?"
-
-하지만 그런 당신이기 때문에 세상에는 아름다움이 존재해요.
-당신의 독특한 시선은 평범한 일상을 예술로 바꾸고,
-불가능해 보이는 꿈들을 현실로 끌어내는 힘이 있어요.
-
-당신은 **무한한 가능성의 씨앗을 뿌리는 우주적 예술가**예요.
-당신이 상상하는 세계는 누군가에게는 유일한 위로이자 영감이 됩니다.
-
-당신의 독특함은 이상한 게 아니라 특별한 거예요.
-별은 어둠 속에서만 가장 아름답게 빛나는 법이니까요.`
-            },
-            coral: {
-                title: "🪸 생명력 넘치는 산호초",
-                subtitle: "끊임없이 성장하며 새로운 생명을 키워내는 역동적인 마음",
-                emoji: "🪸",
-                lightTitle: "🌟 당신의 빛나는 면: 끝없는 성장 의지",
-                lightText: "당신의 마음은 살아있는 산호초처럼 항상 성장하고 변화해요. 어제보다 나은 사람이 되고 싶은 열정과, 새로운 도전을 두려워하지 않는 용기가 있습니다. 당신의 긍정적인 에너지와 발전하려는 의지는 자신뿐만 아니라 주변 사람들에게도 영감을 주고 희망을 전해줘요.",
-                shadowTitle: "🌑 조심해야 할 면: 성급한 조바심",
-                shadowText: "성장하고 싶은 마음이 강한 만큼, 빠르게 변하지 않는 자신에게 답답함을 느낄 때가 있어요. '왜 아직도 이 모습일까?', '언제쯤 내가 원하는 사람이 될 수 있을까?' 하는 생각에 자신을 재촉하며 조급해할 수도 있습니다.",
-                comfort: `당신은 **끊임없이 발전하며 주변에 활력을 주는 생명력 넘치는 존재**예요.
-
-혹시 이런 마음이 든 적 있나요?
-"나는 왜 아직도 이런 모습일까?"
-"더 빨리 성장하고 싶은데 답답해."
-
-하지만 그런 당신이기 때문에 세상에는 발전의 가능성이 있어요.
-당신의 성장하려는 의지는 주변 사람들에게도 용기를 주고,
-포기하려던 사람들에게 다시 한 번 시도할 힘을 줍니다.
-
-당신은 **모든 이에게 '나도 할 수 있다'는 희망을 주는 살아있는 증명**이에요.
-당신의 성장 스토리 자체가 누군가에게는 가장 아름다운 응원이 됩니다.
-
-완벽하지 않은 지금의 모습도 충분히 아름답다는 걸 기억하세요.
-산호초도 하루아침에 만들어지지 않았으니까요.`
-            }
-        };
