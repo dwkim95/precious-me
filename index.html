@@ -89,21 +89,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100px); }
-            100% { transform: translateX(100px); }
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
         @keyframes pulseGlow {
             0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
             50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.5); }
@@ -113,12 +98,7 @@
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-20px); }
-        }
-
+        
         .container {
             max-width: 420px;
             margin: 0 auto;
@@ -133,10 +113,11 @@
 
         .screen {
             animation: fadeIn 0.6s ease;
+            width: 100%;
         }
 
-        .screen.fade-out {
-            animation: fadeOut 0.4s ease forwards;
+        .hidden {
+            display: none !important;
         }
 
         .audio-control {
@@ -155,13 +136,13 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 1.2rem;
         }
 
         .audio-control:hover {
-            background: rgba(30, 41, 59, 0.9);
             transform: scale(1.1);
         }
-
+        
         .audio-control.playing {
             animation: pulseGlow 2s infinite;
         }
@@ -179,14 +160,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 12px;
-            line-height: 1.2;
         }
 
         .logo p {
             font-size: 0.95rem;
             color: #94a3b8;
             font-weight: 300;
-            line-height: 1.4;
         }
 
         .intro-text {
@@ -217,27 +196,6 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            line-height: 1.4;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn-primary:hover::before {
-            width: 300px;
-            height: 300px;
         }
 
         .btn-primary:hover {
@@ -245,16 +203,9 @@
             box-shadow: 0 12px 24px rgba(59, 130, 246, 0.3);
         }
 
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .story-container {
             text-align: center;
             padding: 40px 0;
-            animation: slideInFromBottom 0.6s ease;
         }
 
         .story-title {
@@ -263,7 +214,6 @@
             font-weight: 400;
             color: #a5b4fc;
             margin-bottom: 28px;
-            line-height: 1.4;
         }
 
         .story-text {
@@ -274,12 +224,6 @@
             margin-bottom: 40px;
             font-weight: 300;
             word-break: keep-all;
-        }
-
-        .story-text em {
-            font-style: normal;
-            color: #e8ecf1;
-            font-weight: 400;
         }
 
         .progress-section {
@@ -294,16 +238,12 @@
             margin-bottom: 16px;
             font-weight: 400;
             letter-spacing: 0.05em;
-            text-transform: uppercase;
-            line-height: 1.4;
         }
 
         .progress-bar {
             height: 3px;
             background: rgba(148, 163, 184, 0.2);
             border-radius: 3px;
-            overflow: hidden;
-            position: relative;
         }
 
         .progress-fill {
@@ -311,18 +251,6 @@
             background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
             border-radius: 3px;
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 100px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
-            animation: shimmer 2s infinite;
         }
 
         .question-card {
@@ -332,7 +260,6 @@
             border-radius: 16px;
             padding: 32px 28px;
             margin-bottom: 32px;
-            animation: slideInFromBottom 0.6s ease;
         }
 
         .question-text {
@@ -343,6 +270,7 @@
             text-align: center;
             font-weight: 400;
             word-break: keep-all;
+            white-space: pre-line;
         }
 
         .options {
@@ -353,7 +281,6 @@
 
         .option-btn {
             background: rgba(30, 41, 59, 0.3);
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(148, 163, 184, 0.15);
             border-radius: 12px;
             padding: 20px 24px;
@@ -363,54 +290,17 @@
             color: #e2e8f0;
             font-size: 0.95rem;
             line-height: 1.6;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            animation: slideInFromBottom 0.4s ease forwards;
             word-break: keep-all;
-        }
-
-        .option-btn:nth-child(1) { animation-delay: 0.1s; }
-        .option-btn:nth-child(2) { animation-delay: 0.2s; }
-        .option-btn:nth-child(3) { animation-delay: 0.3s; }
-        .option-btn:nth-child(4) { animation-delay: 0.4s; }
-
-        .option-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .option-btn:hover::before {
-            left: 100%;
-        }
-
-        .option-btn:hover {
-            background: rgba(30, 41, 59, 0.5);
-            border-color: rgba(99, 102, 241, 0.3);
-            transform: translateX(4px);
         }
 
         .option-btn.selected {
             background: rgba(99, 102, 241, 0.15);
             border-color: rgba(99, 102, 241, 0.5);
-            transform: translateX(4px);
-        }
-
-        .option-btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
         }
 
         .loading-container {
             text-align: center;
             padding: 60px 0;
-            animation: fadeInScale 0.6s ease;
         }
 
         .wave-loader {
@@ -426,25 +316,19 @@
             border-radius: 50%;
             animation: wave 1.4s ease-in-out infinite;
         }
-
         .wave-dot:nth-child(2) { animation-delay: 0.2s; }
         .wave-dot:nth-child(3) { animation-delay: 0.4s; }
-        .wave-dot:nth-child(4) { animation-delay: 0.6s; }
-        .wave-dot:nth-child(5) { animation-delay: 0.8s; }
 
         .loading-message {
             font-family: 'Noto Serif KR', serif;
             font-size: 1rem;
             line-height: 1.8;
             color: #94a3b8;
-            font-weight: 300;
-            word-break: keep-all;
         }
 
         .result-header {
             text-align: center;
             margin-bottom: 48px;
-            animation: fadeInScale 0.6s ease;
         }
 
         .result-badge {
@@ -457,15 +341,12 @@
             color: #a5b4fc;
             margin-bottom: 20px;
             font-weight: 500;
-            letter-spacing: 0.05em;
-            line-height: 1.4;
         }
 
         .result-title {
             font-family: 'Noto Serif KR', serif;
             font-size: 2rem;
             font-weight: 500;
-            line-height: 1.3;
             color: #f8fafc;
             margin-bottom: 16px;
         }
@@ -474,7 +355,6 @@
             font-size: 1rem;
             color: #94a3b8;
             font-weight: 300;
-            line-height: 1.6;
             word-break: keep-all;
         }
 
@@ -485,25 +365,13 @@
             border-radius: 16px;
             padding: 28px;
             margin-bottom: 20px;
-            opacity: 0;
-            animation: slideInFromBottom 0.6s ease forwards;
         }
-
-        .result-section:nth-child(2) { animation-delay: 0.1s; }
-        .result-section:nth-child(3) { animation-delay: 0.2s; }
-        .result-section:nth-child(4) { animation-delay: 0.3s; }
-        .result-section:nth-child(5) { animation-delay: 0.4s; }
-        .result-section:nth-child(6) { animation-delay: 0.5s; }
-
+        
         .result-section h3 {
             font-size: 1.1rem;
             font-weight: 500;
             color: #e8ecf1;
             margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            line-height: 1.4;
         }
 
         .result-section p {
@@ -517,72 +385,34 @@
         .letter-section {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
             border: 1px solid rgba(99, 102, 241, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .letter-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        .letter-content {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 1rem;
-            line-height: 1.9;
-            color: #e8ecf1;
-            position: relative;
-            z-index: 1;
-            word-break: keep-all;
         }
 
         .letter-content strong {
             color: #a5b4fc;
             font-weight: 400;
         }
-
+        
         .action-buttons {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin-top: 32px;
-            animation: slideInFromBottom 0.6s ease 0.4s both;
         }
-
+        
         .btn-secondary {
-            flex: 1;
             padding: 14px 20px;
             background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(148, 163, 184, 0.2);
             border-radius: 12px;
             color: #e2e8f0;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            line-height: 1.4;
+            transition: all 0.3s;
         }
 
         .btn-secondary:hover {
             background: rgba(30, 41, 59, 0.7);
-            border-color: rgba(148, 163, 184, 0.3);
-        }
-
-        .btn-kakao {
-            background: #fee500;
-            color: #3c1e1e;
-            border-color: #fee500;
-        }
-
-        .btn-kakao:hover {
-            background: #fdd835;
-            border-color: #fdd835;
         }
 
         .btn-text {
@@ -593,197 +423,127 @@
             color: #64748b;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: color 0.3s;
-            animation: fadeIn 0.6s ease 0.5s both;
-            line-height: 1.4;
         }
-
-        .btn-text:hover {
-            color: #94a3b8;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
+        
         @media (max-width: 480px) {
-            .container { padding: 20px; }
-            .logo h1 { font-size: 2.2rem; }
-            .question-text { font-size: 1.15rem; padding: 0 4px; }
-            .result-title { font-size: 1.75rem; }
-            .option-btn { padding: 18px 20px; font-size: 0.9rem; }
-            .intro-text, .story-text, .loading-message { font-size: 0.95rem; padding: 0 4px; }
-            .result-section p, .letter-content { font-size: 0.9rem; padding: 0 4px; }
-            .action-buttons { flex-direction: column; }
-            .btn-secondary { font-size: 0.9rem; }
-            .audio-control { top: 15px; right: 15px; width: 45px; height: 45px; }
+            .action-buttons { grid-template-columns: 1fr; }
         }
+
     </style>
 </head>
-
 <body>
-    <div class="audio-control" id="audioControl" title="배경음악">
+    <div class="audio-control" id="audioControl" title="배경음악 켜기/끄기">
         <span id="audioIcon">🎵</span>
     </div>
 
     <div class="container">
-        <!-- 시작 화면 -->
         <div class="screen" id="welcomeScreen">
             <div class="logo">
                 <h1>MIND DIVE</h1>
                 <p>마음의 심해로 떠나는 여행</p>
             </div>
-            
             <div class="intro-text">
-                지금 이 순간, 당신은 혼자가 아닙니다.<br>
-                수많은 사람들이 각자의 마음 깊은 곳에서<br>
-                <em>진실한 자신</em>을 찾고 있어요.<br><br>
-                
-                당신의 마음은 깊고 아름다운 바다입니다.<br>
-                표면의 작은 파도 아래에는<br>
-                고요하고 따뜻한 세계가 기다리고 있어요.<br><br>
-                
-                오늘은 온전히 당신을 위한 시간입니다.<br>
-                함께 천천히 내려가 보아요.
+                고요한 밤, 마음의 바다로<br>
+                조용히 다이빙할 시간입니다.<br><br>
+                몇 가지 질문을 통해<br>
+                당신 안에 잠든 <em>빛과 그림자</em>를 발견하고<br>
+                진정한 <em>나</em>를 마주해보세요.
             </div>
-            
-            <button class="btn-primary" onclick="startJourney()">마음의 바다로 들어가기</button>
+            <button class="btn-primary" id="startBtn">마음의 바다로 들어가기</button>
         </div>
 
-        <!-- 스토리 화면 -->
         <div class="screen hidden" id="storyScreen">
             <div class="story-container">
                 <h2 class="story-title" id="storyTitle"></h2>
                 <div class="story-text" id="storyText"></div>
-                <button class="btn-primary" onclick="continueJourney()">계속 나아가기</button>
+                <button class="btn-primary" id="continueBtn">계속 나아가기</button>
             </div>
         </div>
 
-        <!-- 질문 화면 -->
         <div class="screen hidden" id="questionScreen">
             <div class="progress-section">
-                <div class="depth-indicator" id="depthIndicator">수심 0m</div>
+                <div class="depth-indicator" id="depthIndicator"></div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
             </div>
-            
             <div class="question-card">
                 <div class="question-text" id="questionText"></div>
             </div>
-            
             <div class="options" id="optionsContainer"></div>
         </div>
 
-        <!-- 로딩 화면 -->
         <div class="screen hidden" id="loadingScreen">
             <div class="loading-container">
                 <div class="wave-loader">
-                    <div class="wave-dot"></div>
-                    <div class="wave-dot"></div>
-                    <div class="wave-dot"></div>
-                    <div class="wave-dot"></div>
-                    <div class="wave-dot"></div>
+                    <div class="wave-dot"></div><div class="wave-dot"></div><div class="wave-dot"></div>
                 </div>
-                <div class="loading-message" id="loadingMessage">
-                    마음의 깊은 곳에서 당신만의 보물을 발견했습니다
-                </div>
+                <div class="loading-message" id="loadingMessage"></div>
             </div>
         </div>
 
-        <!-- 결과 화면 -->
         <div class="screen hidden" id="resultScreen">
             <div class="result-header">
                 <div class="result-badge">당신의 마음 속 발견</div>
                 <h2 class="result-title" id="resultTitle"></h2>
                 <p class="result-subtitle" id="resultSubtitle"></p>
             </div>
-
             <div class="result-section">
-                <h3>당신의 본질</h3>
+                <h3>✨ 당신의 본질</h3>
                 <p id="essenceText"></p>
             </div>
-
             <div class="result-section">
-                <h3>당신이 세상에 주는 선물</h3>
+                <h3>☀️ 당신의 빛</h3>
                 <p id="lightSide"></p>
             </div>
-
             <div class="result-section">
-                <h3>때로는 힘든 당신의 마음</h3>
+                <h3>🌙 당신의 그림자</h3>
                 <p id="shadowSide"></p>
             </div>
-
             <div class="result-section">
-                <h3>당신에게 필요한 성장</h3>
+                <h3>🌱 성장의 방향</h3>
                 <p id="growthPath"></p>
             </div>
-
             <div class="result-section letter-section">
-                <div class="letter-content" id="letterContent"></div>
+                <h3>💌 마음의 편지</h3>
+                <p class="letter-content" id="letterContent"></p>
             </div>
-
             <div class="action-buttons">
-                <button class="btn-secondary btn-kakao" onclick="shareKakao()">카카오톡</button>
-                <button class="btn-secondary" onclick="shareResult()">공유하기</button>
-                <button class="btn-secondary" onclick="copyLink()">링크복사</button>
+                <button class="btn-secondary" id="kakaoBtn">카카오톡 공유</button>
+                <button class="btn-secondary" id="linkBtn">링크 복사</button>
             </div>
-
-            <button class="btn-text" onclick="restartDive()">다시 잠수하기</button>
+            <button class="btn-text" id="restartBtn">다시 잠수하기</button>
         </div>
     </div>
 
     <script>
-        // 전역 상태 관리
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- 상태 관리 객체 ---
         let gameState = {
-            currentDepth: 0,
-            currentStory: 0,
-            responses: [],
-            isTransitioning: false,
+            currentStep: 0,
             scores: {
                 pearl: 0, current: 0, abyss: 0, coral: 0,
                 gentle: 0, brave: 0, wise: 0, free: 0
-            }
+            },
+            isTransitioning: false
         };
 
-        // 오디오 관리
+        // --- 오디오 관리 ---
         let audioContext = null;
         let isMusicPlaying = false;
-        let currentOscillators = [];
+        let gainNode = null;
 
-        // 스토리 데이터
+        // --- 데이터 ---
         const stories = [
-            {
-                title: "심해로의 입수",
-                text: "수면이 당신을 부드럽게 감싸줍니다.<br><br>처음엔 누구나 망설입니다. 괜찮아요.<br><em>천천히, 자연스럽게.</em><br><br>당신만의 속도로 가면 됩니다."
-            },
-            {
-                title: "첫 번째 깊이",
-                text: "햇살이 물속으로 스며들어<br>온화한 빛줄기를 만들고 있어요.<br><br>여기서 잠시 머물러도 괜찮습니다.<br><em>서두르지 마세요.</em>"
-            },
-            {
-                title: "조금 더 깊은 곳으로",
-                text: "빛이 조금씩 부드러워지고 있네요.<br><br>이 고요함이 낯설어도 괜찮아요.<br>당신은 <em>충분히 안전</em>합니다."
-            },
-            {
-                title: "중간 지점",
-                text: "여기까지 온 당신이 놀라워요.<br><br>주변이 조금 어두워졌지만<br>당신 안의 빛은 <em>더욱 선명해지고</em> 있어요."
-            },
-            {
-                title: "더 깊은 마음으로",
-                text: "정적이 당신을 감싸고 있습니다.<br><br>이 고요함 속에서<br>당신의 진실한 목소리에 <em>귀 기울여보세요.</em>"
-            },
-            {
-                title: "마음의 바닥 근처",
-                text: "거의 다 왔어요.<br><br>여기까지 용기 내어 내려온 당신,<br>정말 <em>용감한 사람</em>이에요."
-            }
+            { title: "심해로의 입수", text: "수면이 당신을 부드럽게 감싸줍니다.<br>처음엔 누구나 망설입니다. 괜찮아요.<br><em>천천히, 자연스럽게.</em> 당신만의 속도로 가면 됩니다." },
+            { title: "조금 더 깊은 곳으로", text: "빛이 조금씩 부드러워지고 있네요.<br>이 고요함이 낯설어도 괜찮아요.<br>당신은 <em>충분히 안전</em>합니다." },
+            { title: "마음의 바닥 근처", text: "거의 다 왔어요.<br>여기까지 용기 내어 내려온 당신,<br>정말 <em>용감한 사람</em>이에요." }
         ];
 
-        // 질문 데이터
         const questions = [
             {
-                depth: 10,
-                text: "친구들과 함께 있을 때\n당신은 주로 어떤 모습인가요?",
+                depth: 100, text: "친구들과 함께 있을 때\n당신은 주로 어떤 모습인가요?",
                 options: [
                     { text: "조용히 듣고 있다가 필요할 때 말해요", type: "gentle" },
                     { text: "재미있는 이야기나 새로운 제안을 해요", type: "brave" },
@@ -792,8 +552,7 @@
                 ]
             },
             {
-                depth: 50,
-                text: "마음이 복잡할 때\n가장 먼저 하고 싶은 일은?",
+                depth: 250, text: "마음이 복잡할 때\n가장 먼저 하고 싶은 일은?",
                 options: [
                     { text: "혼자만의 조용한 공간에서 마음을 다스려요", type: "pearl" },
                     { text: "뭔가 활동적인 걸 하며 에너지를 바꿔요", type: "coral" },
@@ -802,18 +561,7 @@
                 ]
             },
             {
-                depth: 120,
-                text: "카페에서 혼자 앉아 있을 때\n주로 무엇을 하고 있나요?",
-                options: [
-                    { text: "창밖을 보며 조용히 생각에 잠겨있어요", type: "gentle" },
-                    { text: "할 일을 정리하거나 계획을 세우고 있어요", type: "brave" },
-                    { text: "사람들을 관찰하며 이런저런 상상을 해요", type: "wise" },
-                    { text: "그때그때 기분에 따라 달라져요", type: "free" }
-                ]
-            },
-            {
-                depth: 200,
-                text: "소중한 사람이 힘들어할 때\n당신의 첫 반응은?",
+                depth: 400, text: "소중한 사람이 힘들어할 때\n당신의 첫 반응은?",
                 options: [
                     { text: "조용히 곁에 있어주며 위로해요", type: "pearl" },
                     { text: "함께 해결방법을 찾아보자고 해요", type: "coral" },
@@ -822,8 +570,7 @@
                 ]
             },
             {
-                depth: 300,
-                text: "새로운 환경에 적응해야 할 때\n당신은 어떤 타입인가요?",
+                depth: 550, text: "새로운 환경에 적응해야 할 때\n당신은 어떤 타입인가요?",
                 options: [
                     { text: "천천히 익숙해질 때까지 기다려요", type: "gentle" },
                     { text: "적극적으로 배우고 적응하려고 해요", type: "brave" },
@@ -832,28 +579,7 @@
                 ]
             },
             {
-                depth: 450,
-                text: "밤늦게 잠들기 전\n마지막에 드는 생각은?",
-                options: [
-                    { text: "오늘 하루도 고생했구나, 내일은 더 평온했으면", type: "pearl" },
-                    { text: "내일은 뭘 해볼까, 어떻게 더 나아질까", type: "coral" },
-                    { text: "오늘 있었던 일들의 의미를 되짚어봐요", type: "abyss" },
-                    { text: "내일은 또 어떤 하루가 될까 궁금해요", type: "current" }
-                ]
-            },
-            {
-                depth: 600,
-                text: "가장 소중한 사람과 헤어져야 한다면\n어떤 마음이 들까요?",
-                options: [
-                    { text: "조용히 받아들이고 오래 그리워할 것 같아요", type: "gentle" },
-                    { text: "슬프지만 서로의 성장을 위해 응원할게요", type: "brave" },
-                    { text: "왜 헤어져야 하는지 깊이 생각해볼 것 같아요", type: "wise" },
-                    { text: "슬프지만 새로운 만남도 기대할 것 같아요", type: "free" }
-                ]
-            },
-            {
-                depth: 750,
-                text: "인생에서 가장 중요하다고 생각하는 것은?",
+                depth: 700, text: "인생에서 가장 중요하다고 생각하는 것은?",
                 options: [
                     { text: "마음의 평화와 안정감", type: "pearl" },
                     { text: "꾸준한 성장과 발전", type: "coral" },
@@ -862,28 +588,7 @@
                 ]
             },
             {
-                depth: 900,
-                text: "10년 후의 나에게 하고 싶은 말은?",
-                options: [
-                    { text: "지금보다 더 평온하고 행복하길 바라", type: "gentle" },
-                    { text: "꿈꿔왔던 모든 걸 이뤘으면 좋겠어", type: "brave" },
-                    { text: "지금의 고민들이 어떤 의미였는지 알려줘", type: "wise" },
-                    { text: "어떤 모습이든 그때의 너를 응원할게", type: "free" }
-                ]
-            },
-            {
-                depth: 1050,
-                text: "지금 이 순간 가장 필요한 것은?",
-                options: [
-                    { text: "따뜻한 위로와 충분한 휴식", type: "pearl" },
-                    { text: "새로운 동기와 도전할 용기", type: "coral" },
-                    { text: "나 자신에 대한 깊은 이해", type: "abyss" },
-                    { text: "마음 편히 흘러갈 수 있는 자유", type: "current" }
-                ]
-            },
-            {
-                depth: 1200,
-                text: "마지막 질문입니다.\n당신이 가장 소중히 간직하고 싶은 것은?",
+                depth: 900, text: "마지막 질문입니다.\n당신이 가장 소중히 간직하고 싶은 것은?",
                 options: [
                     { text: "지금까지 쌓아온 소중한 추억들", type: "gentle" },
                     { text: "더 나은 내일을 만들어갈 희망", type: "brave" },
@@ -892,383 +597,309 @@
                 ]
             }
         ];
-
-        // 결과 데이터 (핵심 타입들만)
+        
         const results = {
-            "pearl-gentle": {
-                title: "온화한 진주",
-                subtitle: "고요함 속에서 따뜻한 빛을 품은 영혼",
-                essence: "평온함과 온화함이 어우러진 당신은, 세상의 소음 속에서도 중심을 잃지 않는 사람입니다. 조용하지만 확고한 내면의 힘을 가지고 있어요.",
-                light: "당신은 혼란스러운 세상에 안정감을 선사하는 존재입니다. 말없는 위로와 온화한 미소로 많은 사람들의 마음을 어루만져 주고 있어요. 당신 곁에 있으면 자연스럽게 마음이 차분해지고 평온해집니다.",
-                shadow: "때로는 너무 많은 것을 혼자 감당하려 해서 지칠 때가 있어요. 자신의 감정을 표현하는 것을 어려워하기도 하죠. 다른 사람을 배려하느라 정작 자신의 마음은 뒤로 미루곤 합니다.",
-                growth: "당신에게 필요한 것은 자신의 감정에도 귀 기울이는 시간입니다. 다른 사람을 돌보는 만큼 자신도 소중히 여기세요. 때로는 도움을 요청하는 것도 용기라는 것을 기억해주세요.",
-                letter: "고요한 바다 깊은 곳에서 오랜 시간 빛을 키워온 진주처럼, 당신은 세상에 평화를 가져다주는 소중한 존재입니다.<br><br>당신의 <strong>부드러운 힘</strong>이 이 세상을 더 따뜻하게 만들어주고 있어요. 급하지 않게, 천천히 자신만의 속도로 빛나는 당신이 아름답습니다."
-            },
-            "pearl-brave": {
-                title: "용기 있는 진주",
-                subtitle: "평화로우면서도 강인한 의지를 가진 영혼",
-                essence: "평온함과 용기를 동시에 가진 균형잡힌 당신은, 필요할 때는 과감하게 행동하면서도 마음의 평화를 잃지 않는 사람입니다.",
-                light: "당신은 조용한 카리스마를 가진 사람입니다. 평소에는 차분하지만, 중요한 순간에는 앞장서서 길을 제시해요. 이런 당신의 모습이 많은 사람들에게 신뢰감과 안정감을 동시에 줍니다.",
-                shadow: "완벽해 보이려는 압박감을 스스로에게 주기도 해요. 항상 강해야 한다고 생각해서 자신의 약한 모습을 숨기려 할 때가 있어요. 때로는 쉬어가는 것도 필요하다는 것을 인정하기 어려워하죠.",
-                growth: "완벽하지 않아도 괜찮다는 것을 받아들이세요. 당신의 진짜 강함은 약함을 인정할 수 있는 용기에서 나옵니다. 가끔은 방향타를 놓고 파도에 몸을 맡겨보세요.",
-                letter: "고요한 힘과 용감한 마음을 함께 가진 당신은 정말 드문 존재입니다.<br><br>평화를 사랑하면서도 <strong>필요할 때는 앞장서는 용기</strong>를 가진 당신이 멋져요. 당신만의 균형감각을 계속 믿어주세요."
-            },
-            "current-free": {
-                title: "자유로운 해류",
-                subtitle: "끊임없이 흐르며 새로운 길을 만드는 영혼",
-                essence: "변화를 두려워하지 않는 자유로운 당신은, 새로운 것에 대한 호기심과 고정관념에 얽매이지 않는 유연함을 가진 사람입니다.",
-                light: "당신은 세상에 새로운 바람을 불러오는 사람입니다. 창의적인 아이디어와 열린 마음으로 많은 사람들에게 영감을 주어요. 당신이 있는 곳에는 늘 새로운 가능성이 움틉니다.",
-                shadow: "때로는 너무 많은 변화를 추구하다가 정작 중요한 것을 놓치기도 해요. 끊임없이 움직이다 보니 지칠 때도 있고, 한 곳에 깊이 뿌리내리는 것을 어려워하기도 하죠.",
-                growth: "변화도 소중하지만, 때로는 멈춰서 깊이 들여다보는 시간도 필요해요. 자유로움 속에서도 자신만의 중심을 찾아보세요. 흘러가는 것만이 전부가 아니라는 것을 기억해주세요.",
-                letter: "끝없이 흘러가며 새로운 길을 만들어내는 해류처럼, 당신은 세상에 변화와 활력을 가져다주는 소중한 존재입니다.<br><br>당신의 <strong>자유로운 정신</strong>이 많은 사람들에게 희망과 가능성을 보여주고 있어요. 그 흐름을 믿고 계속 나아가세요."
-            },
-            "abyss-wise": {
-                title: "지혜로운 심연",
-                subtitle: "깊은 통찰력으로 진실을 탐구하는 영혼",
-                essence: "표면적인 것에 만족하지 않고 늘 더 깊은 의미를 찾으려 하는 당신은, 복잡한 상황도 본질을 꿰뚫어보는 지혜를 가진 사람입니다.",
-                light: "당신은 혼란스러운 세상에서 진실을 찾아내는 탐험가입니다. 다른 사람들이 놓치는 것들을 발견하고, 복잡한 감정과 상황을 이해하는 능력이 뛰어나요. 당신의 통찰력은 많은 사람들에게 방향을 제시해줍니다.",
-                shadow: "깊이 생각하다 보니 때로는 무거운 감정에 압도될 때가 있어요. 모든 것을 진지하게 받아들여서 단순한 즐거움을 놓치기도 하죠. 너무 많은 것을 보고 느끼다 보니 혼자만 무거운 짐을 지는 것 같을 때가 있어요.",
-                growth: "깊이 있는 사고는 당신의 큰 장점이지만, 때로는 가벼운 마음으로 세상을 바라봐도 좋아요. 모든 것에 의미를 찾으려 하지 말고, 그저 존재하는 것만으로도 충분한 순간들을 허락해주세요.",
-                letter: "가장 깊은 곳까지 탐험할 용기를 가진 당신은 진정한 탐험가입니다.<br><br>당신의 <strong>깊은 지혜</strong>가 혼란스러운 세상에 방향을 제시해주고 있어요. 그 깊이를 두려워하지 말고, 당신만이 발견할 수 있는 진실들을 계속 찾아가세요."
-            },
-            "coral-brave": {
-                title: "역동적인 산호초",
-                subtitle: "끊임없이 성장하며 생명력을 발산하는 영혼",
-                essence: "어떤 환경에서도 적응하며 성장하는 놀라운 생명력을 가진 당신은, 목표를 향해 꾸준히 나아가는 의지력과 주변 사람들을 격려하는 따뜻함을 가진 사람입니다.",
-                light: "당신은 희망과 성장의 상징입니다. 어려운 상황에서도 포기하지 않는 끈기와 다른 사람들에게 용기를 주는 에너지가 있어요. 당신이 있는 곳은 늘 활기차고 긍정적인 분위기가 흘러요.",
-                shadow: "너무 많은 것을 완벽하게 하려다가 스스로에게 과도한 압박을 주기도 해요. 쉬는 것을 게으름이라고 생각하거나, 성과가 바로 나오지 않으면 불안해하기도 하죠. 항상 무언가를 이뤄야 한다는 강박이 있을 수 있어요.",
-                growth: "성장도 중요하지만, 지금 이 순간의 자신도 충분히 소중하다는 것을 기억하세요. 완벽하지 않아도 괜찮고, 때로는 그냥 쉬어가는 것도 성장의 한 과정이라는 것을 받아들여주세요.",
-                letter: "어떤 환경에서도 아름답게 피어나는 산호초처럼, 당신은 희망과 생명력의 상징입니다.<br><br>당신의 <strong>끊임없는 성장</strong>과 다른 사람들을 응원하는 마음이 세상을 더 밝게 만들어주고 있어요. 당신의 속도로 천천히 자라가세요."
-            }
+            "pearl-gentle": { title: "온화한 진주", subtitle: "고요함 속에서 따뜻한 빛을 품은 영혼", essence: "평온함과 온화함이 어우러진 당신은, 세상의 소음 속에서도 중심을 잃지 않는 사람입니다. 조용하지만 확고한 내면의 힘을 가지고 있어요.", light: "당신은 혼란스러운 세상에 안정감을 선사하는 존재입니다. 말없는 위로와 온화한 미소로 많은 사람들의 마음을 어루만져 주고 있어요. 당신 곁에 있으면 자연스럽게 마음이 차분해지고 평온해집니다.", shadow: "때로는 너무 많은 것을 혼자 감당하려 해서 지칠 때가 있어요. 자신의 감정을 표현하는 것을 어려워하기도 하죠. 다른 사람을 배려하느라 정작 자신의 마음은 뒤로 미루곤 합니다.", growth: "당신에게 필요한 것은 자신의 감정에도 귀 기울이는 시간입니다. 다른 사람을 돌보는 만큼 자신도 소중히 여기세요. 때로는 도움을 요청하는 것도 용기라는 것을 기억해주세요.", letter: "고요한 바다 깊은 곳에서 오랜 시간 빛을 키워온 진주처럼, 당신은 세상에 평화를 가져다주는 소중한 존재입니다.<br><br>당신의 <strong>부드러운 힘</strong>이 이 세상을 더 따뜻하게 만들어주고 있어요. 급하지 않게, 천천히 자신만의 속도로 빛나는 당신이 아름답습니다." },
+            "pearl-brave": { title: "용기 있는 진주", subtitle: "평화로우면서도 강인한 의지를 가진 영혼", essence: "평온함과 용기를 동시에 가진 균형잡힌 당신은, 필요할 때는 과감하게 행동하면서도 마음의 평화를 잃지 않는 사람입니다.", light: "당신은 조용한 카리스마를 가진 사람입니다. 평소에는 차분하지만, 중요한 순간에는 앞장서서 길을 제시해요. 이런 당신의 모습이 많은 사람들에게 신뢰감과 안정감을 동시에 줍니다.", shadow: "완벽해 보이려는 압박감을 스스로에게 주기도 해요. 항상 강해야 한다고 생각해서 자신의 약한 모습을 숨기려 할 때가 있어요. 때로는 쉬어가는 것도 필요하다는 것을 인정하기 어려워하죠.", growth: "완벽하지 않아도 괜찮다는 것을 받아들이세요. 당신의 진짜 강함은 약함을 인정할 수 있는 용기에서 나옵니다. 가끔은 방향타를 놓고 파도에 몸을 맡겨보세요.", letter: "고요한 힘과 용감한 마음을 함께 가진 당신은 정말 드문 존재입니다.<br><br>평화를 사랑하면서도 <strong>필요할 때는 앞장서는 용기</strong>를 가진 당신이 멋져요. 당신만의 균형감각을 계속 믿어주세요." },
+            "pearl-wise": { title: "지혜로운 진주", subtitle: "내면의 빛으로 세상을 통찰하는 영혼", essence: "차분한 마음과 깊은 지혜를 가진 당신은, 현상의 이면을 꿰뚫어 보고 본질을 이해하는 능력이 뛰어납니다.", light: "당신은 사람들에게 현명한 조언을 해주는 상담가와 같습니다. 복잡한 문제도 당신을 거치면 명쾌하게 정리되곤 하죠. 당신의 통찰력이 많은 이들에게 등대가 되어줍니다.", shadow: "생각이 너무 많아 행동하기를 주저할 때가 있습니다. 모든 가능성을 고려하려다 보니 때를 놓치기도 하죠. 때론 머리보다 마음의 소리를 따르는 것이 더 빠를 수 있습니다.", growth: "지식과 함께 경험을 쌓아가는 것이 중요합니다. 때로는 불완전하더라도 직접 부딪혀보세요. 행동 속에서 더 큰 지혜를 발견하게 될 거예요.", letter: "깊은 바닷속에서 묵묵히 빛을 키워온 진주처럼, 당신의 지혜는 오랜 시간 쌓아온 내면의 힘입니다.<br><br>세상을 <strong>꿰뚫어 보는 당신의 통찰력</strong>이 더 많은 사람들에게 빛이 되어줄 거예요." },
+            "pearl-free": { title: "자유로운 진주", subtitle: "평화 속에서 자유롭게 유영하는 영혼", essence: "평온한 마음을 기반으로 자유를 추구하는 당신은, 어디에도 얽매이지 않으면서 자신만의 평화를 지켜나가는 사람입니다.", light: "당신은 평화로운 자유주의자입니다. 갈등을 피하면서도 자신만의 길을 잃지 않아요. 당신의 유연하고 평화로운 삶의 방식은 많은 이들에게 영감을 줍니다.", shadow: "중요한 결정을 내려야 할 때, 책임을 회피하고 싶어질 수 있습니다. 갈등을 피하려는 마음이 때로는 당신을 수동적인 위치에 머물게 할 수 있어요.", growth: "진정한 자유는 책임과 함께 온다는 것을 기억하세요. 때로는 불편한 상황을 마주하고 자신의 목소리를 내는 용기가 필요합니다. 그것이 당신의 평화를 더 단단하게 만들 거예요.", letter: "고요한 바다를 자유롭게 유영하는 진주처럼, 당신은 평화와 자유의 가치를 아는 사람입니다.<br><br><strong>얽매이지 않는 당신의 평온함</strong>이 주변 사람들에게도 편안함을 선물합니다. 그 자유로운 평화를 즐기세요." },
+            "current-gentle": { title: "온화한 해류", subtitle: "부드럽게 흐르며 세상을 감싸 안는 영혼", essence: "유연함과 따뜻한 마음을 가진 당신은, 흐르는 물처럼 부드럽게 세상의 변화에 적응하며 주변을 포용하는 사람입니다.", light: "당신은 뛰어난 공감 능력을 가진 사람입니다. 다른 사람의 마음에 자연스럽게 흘러 들어가 아픔을 감싸주고 기쁨을 함께 나누죠. 당신이 있는 곳에는 따뜻한 기운이 감돕니다.", shadow: "다른 사람의 감정에 너무 깊이 동화되어 자신의 중심을 잃을 때가 있습니다. 거절하는 것을 어려워해서 원치 않는 부탁을 들어주기도 하죠.", growth: "포용도 중요하지만, 자신만의 경계를 지키는 연습이 필요합니다. 때로는 흘러가기를 멈추고, 자신만의 공간에서 에너지를 채우는 시간을 가지세요.", letter: "따뜻한 바다를 흐르며 생명을 감싸는 해류처럼, 당신의 온화함은 세상에 온기를 전합니다.<br><br><strong>부드럽게 모든 것을 포용하는 힘</strong>을 가진 당신은 정말 소중한 존재예요. 당신의 따뜻함을 잃지 마세요." },
+            "current-brave": { title: "용감한 해류", subtitle: "거침없이 흘러 새로운 길을 여는 영혼", essence: "유연함과 용기를 겸비한 당신은, 변화의 흐름에 몸을 맡기면서도 목표를 향해 거침없이 나아가는 개척자입니다.", light: "당신은 변화를 주도하는 리더입니다. 새로운 도전을 두려워하지 않고, 유연한 사고로 위기를 기회로 만들죠. 당신의 용기 있는 흐름이 새로운 시대를 엽니다.", shadow: "때로는 너무 빠르게 흐르다가 주변을 살피지 못할 때가 있습니다. 목표 지향적인 성향 때문에 과정의 중요성을 놓치거나, 다른 사람의 의견을 간과하기도 합니다.", growth: "때로는 속도를 늦추고 주변의 풍경을 둘러보는 여유가 필요합니다. 목표뿐만 아니라, 함께 흘러가는 사람들과의 조화를 생각해보세요. 더 멀리, 더 오래 흘러갈 수 있을 거예요.", letter: "거대한 바다의 흐름을 만들어내는 해류처럼, 당신은 세상에 역동적인 에너지를 불어넣습니다.<br><br><strong>변화를 두려워하지 않는 당신의 용기</strong>가 새로운 길을 만들어낼 거예요. 계속해서 거침없이 나아가세요." },
+            "current-wise": { title: "지혜로운 해류", subtitle: "흐름 속에서 삶의 지혜를 발견하는 영혼", essence: "변화에 유연하게 대처하면서도 깊은 통찰력을 가진 당신은, 경험의 흐름 속에서 삶의 지혜를 터득하는 현명한 사람입니다.", light: "당신은 삶의 흐름을 이해하는 현자와 같습니다. 어떤 상황에서도 당황하지 않고 최적의 길을 찾아내죠. 당신의 경험에서 우러나온 지혜는 많은 사람들에게 길잡이가 되어줍니다.", shadow: "과거의 경험에 너무 의존하여 새로운 가능성을 닫아버릴 수 있습니다. '원래 그랬으니까'라는 생각이 변화의 흐름을 막는 걸림돌이 될 수 있어요.", growth: "과거의 지혜를 바탕으로 하되, 언제나 새로운 것을 배울 준비가 되어 있어야 합니다. 아이처럼 순수한 호기심으로 세상을 바라보세요. 흐름은 언제나 새로운 지혜를 가져다줍니다.", letter: "오랜 시간 바다를 흘러온 해류가 바다의 길을 알듯, 당신은 삶의 흐름을 아는 지혜를 가졌습니다.<br><br><strong>경험으로 얻은 당신의 지혜</strong>는 어떤 폭풍우 속에서도 길을 잃지 않게 할 거예요." },
+            "current-free": { title: "자유로운 해류", subtitle: "끊임없이 흐르며 새로운 길을 만드는 영혼", essence: "변화를 두려워하지 않는 자유로운 당신은, 새로운 것에 대한 호기심과 고정관념에 얽매이지 않는 유연함을 가진 사람입니다.", light: "당신은 세상에 새로운 바람을 불러오는 사람입니다. 창의적인 아이디어와 열린 마음으로 많은 사람들에게 영감을 주어요. 당신이 있는 곳에는 늘 새로운 가능성이 움틉니다.", shadow: "때로는 너무 많은 변화를 추구하다가 정작 중요한 것을 놓치기도 해요. 끊임없이 움직이다 보니 지칠 때도 있고, 한 곳에 깊이 뿌리내리는 것을 어려워하기도 하죠.", growth: "변화도 소중하지만, 때로는 멈춰서 깊이 들여다보는 시간도 필요해요. 자유로움 속에서도 자신만의 중심을 찾아보세요.", letter: "끝없이 흘러가며 새로운 길을 만들어내는 해류처럼, 당신은 세상에 변화와 활력을 가져다주는 소중한 존재입니다.<br><br>당신의 <strong>자유로운 정신</strong>이 많은 사람들에게 희망과 가능성을 보여주고 있어요. 그 흐름을 믿고 계속 나아가세요." },
+            "abyss-gentle": { title: "온화한 심연", subtitle: "고요한 깊이로 모든 것을 품어주는 영혼", essence: "깊은 내면과 따뜻한 포용력을 가진 당신은, 다른 사람의 어둠까지도 말없이 감싸 안아주는 깊고 온화한 사람입니다.", light: "당신은 누구에게도 말하지 못할 비밀을 털어놓을 수 있는 안전한 피난처와 같습니다. 당신의 깊은 공감과 이해심은 상처 입은 영혼들에게 큰 위로가 됩니다.", shadow: "다른 사람의 부정적인 감정을 너무 많이 흡수하여 스스로의 에너지를 소진시킬 수 있습니다. 자신의 깊은 내면을 다른 사람에게 드러내는 것을 두려워하기도 합니다.", growth: "때로는 심해 밖으로 나와 햇볕을 쬐는 시간이 필요합니다. 자신의 감정을 정화하고, 가벼운 즐거움을 누리는 시간을 가지세요. 당신의 깊이는 사라지지 않습니다.", letter: "모든 것을 품고 있는 고요한 심해처럼, 당신의 마음은 헤아릴 수 없이 깊고 넓습니다.<br><br><strong>어둠마저 감싸는 당신의 포용력</strong>은 세상의 가장 깊은 상처를 치유하는 힘을 가졌어요." },
+            "abyss-brave": { title: "용감한 심연", subtitle: "어둠 속에서도 진실을 마주하는 영혼", essence: "깊은 통찰력과 강한 용기를 가진 당신은, 누구도 보려 하지 않는 진실과 어둠을 직면하고 그 속에서 의미를 찾아내는 사람입니다.", light: "당신은 진실을 탐구하는 용감한 탐험가입니다. 사회의 위선이나 개인의 그림자를 두려움 없이 파헤치고, 그 본질을 꿰뚫어 봅니다. 당신의 용기는 많은 사람들에게 경각심을 줍니다.", shadow: "때로는 너무 비판적이거나 냉소적으로 보일 수 있습니다. 진실을 추구하는 과정에서 다른 사람의 감정을 상하게 하기도 하죠. 고독을 자초하기도 합니다.", growth: "진실을 마주하는 용기만큼이나, 그것을 따뜻하게 전달하는 지혜가 필요합니다. 당신의 통찰력을 다른 사람을 돕는 데 사용해보세요. 진정한 용기는 사랑과 함께할 때 더욱 빛납니다.", letter: "빛 한 점 없는 심해를 두려워하지 않는 용기, 그것은 당신만이 가진 특별한 힘입니다.<br><br><strong>어둠 속에서 진실을 보는 당신의 용기</strong>는 세상을 더 나은 곳으로 이끄는 등불이 될 것입니다." },
+            "abyss-wise": { title: "지혜로운 심연", subtitle: "깊은 통찰력으로 진실을 탐구하는 영혼", essence: "세상의 이면을 꿰뚫어 보는 깊은 통찰력과 지혜를 가진 당신은, 보이지 않는 것의 가치를 알아보는 현명한 사람입니다.", light: "당신은 문제의 근원을 파악하는 능력이 탁월합니다. 다른 사람들이 표면만 볼 때, 당신은 그 아래 숨겨진 진짜 원인을 찾아내죠. 당신의 지혜는 복잡한 세상을 살아가는 데 큰 도움이 됩니다.", shadow: "때로는 너무 복잡하게 생각해서 단순한 진리를 놓치기도 해요. 현실과 거리를 두고 자신만의 생각에 깊이 빠져들 때가 있어 고립감을 느끼기도 하죠.", growth: "당신의 깊은 지혜를 세상과 나누는 방법을 찾아보세요. 때로는 아이의 눈으로 세상을 단순하게 바라보는 것도 필요해요. 지혜는 나눌수록 더 커진다는 것을 기억하세요.", letter: "가장 깊은 곳까지 탐험할 용기를 가진 당신은 진정한 탐험가입니다.<br><br>당신의 <strong>깊은 지혜</strong>가 혼란스러운 세상에 방향을 제시해주고 있어요. 그 깊이를 두려워하지 말고, 당신만이 발견할 수 있는 진실들을 계속 찾아가세요." },
+            "abyss-free": { title: "자유로운 심연", subtitle: "자신만의 깊이 속에서 자유를 찾는 영혼", essence: "깊은 내면세계를 가지고 있으면서도 세상의 기준에 얽매이지 않는 당신은, 자신만의 우주 속에서 진정한 자유를 누리는 사람입니다.", light: "당신은 독보적인 개성을 가진 사람입니다. 다른 사람의 시선에 연연하지 않고 자신만의 가치와 스타일을 추구하죠. 당신의 자유로운 존재감은 사람들에게 신선한 충격을 줍니다.", shadow: "때로는 세상과 너무 동떨어져 공감을 얻기 어려울 수 있습니다. 자신만의 세계에 너무 깊이 몰두하여 현실적인 책임을 등한시할 위험이 있습니다.", growth: "당신만의 우주와 현실 세계를 연결하는 다리를 놓아보세요. 당신의 독특한 세계를 사람들과 공유할 때, 당신의 자유는 더욱 의미 있어질 것입니다. 소통하는 자유를 배워보세요.", letter: "누구의 방해도 받지 않는 자신만의 심해를 가진 당신, 그곳에서 당신은 가장 자유롭습니다.<br><br><strong>세상에 물들지 않는 당신의 자유로움</strong>은 그 자체로 특별한 가치를 지닙니다. 당신만의 우주를 사랑하세요." },
+            "coral-gentle": { title: "온화한 산호", subtitle: "따뜻한 관계 속에서 함께 성장하는 영혼", essence: "사람들과의 조화와 따뜻한 관계를 중요시하는 당신은, 다른 사람과 함께 있을 때 더욱 빛나는, 다정한 사람입니다.", light: "당신은 공동체에 활력과 안정감을 주는 존재입니다. 뛰어난 친화력과 배려심으로 사람들을 하나로 모으고, 따뜻한 관계의 숲을 만들어갑니다.", shadow: "혼자 있는 것을 견디기 힘들어할 수 있습니다. 관계에 너무 의존한 나머지, 자신의 주체성을 잃어버리거나 부당한 요구에도 '좋은 사람'으로 남기 위해 거절하지 못할 수 있습니다.", growth: "때로는 혼자만의 시간을 가지며 자신의 내면과 마주하는 연습이 필요합니다. 건강한 관계는 각자가 바로 설 때 만들어진다는 것을 기억하세요. 자신을 먼저 챙기는 이기심은 죄가 아닙니다.", letter: "수많은 생명과 어우러져 아름다운 숲을 이루는 산호처럼, 당신은 관계 속에서 세상을 아름답게 만듭니다.<br><br><strong>함께일 때 더욱 빛나는 당신의 따뜻함</strong>이 주변 사람들에게 큰 힘이 되고 있어요." },
+            "coral-brave": { title: "용감한 산호", subtitle: "자신과 공동체를 지키는 용기 있는 영혼", essence: "따뜻한 마음과 강한 용기를 가진 당신은, 자신이 사랑하는 사람들과 공동체를 지키기 위해서라면 기꺼이 앞에 나서는 사람입니다.", light: "당신은 의리 있고 용감한 수호자입니다. 불의를 보면 참지 못하고, 약한 사람을 보호하기 위해 자신의 위험을 감수합니다. 당신의 용기는 공동체에 큰 신뢰와 안정감을 줍니다.", shadow: "'우리'라는 생각에 너무 몰입하여 '우리'가 아닌 존재에 배타적일 수 있습니다. 자신의 신념이 너무 강해 다른 의견을 가진 사람과 갈등을 빚기도 합니다.", growth: "내가 지키려는 공동체의 경계를 넘어 더 넓은 세상을 포용하는 시야가 필요합니다. 다양한 가치를 존중할 때, 당신의 공동체는 더욱 건강하고 풍요로워질 것입니다.", letter: "거친 파도로부터 작은 물고기들을 지켜주는 단단한 산호처럼, 당신은 사랑하는 것들을 지켜내는 힘을 가졌습니다.<br><br><strong>공동체를 위한 당신의 용기</strong>는 무엇보다 값지고 든든합니다. 그 용기를 소중히 여기세요." },
+            "coral-wise": { title: "지혜로운 산호", subtitle: "관계 속에서 지혜를 나누고 배우는 영혼", essence: "따뜻한 관계 속에서 지혜를 발휘하는 당신은, 사람들과의 교류를 통해 배우고 성장하며, 그 지혜를 다시 나누는 사람입니다.", light: "당신은 현명한 조력자이자 멘토입니다. 사람들의 장점을 발견하고 그들이 성장할 수 있도록 돕는 데 탁월한 재능이 있습니다. 당신의 지혜로운 조언은 많은 이들에게 긍정적인 영향을 줍니다.", shadow: "다른 사람의 성장을 돕는 데 집중한 나머지, 정작 자신의 성장은 뒷전이 될 수 있습니다. 때로는 조언이 잔소리로 비칠 수 있다는 점을 경계해야 합니다.", growth: "다른 사람을 가르치는 것만큼, 그들에게서 배우는 자세를 잊지 마세요. 때로는 침묵과 경청이 가장 좋은 조언이 될 수 있습니다. 자신을 위한 배움의 시간도 꼭 가지세요.", letter: "오랜 시간 수많은 생명체와 공존하며 지혜를 쌓아온 산호처럼, 당신의 지혜는 관계 속에서 더욱 깊어집니다.<br><br><strong>사람을 성장시키는 당신의 지혜</strong>는 이 세상을 더욱 풍요롭게 만드는 귀한 능력입니다." },
+            "coral-free": { title: "자유로운 산호", subtitle: "다양한 관계 속에서 자유롭게 피어나는 영혼", essence: "다양한 사람들과의 만남을 즐기면서도 어느 한 곳에 얽매이지 않는 당신은, 자유로운 관계 속에서 자신을 표현하는 사람입니다.", light: "당신은 매력적인 사교가입니다. 넓은 인맥과 유연한 사고방식으로 다양한 분야의 사람들을 연결하는 허브 역할을 합니다. 당신이 있는 곳에는 늘 즐거운 에너지가 넘칩니다.", shadow: "깊이 있는 관계를 맺는 것을 어려워할 수 있습니다. 끊임없이 새로운 사람을 만나다 보니, 한 사람에게 깊이 집중하고 책임지는 것에 부담을 느낄 수 있습니다.", growth: "넓이만큼 깊이도 중요하다는 것을 기억하세요. 수많은 인연 중에서 당신의 마음을 진정으로 나눌 수 있는 소중한 관계에 시간과 에너지를 투자해보세요. 진정한 안정감을 느낄 수 있을 거예요.", letter: "다양한 모양과 색깔의 산호가 어우러져 바다를 다채롭게 만들듯, 당신은 세상을 사람으로 연결합니다.<br><br><strong>자유롭게 관계 맺는 당신의 매력</strong>이 많은 사람들을 당신 곁으로 이끌고 있어요." }
         };
-
-        // 로딩 메시지
+        
         const loadingMessages = [
-            "마음의 깊은 곳에서 당신만의 보물을 발견했습니다",
-            "당신의 진실한 모습이 서서히 드러나고 있어요",
-            "심해에서 온 특별한 메시지를 준비하고 있습니다",
-            "당신만의 고유한 빛깔을 찾고 있어요"
+            "마음의 깊은 곳에서 당신만의 보물을 발견했습니다.",
+            "당신의 진실한 모습이 서서히 드러나고 있어요.",
+            "심해에서 온 특별한 메시지를 준비하고 있습니다.",
+            "당신만의 고유한 빛깔을 찾고 있어요."
         ];
 
-        // 배경 효과 생성
-        function createBackgroundEffects() {
-            function createWaterDrop() {
-                const drop = document.createElement('div');
-                drop.className = 'water-drop';
-                drop.style.left = Math.random() * 100 + 'vw';
-                drop.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                drop.style.animationDelay = Math.random() * 2 + 's';
-                document.body.appendChild(drop);
-                
-                setTimeout(() => {
-                    if (drop.parentNode) drop.remove();
-                }, 7000);
-            }
+        // --- DOM 요소 ---
+        const screens = {
+            welcome: document.getElementById('welcomeScreen'),
+            story: document.getElementById('storyScreen'),
+            question: document.getElementById('questionScreen'),
+            loading: document.getElementById('loadingScreen'),
+            result: document.getElementById('resultScreen')
+        };
+        const buttons = {
+            start: document.getElementById('startBtn'),
+            continue: document.getElementById('continueBtn'),
+            kakao: document.getElementById('kakaoBtn'),
+            link: document.getElementById('linkBtn'),
+            restart: document.getElementById('restartBtn')
+        };
+        const elements = {
+            storyTitle: document.getElementById('storyTitle'),
+            storyText: document.getElementById('storyText'),
+            progressFill: document.getElementById('progressFill'),
+            depthIndicator: document.getElementById('depthIndicator'),
+            questionText: document.getElementById('questionText'),
+            optionsContainer: document.getElementById('optionsContainer'),
+            loadingMessage: document.getElementById('loadingMessage'),
+            resultTitle: document.getElementById('resultTitle'),
+            resultSubtitle: document.getElementById('resultSubtitle'),
+            essenceText: document.getElementById('essenceText'),
+            lightSide: document.getElementById('lightSide'),
+            shadowSide: document.getElementById('shadowSide'),
+            growthPath: document.getElementById('growthPath'),
+            letterContent: document.getElementById('letterContent')
+        };
+        const audioControl = {
+            button: document.getElementById('audioControl'),
+            icon: document.getElementById('audioIcon')
+        };
+        
+        // --- 핵심 함수 ---
 
-            function createShootingStar() {
-                const star = document.createElement('div');
-                star.className = 'shooting-star';
-                star.style.left = Math.random() * 50 + 'vw';
-                star.style.top = Math.random() * 50 + 'vh';
-                star.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                document.body.appendChild(star);
-                
-                setTimeout(() => {
-                    if (star.parentNode) star.remove();
-                }, 5000);
-            }
-
-            setInterval(createWaterDrop, 2000);
-            setInterval(createShootingStar, 8000);
-            
-            for(let i = 0; i < 3; i++) {
-                setTimeout(createWaterDrop, i * 800);
-            }
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => screen.classList.add('hidden'));
+            screens[screenName].classList.remove('hidden');
+            window.scrollTo(0, 0);
         }
 
-        // 향상된 오디오 시스템
-        function createOceanSound() {
-            try {
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                
-                currentOscillators.forEach(osc => {
-                    try { osc.stop(); } catch(e) {}
-                });
-                currentOscillators = [];
-                
-                const frequencies = [60, 120, 180, 240];
-                const gainNode = audioContext.createGain();
-                gainNode.gain.value = 0.08;
-                
-                frequencies.forEach((freq, index) => {
-                    const oscillator = audioContext.createOscillator();
-                    const oscGain = audioContext.createGain();
-                    
-                    oscillator.type = 'sine';
-                    oscillator.frequency.value = freq;
-                    oscGain.gain.value = 0.3 / (index + 1);
-                    
-                    const lfo = audioContext.createOscillator();
-                    const lfoGain = audioContext.createGain();
-                    lfo.type = 'sine';
-                    lfo.frequency.value = 0.1 + (index * 0.05);
-                    lfoGain.gain.value = freq * 0.1;
-                    
-                    lfo.connect(lfoGain);
-                    lfoGain.connect(oscillator.frequency);
-                    
-                    oscillator.connect(oscGain);
-                    oscGain.connect(gainNode);
-                    
-                    oscillator.start();
-                    lfo.start();
-                    
-                    currentOscillators.push(oscillator, lfo);
-                });
-                
-                gainNode.connect(audioContext.destination);
-                return gainNode;
-            } catch (e) {
-                console.log('오디오 생성 실패:', e);
-                return null;
-            }
-        }
-
-        function initAudio() {
-            const audioControl = document.getElementById('audioControl');
-            const audioIcon = document.getElementById('audioIcon');
-            
-            audioControl.addEventListener('click', async () => {
-                if (!isMusicPlaying) {
-                    if (audioContext && audioContext.state === 'suspended') {
-                        await audioContext.resume();
-                    }
-                    
-                    const gainNode = createOceanSound();
-                    if (gainNode) {
-                        isMusicPlaying = true;
-                        audioIcon.textContent = '🌊';
-                        audioControl.classList.add('playing');
-                    }
-                } else {
-                    currentOscillators.forEach(osc => {
-                        try { osc.stop(); } catch(e) {}
-                    });
-                    currentOscillators = [];
-                    isMusicPlaying = false;
-                    audioIcon.textContent = '🎵';
-                    audioControl.classList.remove('playing');
-                }
-            });
-        }
-
-        // 핵심 함수들
         function startJourney() {
-            gameState.isTransitioning = false;
+            if (gameState.isTransitioning) return;
+            gameState.isTransitioning = true;
+            toggleMusic(true); // 음악 재생 시도
             showStory();
+            gameState.isTransitioning = false;
         }
 
         function showStory() {
-            if (gameState.currentStory < stories.length) {
-                const story = stories[gameState.currentStory];
-                document.getElementById('storyTitle').textContent = story.title;
-                document.getElementById('storyText').innerHTML = story.text;
-                
-                showScreen('storyScreen');
-                gameState.currentStory++;
+            const storyIndex = Math.floor(gameState.currentStep / (questions.length / stories.length));
+            const story = stories[storyIndex];
+
+            if (story) {
+                elements.storyTitle.textContent = story.title;
+                elements.storyText.innerHTML = story.text;
+                showScreen('story');
             } else {
                 showQuestion();
             }
         }
-
+        
         function continueJourney() {
+            if (gameState.isTransitioning) return;
+            gameState.isTransitioning = true;
+            showQuestion();
             gameState.isTransitioning = false;
-            
-            if (gameState.currentDepth < questions.length) {
-                showQuestion();
-            } else {
-                showStory();
-            }
         }
 
         function showQuestion() {
-            if (gameState.currentDepth >= questions.length) {
+            if (gameState.currentStep >= questions.length) {
                 showLoading();
                 return;
             }
 
-            const question = questions[gameState.currentDepth];
+            const question = questions[gameState.currentStep];
+            const progress = ((gameState.currentStep + 1) / questions.length) * 100;
+
+            elements.progressFill.style.width = `${progress}%`;
+            elements.depthIndicator.textContent = `수심 ${question.depth}m`;
+            elements.questionText.textContent = question.text;
             
-            const progress = ((gameState.currentDepth + 1) / questions.length) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
-            document.getElementById('depthIndicator').textContent = `수심 ${question.depth}m`;
-            
-            document.getElementById('questionText').textContent = question.text;
-            
-            const optionsContainer = document.getElementById('optionsContainer');
-            optionsContainer.innerHTML = '';
-            
-            question.options.forEach((option, index) => {
+            elements.optionsContainer.innerHTML = '';
+            question.options.forEach(option => {
                 const button = document.createElement('button');
                 button.className = 'option-btn';
                 button.textContent = option.text;
-                button.setAttribute('data-type', option.type);
-                button.setAttribute('data-index', index);
-                
-                button.addEventListener('click', function() {
-                    handleOptionClick(option.type, index);
-                });
-                
-                optionsContainer.appendChild(button);
+                button.onclick = () => handleOptionClick(option.type);
+                elements.optionsContainer.appendChild(button);
             });
             
-            showScreen('questionScreen');
-            gameState.isTransitioning = false;
+            showScreen('question');
         }
 
-        function handleOptionClick(type, index) {
+        function handleOptionClick(type) {
             if (gameState.isTransitioning) return;
-            
             gameState.isTransitioning = true;
 
-            const buttons = document.querySelectorAll('.option-btn');
-            buttons.forEach((btn, i) => {
-                btn.disabled = true;
-                btn.style.pointerEvents = 'none';
-                if (i !== index) {
-                    btn.style.opacity = '0.3';
-                } else {
-                    btn.classList.add('selected');
-                }
-            });
-            
             if (gameState.scores.hasOwnProperty(type)) {
                 gameState.scores[type]++;
             }
-            gameState.responses.push(type);
+            
+            // 선택 효과
+            const selectedButton = event.target;
+            selectedButton.classList.add('selected');
+            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
             
             setTimeout(() => {
-                gameState.currentDepth++;
+                gameState.currentStep++;
+                gameState.isTransitioning = false;
                 
-                if (gameState.currentDepth < questions.length) {
-                    if (gameState.currentDepth % 3 === 0 && gameState.currentStory < stories.length) {
-                        showStory();
-                    } else {
-                        showQuestion();
-                    }
+                const showStoryNext = (gameState.currentStep === 2 || gameState.currentStep === 4);
+                if (showStoryNext) {
+                    showStory();
                 } else {
-                    showLoading();
+                    showQuestion();
                 }
-            }, 400);
+            }, 500);
         }
 
         function showLoading() {
-            const messages = loadingMessages;
-            let messageIndex = 0;
-            
-            const messageElement = document.getElementById('loadingMessage');
-            messageElement.textContent = messages[messageIndex];
-            
-            showScreen('loadingScreen');
-            
+            showScreen('loading');
+            let msgIndex = 0;
+            elements.loadingMessage.textContent = loadingMessages[msgIndex];
+
             const interval = setInterval(() => {
-                messageIndex = (messageIndex + 1) % messages.length;
-                messageElement.textContent = messages[messageIndex];
-            }, 2000);
-            
+                msgIndex = (msgIndex + 1) % loadingMessages.length;
+                elements.loadingMessage.textContent = loadingMessages[msgIndex];
+            }, 1500);
+
             setTimeout(() => {
                 clearInterval(interval);
                 showResult();
-            }, 6000);
+            }, 4500);
         }
 
         function showResult() {
-            const resultKey = calculateResultType();
-            const result = results[resultKey] || results["pearl-gentle"];
-            
-            document.getElementById('resultTitle').textContent = result.title;
-            document.getElementById('resultSubtitle').textContent = result.subtitle;
-            document.getElementById('essenceText').textContent = result.essence;
-            document.getElementById('lightSide').textContent = result.light;
-            document.getElementById('shadowSide').textContent = result.shadow;
-            document.getElementById('growthPath').textContent = result.growth;
-            document.getElementById('letterContent').innerHTML = result.letter;
-            
-            showScreen('resultScreen');
-            
-            window.mindDiveResult = {
-                type: resultKey,
-                result: result,
-                responses: gameState.responses,
-                scores: gameState.scores,
-                timestamp: new Date().toISOString()
-            };
-        }
-
-        function calculateResultType() {
             const scores = gameState.scores;
-            
             const mainTypes = ['pearl', 'current', 'abyss', 'coral'];
             const subTypes = ['gentle', 'brave', 'wise', 'free'];
-            
-            const mainMax = Math.max(...mainTypes.map(type => scores[type]));
-            const subMax = Math.max(...subTypes.map(type => scores[type]));
-            
-            const mainType = mainTypes.find(type => scores[type] === mainMax);
-            const subType = subTypes.find(type => scores[type] === subMax);
-            
+
+            const mainType = mainTypes.reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const subType = subTypes.reduce((a, b) => scores[a] > scores[b] ? a : b);
+
             const resultKey = `${mainType}-${subType}`;
-            
-            if (results[resultKey]) {
-                return resultKey;
-            }
-            
-            const alternatives = [
-                `${subType}-${mainType}`,
-                mainType + '-gentle',
-                'pearl-gentle'
-            ];
-            
-            for (const alt of alternatives) {
-                if (results[alt]) {
-                    return alt;
-                }
-            }
-            
-            return 'pearl-gentle';
+            const resultData = results[resultKey] || results['pearl-gentle'];
+
+            elements.resultTitle.textContent = resultData.title;
+            elements.resultSubtitle.textContent = resultData.subtitle;
+            elements.essenceText.textContent = resultData.essence;
+            elements.lightSide.textContent = resultData.light;
+            elements.shadowSide.textContent = resultData.shadow;
+            elements.growthPath.textContent = resultData.growth;
+            elements.letterContent.innerHTML = resultData.letter;
+
+            showScreen('result');
+        }
+        
+        function restartDive() {
+            gameState = {
+                currentStep: 0,
+                scores: {
+                    pearl: 0, current: 0, abyss: 0, coral: 0,
+                    gentle: 0, brave: 0, wise: 0, free: 0
+                },
+                isTransitioning: false
+            };
+            showScreen('welcome');
         }
 
-        function showScreen(screenId) {
-            try {
-                const allScreens = document.querySelectorAll('.screen');
-                allScreens.forEach(screen => {
-                    screen.classList.add('hidden');
-                });
+        // --- 부가 기능 (오디오, 공유) ---
+        function createOceanSound() {
+            if (!audioContext) return;
+            gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            
+            const freqs = [60, 120, 180, 240];
+            freqs.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
                 
-                const targetScreen = document.getElementById(screenId);
-                if (targetScreen) {
-                    targetScreen.classList.remove('hidden');
-                    window.scrollTo(0, 0);
-                }
-            } catch (e) {
-                console.error('화면 전환 중 오류:', e);
+                const lfo = audioContext.createOscillator();
+                lfo.type = 'sine';
+                lfo.frequency.value = 0.1 + (i * 0.05);
+
+                const lfoGain = audioContext.createGain();
+                lfoGain.gain.value = freq * 0.05;
+                
+                lfo.connect(lfoGain);
+                lfoGain.connect(osc.frequency);
+                osc.connect(gainNode);
+                osc.start();
+                lfo.start();
+            });
+            gainNode.connect(audioContext.destination);
+        }
+        
+        async function toggleMusic(forcePlay = false) {
+             if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                createOceanSound();
+            }
+
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+
+            if (forcePlay || !isMusicPlaying) {
+                gainNode.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 1);
+                isMusicPlaying = true;
+                audioControl.icon.textContent = '🌊';
+                audioControl.button.classList.add('playing');
+            } else {
+                gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1);
+                isMusicPlaying = false;
+                audioControl.icon.textContent = '🎵';
+                audioControl.button.classList.remove('playing');
             }
         }
+        
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('링크가 클립보드에 복사되었습니다.');
+            });
+        }
+        
+        // Kakao SDK 로드
+        const script = document.createElement('script');
+        script.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js';
+        script.integrity = 'sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01';
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
 
+        script.onload = () => {
+            // Kakao.init('YOUR_JAVASCRIPT_KEY'); // 여기에 실제 카카오 앱 키를 넣으세요.
+        };
+        
         function shareKakao() {
-            const resultData = window.mindDiveResult;
-            if (resultData) {
-                const text = `MIND DIVE에서 발견한 나의 모습: ${resultData.result.title}\n\n${resultData.result.subtitle}\n\n당신도 마음의 심해로 여행을 떠나보세요.`;
-                
-                if (typeof Kakao !== 'undefined' && Kakao.Link) {
-                    Kakao.Link.sendDefault({
-                        objectType: 'text',
-                        text: text,
-                        link: {
-                            mobileWebUrl: window.location.href,
-                            webUrl: window.location.href,
-                        },
-                    });
-                } else {
+            if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) {
+                alert('카카오 공유 기능이 아직 준비되지 않았습니다. 잠시 후 다시 시도해주세요.');
+                return;
+            }
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: `[MIND DIVE] 나의 마음 유형: ${elements.resultTitle.textContent}`,
+                    description: elements.resultSubtitle.textContent,
+                    imageUrl: 'https://images.unsplash.com/photo-1502657877623-f66bf489d236?q=80&w=1200', // 대표 이미지
+                    link: { mobileWebUrl: window.location.href, webUrl: window.location.href },
+                },
+                buttons: [{ title: '나도 테스트하기', link: { mobileWebUrl: window.location.href, webUrl: window.location.href }}]
+            });
+        }
+        
+        // --- 이벤트 리스너 설정 ---
+        buttons.start.addEventListener('click', startJourney);
+        buttons.continue.addEventListener('click', continueJourney);
+        buttons.restart.addEventListener('click', restartDive);
+        buttons.link.addEventListener('click', copyLink);
+        buttons.kakao.addEventListener('click', shareKakao);
+        audioControl.button.addEventListener('click', () => toggleMusic());
+        
+        // 배경 효과 생성
+        for (let i = 0; i < 10; i++) {
+             const drop = document.createElement('div');
+             drop.className = 'water-drop';
+             drop.style.left = `${Math.random() * 100}vw`;
+             drop.style.animationDuration = `${Math.random() * 5 + 5}s`;
+             drop.style.animationDelay = `${Math.random() * 5}s`;
+             document.body.appendChild(drop);
+        }
+    });
+    </script>
+</body>
+</html>
