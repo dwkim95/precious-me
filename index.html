@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MIND DIVE - 마음 깊이 측정하기</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -10,19 +10,60 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 400;
-            overflow: hidden;
             background: #000;
             color: #fff;
             letter-spacing: -0.02em;
             line-height: 1.7;
+            overflow-x: hidden;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 로딩 화면 */
+        .loading-screen {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: #90e0ef;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         /* 일러스트 요소 */
+        .ocean-elements {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
         .whale {
             width: 100px;
             height: 50px;
@@ -52,15 +93,6 @@
         }
 
         /* 물방울 효과 */
-        .bubbles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 1;
-        }
-
         .bubble {
             position: absolute;
             bottom: -100px;
@@ -80,13 +112,15 @@
         .screen {
             position: fixed;
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             display: none;
             justify-content: center;
             align-items: center;
             opacity: 0;
             transition: opacity 1.2s ease;
             z-index: 10;
+            padding: 20px;
+            overflow-y: auto;
         }
 
         .screen.active {
@@ -94,10 +128,46 @@
             opacity: 1;
         }
 
+        /* 진행 상태 표시 */
+        .progress-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .progress-container.show {
+            opacity: 1;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48cae4, #0077b6);
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 8px;
+        }
+
         /* 깊이 표시기 */
         .depth-indicator {
             position: fixed;
-            right: 30px;
+            right: 20px;
             top: 50%;
             transform: translateY(-50%);
             z-index: 20;
@@ -109,21 +179,37 @@
             opacity: 0.5;
         }
 
-        .depth-bar {
-            width: 3px;
-            height: 180px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
+        .depth-visual {
+            width: 60px;
+            height: 150px;
+            background: linear-gradient(to bottom, 
+                rgba(144, 224, 239, 0.3) 0%, 
+                rgba(0, 119, 182, 0.3) 50%, 
+                rgba(3, 4, 94, 0.3) 100%);
+            border-radius: 30px;
             position: relative;
+            overflow: hidden;
         }
 
-        .depth-progress {
+        .depth-marker {
             position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: linear-gradient(to top, #48cae4, #0077b6);
-            border-radius: 2px;
-            transition: height 1s ease;
+            width: 40px;
+            height: 40px;
+            background: #90e0ef;
+            border-radius: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: top 1s ease;
+            box-shadow: 0 0 20px rgba(144, 224, 239, 0.6);
+        }
+
+        .depth-number {
+            position: absolute;
+            right: 70px;
+            color: #90e0ef;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: top 1s ease;
         }
 
         /* 시작 화면 */
@@ -134,25 +220,27 @@
         .start-content {
             text-align: center;
             max-width: 600px;
-            padding: 0 30px;
         }
 
-        .start-content h1 {
-            font-size: 3.5rem;
+        .logo {
+            font-size: 4rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             opacity: 0;
             animation: fadeInUp 1.2s ease-out forwards;
             letter-spacing: -0.03em;
+            background: linear-gradient(180deg, #90e0ef 0%, #0077b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .start-content .subtitle {
+        .subtitle {
             font-size: 1.1rem;
             margin-bottom: 3rem;
             opacity: 0;
             animation: fadeInUp 1.2s ease-out 0.3s forwards;
             color: rgba(255, 255, 255, 0.8);
-            font-weight: 300;
         }
 
         /* 인트로 화면 */
@@ -163,10 +251,9 @@
         .intro-content {
             text-align: center;
             max-width: 750px;
-            padding: 0 40px;
         }
 
-        .intro-text h2 {
+        .intro-title {
             font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 2rem;
@@ -174,7 +261,7 @@
             animation: fadeIn 1.5s ease-out forwards;
         }
 
-        .intro-text p {
+        .intro-text {
             font-size: 1.15rem;
             line-height: 2.2;
             margin-bottom: 1.5rem;
@@ -183,7 +270,7 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        .intro-text .emphasis {
+        .emphasis {
             display: block;
             font-size: 1.3rem;
             margin: 2rem 0;
@@ -191,33 +278,6 @@
             font-weight: 600;
             opacity: 0;
             animation: fadeIn 1.5s ease-out 1s forwards;
-        }
-
-        /* 준비 화면 */
-        #prepareScreen {
-            background: linear-gradient(to bottom, #0077b6 0%, #0096c7 100%);
-        }
-
-        .prepare-content {
-            text-align: center;
-            max-width: 650px;
-            padding: 0 40px;
-        }
-
-        .breath-text {
-            font-size: 1.2rem;
-            line-height: 2.5;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out forwards;
-        }
-
-        .breath-guide {
-            font-size: 1.8rem;
-            color: #caf0f8;
-            margin: 2rem 0;
-            font-weight: 600;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out 0.5s forwards;
         }
 
         /* 설문 화면 */
@@ -228,25 +288,26 @@
         .survey-content {
             text-align: center;
             max-width: 700px;
-            padding: 0 30px;
+            width: 100%;
+        }
+
+        .question-header {
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
         }
 
         .question-depth {
             font-size: 0.9rem;
             color: #caf0f8;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             letter-spacing: 0.1em;
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
         }
 
-        .question {
+        .question-title {
             font-size: 1.6rem;
             font-weight: 600;
-            margin-bottom: 2.5rem;
             line-height: 1.8;
-            opacity: 0;
-            animation: fadeIn 1s ease-out 0.3s forwards;
         }
 
         .options {
@@ -254,7 +315,7 @@
             flex-direction: column;
             gap: 0.8rem;
             opacity: 0;
-            animation: fadeIn 1s ease-out 0.6s forwards;
+            animation: fadeIn 1s ease-out 0.3s forwards;
         }
 
         .option-button {
@@ -269,7 +330,19 @@
             transition: all 0.3s ease;
             text-align: left;
             width: 100%;
-            font-weight: 400;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
         }
 
         .option-button:hover {
@@ -278,62 +351,220 @@
             transform: translateX(5px);
         }
 
+        .option-button:hover::before {
+            left: 100%;
+        }
+
         /* 결과 화면 */
         #resultScreen {
-            background: linear-gradient(to bottom, #00b4d8 0%, #48cae4 100%);
+            background: linear-gradient(to bottom, #023e8a 0%, #03045e 100%);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .result-content {
-            max-width: 800px;
-            padding: 0 40px;
+        .result-container {
+            max-width: 900px;
+            padding: 40px 30px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* 결과 헤더 */
+        .result-header {
             text-align: center;
-        }
-
-        .result-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 3rem;
             opacity: 0;
             animation: fadeIn 1.5s ease-out 0.3s forwards;
         }
 
-        .depth-reached {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 2rem;
+        .result-type {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #90e0ef;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(144, 224, 239, 0.4);
+        }
+
+        .depth-badge {
+            display: inline-block;
+            background: rgba(144, 224, 239, 0.1);
+            border: 1px solid rgba(144, 224, 239, 0.3);
+            padding: 10px 30px;
+            border-radius: 30px;
+            margin-bottom: 1rem;
+        }
+
+        .depth-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #caf0f8;
+        }
+
+        .depth-description {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        /* 시각적 요소 */
+        .result-visual {
+            width: 200px;
+            height: 200px;
+            margin: 2rem auto;
+            position: relative;
             opacity: 0;
             animation: fadeIn 1.5s ease-out 0.6s forwards;
         }
 
-        .result-box {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin: 2rem 0;
-            backdrop-filter: blur(10px);
+        .visual-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(144, 224, 239, 0.3), transparent);
+            animation: pulse 3s infinite;
+            position: absolute;
+        }
+
+        .visual-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+        }
+
+        /* 성격 카드 */
+        .personality-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
             opacity: 0;
             animation: fadeIn 1.5s ease-out 0.9s forwards;
         }
 
-        .result-section {
-            margin-bottom: 2rem;
-            text-align: left;
+        .personality-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
 
-        .result-section:last-child {
-            margin-bottom: 0;
+        .personality-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(144, 224, 239, 0.2);
+            border-color: rgba(144, 224, 239, 0.3);
         }
 
-        .result-section h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
+        .card-icon {
+            font-size: 2rem;
             margin-bottom: 1rem;
-            color: #caf0f8;
         }
 
-        .result-section p {
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #90e0ef;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* 특성 태그 */
+        .trait-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin: 2rem 0;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 1.2s forwards;
+        }
+
+        .trait-tag {
+            background: rgba(144, 224, 239, 0.15);
+            border: 1px solid rgba(144, 224, 239, 0.3);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            color: #caf0f8;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .trait-tag:hover {
+            background: rgba(144, 224, 239, 0.25);
+            transform: scale(1.05);
+        }
+
+        /* 상세 설명 섹션 */
+        .detail-sections {
+            margin-top: 3rem;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 1.5s forwards;
+        }
+
+        .detail-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #90e0ef;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #90e0ef;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-content {
             font-size: 1.05rem;
             line-height: 2;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .highlight-box {
+            background: rgba(144, 224, 239, 0.08);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            border: 1px solid rgba(144, 224, 239, 0.2);
+        }
+
+        /* 최종 메시지 */
+        .final-message {
+            background: linear-gradient(135deg, rgba(144, 224, 239, 0.1), rgba(0, 119, 182, 0.1));
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 3rem 0 2rem;
+            text-align: center;
+            border: 1px solid rgba(144, 224, 239, 0.2);
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 1.8s forwards;
+        }
+
+        .message-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #caf0f8;
+            margin-bottom: 1.5rem;
+        }
+
+        .message-content {
+            font-size: 1.1rem;
+            line-height: 2.2;
             color: rgba(255, 255, 255, 0.9);
         }
 
@@ -351,6 +582,21 @@
             letter-spacing: 0.02em;
             margin-top: 1.5rem;
             font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
 
         .nav-button:hover {
@@ -358,6 +604,29 @@
             border-color: rgba(255, 255, 255, 0.5);
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .share-button {
+            background: rgba(144, 224, 239, 0.1);
+            border-color: rgba(144, 224, 239, 0.3);
+        }
+
+        .share-button:hover {
+            background: rgba(144, 224, 239, 0.2);
+            border-color: rgba(144, 224, 239, 0.5);
         }
 
         /* 애니메이션 */
@@ -377,429 +646,658 @@
             to { opacity: 1; }
         }
 
-        /* 반응형 */
+        /* 모바일 반응형 */
         @media (max-width: 768px) {
-            .start-content h1 { font-size: 2.5rem; }
-            .question { font-size: 1.3rem; }
-            .result-title { font-size: 2rem; }
-            .whale { width: 70px; height: 35px; }
-            .option-button { padding: 15px 25px; font-size: 0.95rem; }
+            .logo { font-size: 3rem; }
+            .question-title { font-size: 1.3rem; }
+            .result-type { font-size: 2rem; }
+            .personality-cards { grid-template-columns: 1fr; }
+            .depth-indicator { right: 10px; }
+            .progress-container { top: 10px; }
+            .result-visual { width: 150px; height: 150px; }
+            .visual-icon { font-size: 3rem; }
+            .action-buttons { flex-direction: column; }
+            .nav-button { width: 100%; }
+        }
+
+        @media (max-width: 375px) {
+            .logo { font-size: 2.5rem; }
+            .result-type { font-size: 1.8rem; }
+            .detail-section { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- 물방울 효과 -->
-    <div class="bubbles" id="bubbles"></div>
+    <!-- 로딩 화면 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">마음의 바다를 준비하고 있어요</div>
+    </div>
+
+    <!-- 바다 요소들 -->
+    <div class="ocean-elements" id="oceanElements"></div>
+
+    <!-- 진행 상태 표시 -->
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text" id="progressText">0 / 10</div>
+    </div>
 
     <!-- 깊이 표시기 -->
     <div class="depth-indicator" id="depthIndicator">
-        <div class="depth-bar">
-            <div class="depth-progress" id="depthProgress" style="height: 0%"></div>
+        <div class="depth-visual">
+            <div class="depth-marker" id="depthMarker" style="top: 0"></div>
         </div>
+        <div class="depth-number" id="depthNumber" style="top: 0">0m</div>
     </div>
 
     <!-- 시작 화면 -->
-    <div id="startScreen" class="screen active">
+    <div id="startScreen" class="screen">
         <div class="whale"></div>
         <div class="start-content">
-            <h1>MIND DIVE</h1>
+            <h1 class="logo">MIND DIVE</h1>
             <p class="subtitle">마음 깊이 측정하기</p>
-            <button id="startButton" class="nav-button">시작하기</button>
+            <button class="nav-button" onclick="showScreen('introScreen')">시작하기</button>
         </div>
     </div>
 
     <!-- 인트로 화면 -->
     <div id="introScreen" class="screen">
         <div class="intro-content">
-            <div class="intro-text">
-                <h2>요즘 많이 힘드시죠?</h2>
-                <p>
-                    매일 반복되는 일상에 지쳐가고<br>
-                    사람들과의 관계에서 상처받고<br>
-                    나를 알아주는 사람이 없는 것 같고
-                </p>
-                <span class="emphasis">잠시 모든 걸 내려놓고 쉬어가도 괜찮아요</span>
-                <p>
-                    지금부터 당신의 마음속을<br>
-                    천천히 들여다볼 거예요
-                </p>
+            <h2 class="intro-title">요즘 많이 힘드시죠?</h2>
+            <p class="intro-text">
+                매일 반복되는 일상에 지쳐가고<br>
+                사람들과의 관계에서 상처받고<br>
+                나를 알아주는 사람이 없는 것 같고
+            </p>
+            <span class="emphasis">잠시 모든 걸 내려놓고 쉬어가도 괜찮아요</span>
+            <p class="intro-text">
+                지금부터 당신의 마음속을<br>
+                천천히 들여다볼 거예요
+            </p>
+            <button class="nav-button" onclick="startSurvey()">준비됐어요</button>
+        </div>
+    </div>
+
+    <!-- 설문 화면 (동적 생성) -->
+    <div id="surveyScreen" class="screen survey-screen">
+        <div class="survey-content">
+            <div class="question-header">
+                <div class="question-depth" id="questionDepth"></div>
+                <div class="question-title" id="questionTitle"></div>
             </div>
-            <button id="continueButton" class="nav-button">다음</button>
-        </div>
-    </div>
-
-    <!-- 준비 화면 -->
-    <div id="prepareScreen" class="screen">
-        <div class="prepare-content">
-            <div class="breath-text">
-                <p>편안한 자세로 앉아주세요</p>
-                <p class="breath-guide">깊게 숨을 들이쉬고 천천히 내쉬어요</p>
-                <p>
-                    마음의 바다로 들어갈 준비가 되셨나요?<br>
-                    각 질문마다 더 깊은 곳으로 내려갈 거예요<br><br>
-                    걱정하지 마세요<br>
-                    언제든 당신의 속도대로 진행하면 돼요
-                </p>
-            </div>
-            <button id="beginButton" class="nav-button">준비됐어요</button>
-        </div>
-    </div>
-
-    <!-- 설문 화면들 -->
-    <div id="surveyScreen1" class="screen survey-screen">
-        <div class="survey-content">
-            <div class="question-depth">수심 10m</div>
-            <div class="question">오늘 하루는 어땠나요?</div>
-            <div class="options" id="options1"></div>
-        </div>
-    </div>
-
-    <div id="surveyScreen2" class="screen survey-screen">
-        <div class="survey-content">
-            <div class="question-depth">수심 30m</div>
-            <div class="question">최근 가장 힘든 건 무엇인가요?</div>
-            <div class="options" id="options2"></div>
-        </div>
-    </div>
-
-    <div id="surveyScreen3" class="screen survey-screen">
-        <div class="survey-content">
-            <div class="question-depth">수심 50m</div>
-            <div class="question">사람들과 있을 때 어떤가요?</div>
-            <div class="options" id="options3"></div>
-        </div>
-    </div>
-
-    <div id="surveyScreen4" class="screen survey-screen">
-        <div class="survey-content">
-            <div class="question-depth">수심 70m</div>
-            <div class="question">혼자 있을 때 어떤 생각을 하나요?</div>
-            <div class="options" id="options4"></div>
-        </div>
-    </div>
-
-    <div id="surveyScreen5" class="screen survey-screen">
-        <div class="survey-content">
-            <div class="question-depth">수심 90m</div>
-            <div class="question">지금 가장 필요한 건 무엇인가요?</div>
-            <div class="options" id="options5"></div>
-        </div>
-    </div>
-
-    <div id="surveyScreen6" class="screen survey-screen">
-        <div class="survey-content">
-            <div class="question-depth">수심 120m</div>
-            <div class="question">마음 깊은 곳의 두려움은?</div>
-            <div class="options" id="options6"></div>
-        </div>
-    </div>
-
-    <div id="surveyScreen7" class="screen survey-screen">
-        <div class="survey-content">
-            <div class="question-depth">수심 150m</div>
-            <div class="question">진짜 나는 어떤 사람인가요?</div>
-            <div class="options" id="options7"></div>
+            <div class="options" id="optionsContainer"></div>
         </div>
     </div>
 
     <!-- 결과 화면 -->
     <div id="resultScreen" class="screen">
-        <div class="result-content">
-            <h2 class="result-title" id="resultTitle">깊은 바다의 진주</h2>
-            <p class="depth-reached">도달한 깊이: <span id="depthText">150m</span></p>
-            
-            <div class="result-box">
-                <div class="result-section">
-                    <h3>당신의 마음 상태</h3>
-                    <p id="stateDescription">
-                        겉으로는 잔잔해 보이지만 속은 깊은 생각과 감정으로 가득합니다.
-                        혼자만의 시간을 소중히 여기며, 진정성 있는 관계를 추구합니다.
-                        때로는 외로움을 느끼지만, 그것은 당신이 깊이 있는 사람이기 때문입니다.
-                    </p>
-                </div>
-                
-                <div class="result-section">
-                    <h3>현재 필요한 것</h3>
-                    <p id="needsDescription">
-                        지금 당신에게는 충분한 휴식과 자기 돌봄의 시간이 필요합니다.
-                        매일 조금씩이라도 자신을 위한 시간을 가져보세요.
-                        좋아하는 음악을 듣거나, 산책을 하거나, 그냥 아무것도 하지 않아도 좋습니다.
-                    </p>
-                </div>
-                
-                <div class="result-section">
-                    <h3>당신에게 전하는 말</h3>
-                    <p id="messageDescription">
-                        당신은 충분히 잘하고 있어요.
-                        완벽하지 않아도, 실수를 해도 괜찮습니다.
-                        지금처럼 한 걸음씩 나아가면 됩니다.
-                        당신의 속도가 가장 적절한 속도예요.
-                        힘들 때는 잠시 쉬어가도 좋고, 도움을 요청해도 좋습니다.
-                        당신은 혼자가 아니에요.
-                    </p>
+        <div class="result-container">
+            <div class="result-header">
+                <h2 class="result-type" id="resultType">깊은 바다의 진주</h2>
+                <div class="depth-badge">
+                    <div class="depth-value" id="finalDepth">150m</div>
+                    <div class="depth-description" id="depthMeaning">가장 깊은 곳까지 내려간 당신</div>
                 </div>
             </div>
-            
-            <button id="restartButton" class="nav-button">처음으로</button>
+
+            <div class="result-visual">
+                <div class="visual-circle"></div>
+                <div class="visual-icon" id="resultIcon">💎</div>
+            </div>
+
+            <div class="trait-tags" id="traitTags"></div>
+
+            <div class="personality-cards" id="personalityCards"></div>
+
+            <div class="detail-sections">
+                <div class="detail-section">
+                    <h3 class="section-title">
+                        <span>🌊</span>
+                        <span>당신의 마음 상태</span>
+                    </h3>
+                    <div class="section-content" id="currentState"></div>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="section-title">
+                        <span>💫</span>
+                        <span>당신만의 특별함</span>
+                    </h3>
+                    <div class="section-content" id="uniqueTraits"></div>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="section-title">
+                        <span>🌱</span>
+                        <span>성장을 위한 조언</span>
+                    </h3>
+                    <div class="section-content" id="growthAdvice"></div>
+                </div>
+            </div>
+
+            <div class="final-message">
+                <h3 class="message-title">당신에게 전하는 편지</h3>
+                <div class="message-content" id="personalMessage"></div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="nav-button" onclick="restart()">다시 측정하기</button>
+                <button class="nav-button share-button" onclick="shareResult()">결과 공유하기</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // 설문 데이터
-        const surveyData = {
-            1: {
+        // 전역 변수
+        let currentQuestion = 0;
+        let answers = [];
+        let surveyStarted = false;
+
+        // 설문 데이터 (10문항으로 확장)
+        const surveyData = [
+            {
+                depth: "수심 10m - 표면의 물결",
+                question: "평소 스트레스를 받을 때 어떻게 반응하시나요?",
                 options: [
-                    "평범했지만 뭔가 허전했어요",
-                    "일이 많아서 정신없이 바빴어요",
-                    "특별한 일 없이 무기력했어요",
-                    "나름 괜찮았지만 피곤했어요"
+                    "혼자 조용히 시간을 보내며 회복해요",
+                    "친구들과 만나서 이야기를 나눠요",
+                    "운동이나 활동적인 것을 하며 풀어요",
+                    "그냥 참고 일상을 계속해요"
                 ]
             },
-            2: {
+            {
+                depth: "수심 20m - 빛이 닿는 곳",
+                question: "하루 중 가장 편안한 시간은 언제인가요?",
                 options: [
-                    "일이 너무 많고 압박감이 심해요",
-                    "사람들과의 관계가 어렵고 피곤해요",
-                    "미래가 불확실해서 불안해요",
-                    "나 자신이 마음에 들지 않아요"
+                    "이른 아침의 고요한 시간",
+                    "활기찬 낮 시간",
+                    "노을 지는 저녁 무렵",
+                    "모두가 잠든 깊은 밤"
                 ]
             },
-            3: {
+            {
+                depth: "수심 35m - 온도가 변하는 층",
+                question: "새로운 사람들을 만날 때 어떤가요?",
                 options: [
-                    "겉으로는 밝지만 속은 외로워요",
-                    "있는 그대로의 나를 보여주기 어려워요",
-                    "사람들이 부담스럽고 혼자 있고 싶어요",
-                    "편한 사람들하고만 있고 싶어요"
+                    "설레고 기대돼요",
+                    "긴장되지만 괜찮아요",
+                    "피곤하고 부담스러워요",
+                    "상황에 따라 달라요"
                 ]
             },
-            4: {
+            {
+                depth: "수심 50m - 해류가 흐르는 곳",
+                question: "요즘 가장 많이 드는 감정은?",
                 options: [
-                    "내가 잘 살고 있나 의구심이 들어요",
-                    "왜 이렇게 외로운지 모르겠어요",
-                    "하고 싶은 게 뭔지 모르겠어요",
-                    "과거의 일들이 자꾸 떠올라요"
+                    "불안하고 초조한 마음",
+                    "무기력하고 공허한 느낌",
+                    "답답하고 갑갑한 기분",
+                    "잔잔하지만 쓸쓸한 마음"
                 ]
             },
-            5: {
+            {
+                depth: "수심 70m - 압력이 느껴지는 곳",
+                question: "중요한 결정을 내릴 때 어떻게 하시나요?",
                 options: [
-                    "아무 생각 없이 푹 쉬고 싶어요",
-                    "나를 이해해주는 사람이 필요해요",
-                    "새로운 시작을 위한 용기가 필요해요",
-                    "내 마음을 정리할 시간이 필요해요"
+                    "충분히 고민하고 신중하게 결정해요",
+                    "직감을 믿고 빠르게 결정해요",
+                    "다른 사람들의 조언을 구해요",
+                    "최대한 미루다가 어쩔 수 없이 결정해요"
                 ]
             },
-            6: {
+            {
+                depth: "수심 90m - 어둠이 시작되는 곳",
+                question: "실패했을 때 어떤 생각이 드나요?",
                 options: [
-                    "영원히 혼자가 될까봐 두려워요",
-                    "실패해서 무너질까봐 두려워요",
-                    "진짜 나를 보여줬다가 싫어할까봐 두려워요",
-                    "이대로 아무것도 변하지 않을까봐 두려워요"
+                    "내가 부족해서 그런 거야",
+                    "다음엔 더 잘할 수 있을 거야",
+                    "운이 없었을 뿐이야",
+                    "실패도 하나의 경험이야"
                 ]
             },
-            7: {
+            {
+                depth: "수심 110m - 고요한 심연",
+                question: "혼자 있을 때 자주 하는 생각은?",
                 options: [
-                    "겉은 강해 보여도 속은 여린 사람",
-                    "사랑받고 싶어하는 평범한 사람",
-                    "아직 나를 찾아가는 중인 사람",
-                    "많은 가능성을 가진 사람"
+                    "과거의 일들을 되돌아봐요",
+                    "미래에 대한 계획을 세워요",
+                    "현재의 고민들을 정리해요",
+                    "아무 생각 없이 있으려고 해요"
+                ]
+            },
+            {
+                depth: "수심 130m - 압력의 경계",
+                question: "진정한 휴식은 무엇이라고 생각하나요?",
+                options: [
+                    "아무것도 하지 않고 멍하니 있기",
+                    "좋아하는 취미활동에 몰두하기",
+                    "사랑하는 사람들과 시간 보내기",
+                    "새로운 곳으로 여행 떠나기"
+                ]
+            },
+            {
+                depth: "수심 150m - 진정한 심해",
+                question: "가장 두려운 것은 무엇인가요?",
+                options: [
+                    "영원히 이해받지 못하는 것",
+                    "소중한 것을 잃어버리는 것",
+                    "나 자신을 잃어버리는 것",
+                    "아무것도 변하지 않는 것"
+                ]
+            },
+            {
+                depth: "수심 180m - 마음의 심해",
+                question: "진짜 나는 어떤 사람인가요?",
+                options: [
+                    "겉과 속이 다른 복잡한 사람",
+                    "상처받기 쉬운 여린 사람",
+                    "가능성이 무한한 성장하는 사람",
+                    "아직도 나를 찾아가는 사람"
                 ]
             }
-        };
+        ];
 
-        // 결과 데이터
+        // 결과 유형 데이터 (4가지 유형)
         const resultTypes = {
-            'deep_pearl': {
-                title: '깊은 바다의 진주',
-                depth: '150m',
-                state: `겉으로는 잔잔해 보이지만 속은 깊은 생각과 감정으로 가득합니다.
-                    혼자만의 시간을 소중히 여기며, 진정성 있는 관계를 추구합니다.
-                    때로는 외로움을 느끼지만, 그것은 당신이 깊이 있는 사람이기 때문입니다.`,
-                needs: `지금 당신에게는 충분한 휴식과 자기 돌봄의 시간이 필요합니다.
-                    매일 조금씩이라도 자신을 위한 시간을 가져보세요.
-                    좋아하는 음악을 듣거나, 산책을 하거나, 그냥 아무것도 하지 않아도 좋습니다.`,
-                message: `당신은 충분히 잘하고 있어요.
-                    완벽하지 않아도, 실수를 해도 괜찮습니다.
-                    지금처럼 한 걸음씩 나아가면 됩니다.
-                    당신의 속도가 가장 적절한 속도예요.
-                    힘들 때는 잠시 쉬어가도 좋고, 도움을 요청해도 좋습니다.
-                    당신은 혼자가 아니에요.`
+            'deep_ocean': {
+                type: '심해의 진주',
+                icon: '🦪',
+                depth: '180m',
+                meaning: '가장 깊은 곳까지 내려간 당신',
+                traits: ['내면의 우주', '고요한 관찰자', '깊은 통찰력', '숨겨진 지혜'],
+                cards: [
+                    {
+                        icon: '🌌',
+                        title: '내면의 깊이',
+                        desc: '겉으로는 조용해 보이지만, 내면에는 광대한 우주가 펼쳐져 있어요. 사소한 것에서도 깊은 의미를 발견하는 능력이 있습니다.'
+                    },
+                    {
+                        icon: '💎',
+                        title: '숨겨진 보석',
+                        desc: '압력 속에서 만들어진 진주처럼, 당신은 어려움을 통해 더욱 단단해지고 아름다워집니다.'
+                    },
+                    {
+                        icon: '🔮',
+                        title: '직관의 힘',
+                        desc: '말로 표현할 수 없는 것들을 느끼고 이해하는 특별한 감각을 가지고 있어요.'
+                    }
+                ],
+                state: `지금 당신은 많은 생각과 감정의 소용돌이 속에 있어요. 겉으로는 평온해 보이지만, 내면에서는 크고 작은 파도가 일고 있죠. 혼자만의 시간이 절실히 필요하면서도, 동시에 깊이 이해받고 싶은 갈망이 공존합니다.
+
+                깊은 곳까지 잠수할 수 있다는 것은 그만큼 강인한 내면을 가졌다는 증거예요. 하지만 가끔은 그 깊이가 외로움으로 다가올 때도 있겠죠.`,
+                unique: `당신의 가장 큰 강점은 '깊이'입니다. 남들이 지나치는 순간에서도 의미를 발견하고, 표면 너머의 진실을 볼 수 있는 눈을 가졌어요.
+
+                <div class="highlight-box">
+                    <strong>당신만의 초능력:</strong><br>
+                    • 복잡한 감정을 섬세하게 이해하는 능력<br>
+                    • 침묵 속에서도 많은 것을 전달하는 존재감<br>
+                    • 진정성을 알아보는 예리한 직관
+                </div>
+
+                이런 깊이는 때로는 부담스러울 수 있지만, 그것이 바로 당신을 특별하게 만드는 이유입니다.`,
+                growth: `깊은 바다에 오래 머물면 수압에 적응해야 하듯, 당신도 가끔은 얕은 곳으로 올라와 숨을 쉬어야 해요.
+
+                <div class="highlight-box">
+                    <strong>성장을 위한 조언:</strong><br>
+                    • 매일 10분씩 아무 생각 없이 보내는 시간 만들기<br>
+                    • 가벼운 대화와 웃음도 즐기는 연습하기<br>
+                    • 완벽하지 않아도 괜찮다고 스스로에게 말해주기<br>
+                    • 신뢰할 수 있는 사람에게 마음 열어보기
+                </div>
+
+                당신의 깊이는 선물이지만, 때로는 가볍게 떠있는 법도 배워야 합니다.`,
+                message: `깊은 바다까지 내려간 당신에게,
+
+                얼마나 많은 용기가 필요했을까요. 남들이 두려워하는 깊이까지 내려가 자신과 마주한 당신은 정말 대단한 사람이에요.
+
+                가끔은 그 깊이가 숨막히게 느껴질 수도 있어요. 혼자만 다른 세상에 있는 것 같고, 아무도 당신을 이해하지 못하는 것 같을 때도 있겠죠. 하지만 기억하세요. 가장 아름다운 진주는 가장 깊은 곳에서 발견됩니다.
+
+                당신의 고요함이 누군가에게는 평온이 되고, 당신의 깊이가 누군가에게는 위로가 됩니다. 서두르지 마세요. 당신만의 속도로, 당신만의 방식으로 살아가면 됩니다.
+
+                심해에도 빛이 있듯이, 당신의 가장 어두운 순간에도 희망은 있습니다. 그 빛을 잃지 마세요.
+
+                당신은 있는 그대로 충분히 아름답습니다.`
             },
-            'healing_coral': {
-                title: '회복 중인 산호초',
+            'coral_reef': {
+                type: '빛나는 산호초',
+                icon: '🪸',
                 depth: '120m',
-                state: `상처받았지만 천천히 회복하고 있는 중입니다.
-                    예민하고 섬세한 당신은 작은 것에도 쉽게 영향을 받지만,
-                    그만큼 아름다운 것들을 발견하는 능력도 있습니다.
-                    지금은 치유의 시간이 필요한 때입니다.`,
-                needs: `안전하고 편안한 환경이 필요합니다.
-                    스트레스를 줄이고, 부정적인 관계에서 거리를 두세요.
-                    자신을 보호하는 것은 이기적인 게 아니라 필요한 일입니다.
-                    천천히, 자신의 속도로 회복하세요.`,
-                message: `상처받은 것은 당신 잘못이 아니에요.
-                    아픔을 느끼는 것은 당신이 살아있고, 사랑할 줄 아는 사람이기 때문입니다.
-                    시간이 걸리더라도 반드시 나아질 거예요.
-                    당신은 생각보다 훨씬 강한 사람입니다.
-                    지금의 아픔도 언젠가는 당신을 더 깊이 있는 사람으로 만들어줄 거예요.`
+                meaning: '상처 속에서도 아름다움을 찾는 당신',
+                traits: ['섬세한 감성', '회복탄력성', '공감의 마음', '숨은 생명력'],
+                cards: [
+                    {
+                        icon: '🌸',
+                        title: '섬세한 감수성',
+                        desc: '작은 변화도 민감하게 느끼는 당신은 그만큼 세상의 아름다움을 더 깊이 경험할 수 있어요.'
+                    },
+                    {
+                        icon: '💝',
+                        title: '공감의 힘',
+                        desc: '다른 사람의 아픔을 자신의 것처럼 느끼고, 진심어린 위로를 건넬 수 있는 따뜻한 마음을 가졌어요.'
+                    },
+                    {
+                        icon: '🌱',
+                        title: '재생의 능력',
+                        desc: '부서져도 다시 자라나는 산호초처럼, 당신은 어떤 상처도 결국 극복해내는 힘이 있어요.'
+                    }
+                ],
+                state: `지금 당신은 회복과 재생의 시기를 보내고 있어요. 과거의 상처들이 아직 완전히 아물지 않았지만, 조금씩 새살이 돋아나고 있습니다.
+
+                예민한 당신은 작은 자극에도 쉽게 흔들리곤 하죠. 하지만 그것은 약함이 아니라, 살아있음의 증거예요. 죽은 산호는 단단하지만, 살아있는 산호는 부드럽고 유연합니다.`,
+                unique: `당신의 가장 큰 강점은 '공감능력'입니다. 다른 사람의 감정을 깊이 이해하고, 필요한 위로를 줄 수 있는 특별한 재능이 있어요.
+
+                <div class="highlight-box">
+                    <strong>당신만의 초능력:</strong><br>
+                    • 미묘한 감정의 변화를 읽는 능력<br>
+                    • 상처를 아름다움으로 승화시키는 힘<br>
+                    • 부서져도 다시 일어서는 회복력
+                </div>
+
+                이런 섬세함은 때로는 피곤할 수 있지만, 세상을 더 풍부하게 만드는 당신만의 색깔입니다.`,
+                growth: `산호초가 적절한 환경에서 가장 잘 자라듯, 당신도 자신에게 맞는 환경을 만들어가야 해요.
+
+                <div class="highlight-box">
+                    <strong>성장을 위한 조언:</strong><br>
+                    • 나를 지키는 건강한 경계선 만들기<br>
+                    • 모든 사람을 구할 수는 없다는 것 받아들이기<br>
+                    • 자신의 감정을 표현하는 연습하기<br>
+                    • 상처받는 것을 두려워하지 않기
+                </div>
+
+                당신의 섬세함은 약점이 아닌 강점입니다. 그것을 소중히 여기세요.`,
+                message: `아름다운 산호초 같은 당신에게,
+
+                얼마나 많은 파도를 견뎌왔나요. 부서지고 다시 자라기를 반복하면서도, 여전히 아름다운 빛을 잃지 않는 당신이 대단해요.
+
+                예민한 것은 잘못이 아니에요. 남들보다 더 많이 느끼고, 더 깊이 아파하는 것은 그만큼 살아있다는 증거입니다. 당신의 섬세함으로 인해 이 세상은 조금 더 따뜻한 곳이 되었어요.
+
+                상처받을까 두려워 숨지 마세요. 산호초가 물살에 몸을 맡기듯, 때로는 흐름에 몸을 맡기는 것도 필요해요. 부서진 조각들이 모여 더 아름다운 모양을 만들어낼 거예요.
+
+                당신은 생각보다 훨씬 강한 사람입니다. 그 강함을 믿어주세요.`
             },
-            'flowing_whale': {
-                title: '자유로운 고래',
-                depth: '130m',
-                state: `끊임없이 움직이며 자신의 길을 찾아가고 있습니다.
-                    안정보다는 변화를, 정착보다는 탐험을 선택하는 당신.
-                    때로는 방황하는 것 같아도, 그것이 당신만의 여정입니다.
-                    자유로운 영혼을 가진 당신은 어디서든 적응할 수 있는 힘이 있습니다.`,
-                needs: `명확한 방향성과 목표가 필요합니다.
-                    자유롭게 탐험하되, 가끔은 멈춰서서 현재 위치를 확인해보세요.
-                    당신만의 나침반을 만들어가는 시간이 필요합니다.
-                    조급해하지 말고, 여정 자체를 즐기세요.`,
-                message: `방황하는 것 같아도 괜찮아요.
-                    모든 경험이 당신을 더 풍부한 사람으로 만들고 있습니다.
-                    정답은 없어요. 당신이 가는 길이 곧 길이 됩니다.
-                    때로는 쉬어가도 좋고, 방향을 바꿔도 좋습니다.
-                    중요한 것은 계속 나아가는 거예요.
-                    당신의 자유로운 영혼을 잃지 마세요.`
+            'whale_journey': {
+                type: '여행하는 고래',
+                icon: '🐋',
+                depth: '150m',
+                meaning: '끊임없이 탐험하며 성장하는 당신',
+                traits: ['자유로운 영혼', '모험가 정신', '유연한 사고', '무한한 가능성'],
+                cards: [
+                    {
+                        icon: '🧭',
+                        title: '탐험가의 마음',
+                        desc: '안전한 곳에 머물기보다 새로운 세계를 탐험하는 것을 선택하는 용기있는 영혼이에요.'
+                    },
+                    {
+                        icon: '🌊',
+                        title: '유연한 적응력',
+                        desc: '어떤 환경에서도 자신만의 방법을 찾아내고, 변화를 즐길 줄 아는 능력이 있어요.'
+                    },
+                    {
+                        icon: '✨',
+                        title: '무한한 잠재력',
+                        desc: '아직 발견하지 못한 가능성들이 당신 안에 가득해요. 매일이 새로운 발견의 연속입니다.'
+                    }
+                ],
+                state: `지금 당신은 큰 바다를 항해하는 중이에요. 어디로 가야 할지 명확하지 않아 불안할 때도 있지만, 그 불확실성이 주는 자유로움도 느끼고 있죠.
+
+                정해진 항로가 없다는 것은 두렵기도 하지만, 동시에 무엇이든 가능하다는 의미이기도 해요. 당신은 자신만의 지도를 그려가고 있습니다.`,
+                unique: `당신의 가장 큰 강점은 '적응력'입니다. 고정관념에 얽매이지 않고, 항상 새로운 가능성을 탐색하는 열린 마음을 가졌어요.
+
+                <div class="highlight-box">
+                    <strong>당신만의 초능력:</strong><br>
+                    • 변화를 기회로 만드는 긍정적 사고<br>
+                    • 다양한 관점을 수용하는 열린 마음<br>
+                    • 어디서든 자신의 자리를 찾는 능력
+                </div>
+
+                이런 유연함은 불안정해 보일 수 있지만, 사실은 가장 강력한 생존 전략입니다.`,
+                growth: `넓은 바다를 여행하는 고래도 때로는 쉴 곳이 필요하듯, 당신도 잠시 정박할 항구가 필요해요.
+
+                <div class="highlight-box">
+                    <strong>성장을 위한 조언:</strong><br>
+                    • 작은 목표부터 차근차근 설정하기<br>
+                    • 과정 자체를 즐기는 마음 갖기<br>
+                    • 가끔은 한 곳에 머물러도 괜찮다고 인정하기<br>
+                    • 함께 여행할 동료 찾기
+                </div>
+
+                여정이 목적지보다 중요할 때도 있지만, 가끔은 도착지를 정하는 것도 필요합니다.`,
+                message: `자유로운 영혼을 가진 당신에게,
+
+                끝없는 바다를 헤엄치는 당신의 모습이 아름다워요. 남들이 정해놓은 길이 아닌, 자신만의 항로를 개척하는 용기가 대단합니다.
+
+                방황하는 것 같아 보여도 걱정하지 마세요. 모든 고래는 자신만의 노래를 부르며 자신만의 길을 갑니다. 당신의 여정에는 정답도 오답도 없어요.
+
+                때로는 외롭고, 때로는 막막할 거예요. 하지만 그 모든 순간이 당신을 더 넓은 사람으로 만들고 있습니다. 보지 못한 것을 보고, 느끼지 못한 것을 느끼는 당신은 살아있는 전설이 될 거예요.
+
+                계속 헤엄쳐 나가세요. 당신이 지나간 자리에는 아름다운 물결이 남을 거예요.`
             },
             'lighthouse': {
-                title: '깊은 바다의 등대',
-                depth: '140m',
-                state: `어둠 속에서도 자신만의 빛을 잃지 않는 당신.
-                    힘든 상황에서도 희망을 놓지 않고, 오히려 다른 사람들에게 빛이 되어줍니다.
-                    강인한 내면을 가지고 있지만, 가끔은 그 강함이 부담스러울 때도 있습니다.
-                    당신의 빛은 많은 이들에게 위로가 됩니다.`,
-                needs: `당신도 누군가에게 기댈 수 있는 시간이 필요합니다.
-                    항상 강해야 한다는 부담을 내려놓으세요.
-                    약함을 보이는 것도 용기입니다.
-                    당신을 위한 충전의 시간을 가지세요.`,
-                message: `항상 밝을 필요는 없어요.
-                    당신도 힘들 때는 힘들다고 말해도 됩니다.
-                    등대도 가끔은 정비가 필요하듯, 당신도 쉼이 필요해요.
-                    당신의 빛은 이미 충분히 많은 사람들을 비추고 있습니다.
-                    이제는 당신 자신을 위해 빛나도 좋아요.
-                    당신은 존재 자체로 소중한 사람입니다.`
+                type: '깊은 바다의 등대',
+                icon: '🏮',
+                depth: '160m',
+                meaning: '어둠 속에서도 빛을 잃지 않는 당신',
+                traits: ['내면의 빛', '조용한 리더십', '흔들림 없는 중심', '희망의 전달자'],
+                cards: [
+                    {
+                        icon: '💡',
+                        title: '내면의 빛',
+                        desc: '어떤 어둠 속에서도 꺼지지 않는 빛을 품고 있어요. 그 빛으로 자신과 타인의 길을 비춥니다.'
+                    },
+                    {
+                        icon: '⚓',
+                        title: '중심을 지키는 힘',
+                        desc: '거센 파도에도 흔들리지 않는 등대처럼, 당신은 어떤 상황에서도 중심을 잃지 않아요.'
+                    },
+                    {
+                        icon: '🕯️',
+                        title: '희망의 전달자',
+                        desc: '당신의 존재만으로도 주변 사람들은 위안을 받고, 방향을 찾습니다.'
+                    }
+                ],
+                state: `지금 당신은 많은 책임감을 느끼고 있어요. 모두를 비춰야 한다는 무게가 때로는 버겁게 느껴지죠. 스스로의 빛을 유지하면서도 타인을 돕는 것은 쉽지 않은 일입니다.
+
+                하지만 당신은 그 어려운 일을 묵묵히 해내고 있어요. 비록 지친 날들이 많더라도, 여전히 빛을 잃지 않고 있습니다.`,
+                unique: `당신의 가장 큰 강점은 '영향력'입니다. 소리 없이 강한 존재감으로 주변을 변화시키는 특별한 능력이 있어요.
+
+                <div class="highlight-box">
+                    <strong>당신만의 초능력:</strong><br>
+                    • 위기 상황에서의 침착함<br>
+                    • 말하지 않아도 전달되는 위로<br>
+                    • 어둠 속에서 희망을 찾는 능력
+                </div>
+
+                이런 강인함은 타고난 것이 아니라, 수많은 폭풍을 견뎌낸 결과입니다.`,
+                growth: `등대도 정기적인 보수가 필요하듯, 당신도 자신을 돌보는 시간이 필요해요.
+
+                <div class="highlight-box">
+                    <strong>성장을 위한 조언:</strong><br>
+                    • 도움을 요청하는 것도 강함임을 인정하기<br>
+                    • 완벽하지 않아도 충분하다고 받아들이기<br>
+                    • 자신의 빛을 충전하는 시간 갖기<br>
+                    • 무거운 짐을 나눌 사람 찾기
+                </div>
+
+                당신이 빛을 잃으면 많은 사람들이 길을 잃을 거예요. 그러니 먼저 자신을 지키세요.`,
+                message: `어둠 속의 등대 같은 당신에게,
+
+                깊고 어두운 바다에서도 빛을 잃지 않는 당신이 얼마나 소중한지 아시나요? 당신이 비춘 빛으로 수많은 사람들이 안전하게 항해할 수 있었어요.
+
+                항상 강해야 한다는 부담감, 이제는 내려놓아도 돼요. 등대도 안개 낀 날은 희미하게 보이듯, 당신도 때로는 약해져도 괜찮습니다.
+
+                혼자 모든 걸 감당하려 하지 마세요. 당신을 비춰줄 다른 등대들도 분명 있을 거예요. 서로의 빛을 나누며 함께 어둠을 밝혀가면 됩니다.
+
+                기억하세요. 당신의 존재 자체가 기적이고, 당신의 빛은 이미 충분히 밝습니다. 그 빛을 소중히 지켜주세요.`
             }
         };
 
-        let currentQuestion = 1;
-        let answers = [];
+        // 초기화 함수
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hide');
+                showScreen('startScreen');
+                createOceanElements();
+            }, 1500);
+        };
 
-        // 화면 전환 함수
+        // 바다 요소 생성
+        function createOceanElements() {
+            const container = document.getElementById('oceanElements');
+            setInterval(() => {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.width = bubble.style.height = Math.random() * 30 + 10 + 'px';
+                bubble.style.animationDuration = Math.random() * 5 + 10 + 's';
+                container.appendChild(bubble);
+                
+                setTimeout(() => bubble.remove(), 15000);
+            }, 2000);
+        }
+
+        // 화면 전환
         function showScreen(screenId) {
             const screens = document.querySelectorAll('.screen');
-            screens.forEach(screen => {
-                screen.classList.remove('active');
-            });
+            screens.forEach(screen => screen.classList.remove('active'));
             
-            const targetScreen = document.getElementById(screenId);
-            if (targetScreen) {
-                setTimeout(() => {
-                    targetScreen.classList.add('active');
-                }, 100);
-            }
+            setTimeout(() => {
+                document.getElementById(screenId).classList.add('active');
+            }, 100);
         }
 
-        // 물방울 생성
-        function createBubble() {
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            bubble.style.left = Math.random() * 100 + '%';
-            bubble.style.width = bubble.style.height = Math.random() * 30 + 10 + 'px';
-            bubble.style.animationDuration = Math.random() * 5 + 10 + 's';
-            bubble.style.animationDelay = Math.random() * 5 + 's';
-            document.getElementById('bubbles').appendChild(bubble);
+        // 설문 시작
+        function startSurvey() {
+            surveyStarted = true;
+            currentQuestion = 0;
+            answers = [];
             
-            setTimeout(() => bubble.remove(), 15000);
+            document.getElementById('progressContainer').classList.add('show');
+            document.getElementById('depthIndicator').classList.add('show');
+            
+            showQuestion();
+            showScreen('surveyScreen');
         }
 
-        // 설문 옵션 생성
-        function createOptions(questionNum) {
-            const optionsContainer = document.getElementById(`options${questionNum}`);
-            if (!optionsContainer) return;
+        // 질문 표시
+        function showQuestion() {
+            const data = surveyData[currentQuestion];
+            document.getElementById('questionDepth').textContent = data.depth;
+            document.getElementById('questionTitle').textContent = data.question;
             
-            optionsContainer.innerHTML = '';
-            const options = surveyData[questionNum].options;
+            // 진행률 업데이트
+            const progress = ((currentQuestion + 1) / surveyData.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${currentQuestion + 1} / ${surveyData.length}`;
             
-            options.forEach((option, index) => {
+            // 깊이 표시 업데이트
+            const depthProgress = (currentQuestion / (surveyData.length - 1)) * 100;
+            document.getElementById('depthMarker').style.top = depthProgress + '%';
+            document.getElementById('depthNumber').style.top = depthProgress + '%';
+            document.getElementById('depthNumber').textContent = `${Math.round(depthProgress * 1.8)}m`;
+            
+            // 옵션 생성
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            data.options.forEach((option, index) => {
                 const button = document.createElement('button');
                 button.className = 'option-button';
                 button.textContent = option;
-                button.onclick = () => handleAnswer(index);
-                optionsContainer.appendChild(button);
+                button.onclick = () => selectAnswer(index);
+                container.appendChild(button);
             });
         }
 
-        // 답변 처리
-        function handleAnswer(answerIndex) {
-            answers.push(answerIndex);
-            updateDepth();
+        // 답변 선택
+        function selectAnswer(index) {
+            answers.push(index);
             
-            if (currentQuestion < 7) {
+            if (currentQuestion < surveyData.length - 1) {
                 currentQuestion++;
-                showScreen(`surveyScreen${currentQuestion}`);
-                setTimeout(() => createOptions(currentQuestion), 300);
+                showQuestion();
             } else {
                 showResult();
             }
         }
 
-        // 깊이 업데이트
-        function updateDepth() {
-            const progress = (currentQuestion / 7) * 100;
-            document.getElementById('depthProgress').style.height = progress + '%';
-        }
-
         // 결과 계산 및 표시
         function showResult() {
+            document.getElementById('progressContainer').classList.remove('show');
+            document.getElementById('depthIndicator').classList.remove('show');
+            
+            // 결과 타입 결정 (간단한 로직)
             const sum = answers.reduce((a, b) => a + b, 0);
-            let resultType;
+            let resultKey;
             
-            if (sum <= 7) resultType = 'deep_pearl';
-            else if (sum <= 14) resultType = 'healing_coral';
-            else if (sum <= 21) resultType = 'flowing_whale';
-            else resultType = 'lighthouse';
+            if (sum <= 10) resultKey = 'deep_ocean';
+            else if (sum <= 20) resultKey = 'coral_reef';
+            else if (sum <= 30) resultKey = 'whale_journey';
+            else resultKey = 'lighthouse';
             
-            const result = resultTypes[resultType];
+            const result = resultTypes[resultKey];
             
-            document.getElementById('resultTitle').textContent = result.title;
-            document.getElementById('depthText').textContent = result.depth;
-            document.getElementById('stateDescription').textContent = result.state;
-            document.getElementById('needsDescription').textContent = result.needs;
-            document.getElementById('messageDescription').textContent = result.message;
+            // 결과 화면 업데이트
+            document.getElementById('resultType').textContent = result.type;
+            document.getElementById('finalDepth').textContent = result.depth;
+            document.getElementById('depthMeaning').textContent = result.meaning;
+            document.getElementById('resultIcon').textContent = result.icon;
+            
+            // 특성 태그
+            const tagsContainer = document.getElementById('traitTags');
+            tagsContainer.innerHTML = '';
+            result.traits.forEach(trait => {
+                const tag = document.createElement('span');
+                tag.className = 'trait-tag';
+                tag.textContent = trait;
+                tagsContainer.appendChild(tag);
+            });
+            
+            // 성격 카드
+            const cardsContainer = document.getElementById('personalityCards');
+            cardsContainer.innerHTML = '';
+            result.cards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'personality-card';
+                cardDiv.innerHTML = `
+                    <div class="card-icon">${card.icon}</div>
+                    <div class="card-title">${card.title}</div>
+                    <div class="card-description">${card.desc}</div>
+                `;
+                cardsContainer.appendChild(cardDiv);
+            });
+            
+            // 상세 설명
+            document.getElementById('currentState').innerHTML = result.state;
+            document.getElementById('uniqueTraits').innerHTML = result.unique;
+            document.getElementById('growthAdvice').innerHTML = result.growth;
+            document.getElementById('personalMessage').innerHTML = result.message;
             
             showScreen('resultScreen');
         }
 
-        // 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            // 물방울 효과
-            setInterval(createBubble, 2000);
+        // 다시 시작
+        function restart() {
+            currentQuestion = 0;
+            answers = [];
+            showScreen('startScreen');
+        }
+
+        // 결과 공유
+        function shareResult() {
+            const text = `나의 마음 깊이는 ${document.getElementById('finalDepth').textContent}!\nMIND DIVE에서 나만의 마음 상태를 확인해보세요.`;
             
-            // 시작 버튼
-            document.getElementById('startButton').addEventListener('click', function() {
-                showScreen('introScreen');
-            });
-            
-            // 다음 버튼
-            document.getElementById('continueButton').addEventListener('click', function() {
-                showScreen('prepareScreen');
-            });
-            
-            // 준비 완료 버튼
-            document.getElementById('beginButton').addEventListener('click', function() {
-                currentQuestion = 1;
-                answers = [];
-                document.getElementById('depthIndicator').classList.add('show');
-                showScreen('surveyScreen1');
-                setTimeout(() => createOptions(1), 300);
-            });
-            
-            // 다시 시작 버튼
-            document.getElementById('restartButton').addEventListener('click', function() {
-                currentQuestion = 1;
-                answers = [];
-                document.getElementById('depthIndicator').classList.remove('show');
-                document.getElementById('depthProgress').style.height = '0%';
-                showScreen('startScreen');
-            });
-        });
+            if (navigator.share) {
+                navigator.share({
+                    title: 'MIND DIVE - 마음 깊이 측정 결과',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                alert('공유 기능이 지원되지 않는 브라우저입니다.');
+            }
+        }
     </script>
 </body>
 </html>
