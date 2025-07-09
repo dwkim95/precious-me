@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MIND DIVE - 마음 깊이 측정하기</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* Reset & Base */
         * {
             margin: 0;
             padding: 0;
@@ -17,295 +18,356 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-        }
-
-        body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 400;
             background: #000;
             color: #fff;
             letter-spacing: -0.02em;
             line-height: 1.7;
-            position: relative;
+        }
+
+        /* 애니메이션 정의 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-25px) translateY(-10px); }
+            100% { transform: translateX(0) translateY(0); }
         }
 
         /* 로딩 화면 */
-        .loading-screen {
+        #loadingScreen {
             position: fixed;
             width: 100%;
-            height: 100vh;
-            background: #000;
+            height: 100%;
+            background: #000814;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
         }
 
-        .loading-screen.hide {
+        #loadingScreen.hide {
             opacity: 0;
             pointer-events: none;
         }
 
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-wave {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #48cae4 0%, #0077b6 100%);
+            border-radius: 50%;
+            animation: waveMove 2s ease-in-out infinite;
+        }
+
         .loading-text {
-            font-size: 1.2rem;
-            color: #90e0ef;
+            font-size: 1.1rem;
+            color: #48cae4;
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* 바다 요소들 */
-        .ocean-elements {
+        /* 배경 효과 */
+        .ocean-bg {
             position: fixed;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            background: linear-gradient(to bottom, #000814 0%, #001d3d 40%, #003566 100%);
+            z-index: 0;
+        }
+
+        .wave-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             z-index: 1;
+            opacity: 0.3;
         }
 
-        /* 물방울 효과 */
-        .bubble {
+        .wave {
             position: absolute;
-            bottom: -100px;
-            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: rise 12s infinite ease-in;
+            width: 200%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path fill="%23ffffff" fill-opacity="0.1" d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path></svg>') repeat-x;
+            animation: waveAnimation 10s linear infinite;
         }
 
-        @keyframes rise {
-            to {
-                transform: translateY(-120vh);
-                opacity: 0;
-            }
+        @keyframes waveAnimation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
-        /* 화면 관리 */
+        /* 화면 공통 스타일 */
         .screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
-            display: none;
-            opacity: 0;
-            transition: opacity 1.2s ease;
-            z-index: 10;
-        }
-
-        .screen.active {
-            display: block;
-            opacity: 1;
-        }
-
-        /* 중앙 정렬 화면 */
-        .center-screen {
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s ease;
+            z-index: 10;
             padding: 20px;
         }
 
-        /* 스크롤 가능한 화면 */
-        .scroll-screen {
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            height: 100vh;
-        }
-
-        /* 진행 상태 표시 */
-        .progress-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 30;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .progress-container.show {
+        .screen.active {
             opacity: 1;
+            visibility: visible;
         }
 
-        .progress-bar {
-            width: 200px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
+        .content-wrapper {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 시작 화면 */
+        .start-content {
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .logo {
+            font-size: clamp(3rem, 8vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #48cae4 0%, #90e0ef 50%, #00b4d8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(72, 202, 228, 0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* 버튼 스타일 */
+        .btn {
+            display: inline-block;
+            padding: 18px 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            position: relative;
             overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(72, 202, 228, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* 인트로 화면 */
+        .intro-content {
+            text-align: center;
+            max-width: 700px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .intro-title {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #90e0ef;
+        }
+
+        .intro-text {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .highlight {
+            display: block;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            color: #48cae4;
+            margin: 2rem 0;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        /* 진행 바 */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .progress-bar.show {
+            opacity: 1;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #48cae4, #0077b6);
+            background: linear-gradient(90deg, #48cae4 0%, #00b4d8 100%);
             transition: width 0.5s ease;
-        }
-
-        .progress-text {
-            text-align: center;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 8px;
-        }
-
-        /* 시작 화면 */
-        #startScreen {
-            background: linear-gradient(to bottom, #03045e 0%, #023e8a 50%, #0077b6 100%);
-        }
-
-        .start-content {
-            text-align: center;
-            max-width: 600px;
-        }
-
-        .logo {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.03em;
-            background: linear-gradient(180deg, #90e0ef 0%, #0077b6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            margin-bottom: 3rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* 인트로 화면 */
-        #introScreen {
-            background: linear-gradient(to bottom, #023e8a 0%, #0077b6 100%);
-        }
-
-        .intro-content {
-            text-align: center;
-            max-width: 750px;
-        }
-
-        .intro-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-        }
-
-        .intro-text {
-            font-size: 1.15rem;
-            line-height: 2.2;
-            margin-bottom: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .emphasis {
-            display: block;
-            font-size: 1.3rem;
-            margin: 2rem 0;
-            color: #90e0ef;
-            font-weight: 600;
+            box-shadow: 0 0 10px rgba(72, 202, 228, 0.5);
         }
 
         /* 설문 화면 */
-        #surveyScreen {
-            background: linear-gradient(to bottom, #0096c7 0%, #00b4d8 100%);
-        }
-
         .survey-content {
             text-align: center;
             max-width: 700px;
-            width: 100%;
+            animation: fadeIn 0.6s ease-out;
         }
 
-        .question-header {
-            margin-bottom: 2rem;
-        }
-
-        .question-depth {
+        .question-number {
             font-size: 0.9rem;
-            color: #caf0f8;
-            margin-bottom: 0.5rem;
+            color: #48cae4;
+            margin-bottom: 1rem;
             letter-spacing: 0.1em;
+            font-weight: 600;
         }
 
-        .question-title {
-            font-size: 1.5rem;
+        .question-text {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
             font-weight: 600;
-            line-height: 1.8;
+            margin-bottom: 3rem;
+            line-height: 1.6;
             word-break: keep-all;
         }
 
-        .options {
+        .options-container {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 1rem;
         }
 
-        .option-button {
-            font-family: inherit;
-            padding: 18px 25px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
+        .option {
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: left;
-            width: 100%;
-            word-break: keep-all;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
             line-height: 1.6;
+            word-break: keep-all;
+            position: relative;
+            overflow: hidden;
         }
 
-        .option-button:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.4);
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(72, 202, 228, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(72, 202, 228, 0.3);
             transform: translateX(5px);
         }
 
-        /* 쿠팡 화면 */
-        #coupangScreen {
-            background: linear-gradient(to bottom, #023e8a 0%, #0077b6 100%);
+        .option:hover::before {
+            left: 100%;
         }
 
+        /* 쿠팡 화면 */
         .coupang-content {
             text-align: center;
             max-width: 600px;
-            padding: 0 20px;
-        }
-
-        .coupang-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-        }
-
-        .coupang-desc {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            color: rgba(255, 255, 255, 0.9);
+            animation: fadeIn 1s ease-out;
         }
 
         .coupang-box {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 2.5rem;
             margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .coupang-link {
-            display: inline-block;
             background: #e74c3c;
             color: white;
             padding: 15px 40px;
             border-radius: 50px;
             text-decoration: none;
+            display: inline-block;
             font-weight: 600;
             margin: 1rem 0;
             transition: all 0.3s ease;
@@ -314,248 +376,321 @@
         .coupang-link:hover {
             background: #c0392b;
             transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+        }
+
+        .skip-btn {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
         }
 
         /* 결과 화면 */
         #resultScreen {
-            background: linear-gradient(to bottom, #023e8a 0%, #03045e 100%);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            height: 100vh;
+            padding: 0;
         }
 
         .result-container {
+            min-height: 100vh;
+            padding: 60px 20px 100px;
             max-width: 900px;
             margin: 0 auto;
-            padding: 40px 20px 80px;
         }
 
         .result-header {
             text-align: center;
             margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out;
         }
 
-        .result-type {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #90e0ef;
+        .result-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: #48cae4;
             margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(144, 224, 239, 0.4);
-            word-break: keep-all;
+            text-shadow: 0 0 30px rgba(72, 202, 228, 0.5);
         }
 
-        .personality-cards {
+        .result-subtitle {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+
+        .result-visual {
+            width: 200px;
+            height: 200px;
+            margin: 3rem auto;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .visual-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(72, 202, 228, 0.2), transparent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .visual-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+        }
+
+        .result-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
             margin: 3rem 0;
         }
 
-        .personality-card {
-            background: rgba(255, 255, 255, 0.05);
+        .result-card {
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 20px;
             padding: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .result-card:nth-child(1) { animation-delay: 0.2s; }
+        .result-card:nth-child(2) { animation-delay: 0.4s; }
+        .result-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(72, 202, 228, 0.2);
+            border-color: rgba(72, 202, 228, 0.3);
         }
 
         .card-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 1rem;
         }
 
         .card-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #90e0ef;
-            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #48cae4;
+            margin-bottom: 0.8rem;
         }
 
-        .card-description {
-            font-size: 0.95rem;
-            line-height: 1.8;
+        .card-text {
+            font-size: 1rem;
+            line-height: 1.7;
             color: rgba(255, 255, 255, 0.85);
-            word-break: keep-all;
         }
 
-        .detail-section {
-            background: rgba(255, 255, 255, 0.03);
+        .result-section {
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 2.5rem;
             margin-bottom: 2rem;
-            border-left: 4px solid #90e0ef;
+            border-left: 4px solid #48cae4;
+            animation: fadeInUp 1s ease-out;
+            animation-fill-mode: both;
         }
+
+        .result-section:nth-child(1) { animation-delay: 0.8s; }
+        .result-section:nth-child(2) { animation-delay: 1s; }
+        .result-section:nth-child(3) { animation-delay: 1.2s; }
 
         .section-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #90e0ef;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #48cae4;
             margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .section-content {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             line-height: 2;
             color: rgba(255, 255, 255, 0.85);
             word-break: keep-all;
-        }
-
-        /* 버튼 스타일 */
-        .nav-button {
-            font-family: inherit;
-            padding: 16px 40px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 0.02em;
-            margin-top: 1.5rem;
-            font-weight: 600;
-        }
-
-        .nav-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
         }
 
         .action-buttons {
             display: flex;
             gap: 1rem;
             justify-content: center;
+            margin-top: 3rem;
             flex-wrap: wrap;
-            margin-top: 2rem;
         }
 
-        /* 모바일 */
+        /* 모바일 최적화 */
         @media (max-width: 768px) {
-            .logo { font-size: 2.8rem; }
-            .question-title { font-size: 1.3rem; }
-            .result-type { font-size: 1.8rem; }
-            .personality-cards { grid-template-columns: 1fr; }
-            .detail-section { padding: 1.5rem; }
+            .logo { letter-spacing: -0.05em; }
+            .result-cards { grid-template-columns: 1fr; }
+            .result-visual { width: 150px; height: 150px; }
+            .visual-icon { font-size: 4rem; }
             .action-buttons { flex-direction: column; }
-            .nav-button { width: 100%; }
+            .btn { width: 100%; }
+            .result-section { padding: 1.5rem; }
+        }
+
+        /* 아이폰 노치 대응 */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .screen {
+                padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            }
         }
     </style>
 </head>
 <body>
     <!-- 로딩 화면 -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-text">마음의 바다를 준비하고 있어요</div>
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-wave"></div>
+            <div class="loading-text">마음의 바다를 준비하고 있어요</div>
+        </div>
     </div>
 
-    <!-- 바다 요소들 -->
-    <div class="ocean-elements" id="oceanElements"></div>
+    <!-- 배경 효과 -->
+    <div class="ocean-bg"></div>
+    <div class="wave-container">
+        <div class="wave"></div>
+    </div>
 
-    <!-- 진행 상태 표시 -->
-    <div class="progress-container" id="progressContainer">
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-        </div>
-        <div class="progress-text" id="progressText">0 / 10</div>
+    <!-- 진행 바 -->
+    <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
 
     <!-- 시작 화면 -->
-    <div id="startScreen" class="screen active center-screen">
-        <div class="start-content">
-            <h1 class="logo">MIND DIVE</h1>
-            <p class="subtitle">마음 깊이 측정하기</p>
-            <button class="nav-button" onclick="goToIntro()">시작하기</button>
+    <div id="startScreen" class="screen active">
+        <div class="content-wrapper">
+            <div class="start-content">
+                <h1 class="logo">MIND DIVE</h1>
+                <p class="subtitle">마음 깊이 측정하기</p>
+                <button class="btn" onclick="showIntro()">시작하기</button>
+            </div>
         </div>
     </div>
 
     <!-- 인트로 화면 -->
-    <div id="introScreen" class="screen center-screen">
-        <div class="intro-content">
-            <h2 class="intro-title">요즘 많이 힘드시죠?</h2>
-            <p class="intro-text">
-                매일 반복되는 일상에 지쳐가고<br>
-                사람들과의 관계에서 상처받고<br>
-                나를 알아주는 사람이 없는 것 같고
-            </p>
-            <span class="emphasis">잠시 모든 걸 내려놓고 쉬어가도 괜찮아요</span>
-            <p class="intro-text">
-                지금부터 당신의 마음속을<br>
-                천천히 들여다볼 거예요
-            </p>
-            <button class="nav-button" onclick="startSurvey()">준비됐어요</button>
+    <div id="introScreen" class="screen">
+        <div class="content-wrapper">
+            <div class="intro-content">
+                <h2 class="intro-title">요즘 많이 힘드시죠?</h2>
+                <p class="intro-text">
+                    매일 반복되는 일상에 지쳐가고<br>
+                    사람들과의 관계에서 상처받고<br>
+                    나를 알아주는 사람이 없는 것 같고
+                </p>
+                <span class="highlight">잠시 모든 걸 내려놓고 쉬어가도 괜찮아요</span>
+                <p class="intro-text">
+                    지금부터 당신의 마음속을<br>
+                    천천히 들여다볼 거예요
+                </p>
+                <button class="btn" onclick="startDive()">준비됐어요</button>
+            </div>
         </div>
     </div>
 
     <!-- 설문 화면 -->
-    <div id="surveyScreen" class="screen center-screen">
-        <div class="survey-content">
-            <div class="question-header">
-                <div class="question-depth" id="questionDepth"></div>
-                <div class="question-title" id="questionTitle"></div>
+    <div id="surveyScreen" class="screen">
+        <div class="content-wrapper">
+            <div class="survey-content">
+                <div class="question-number" id="questionNumber">질문 1/10</div>
+                <h3 class="question-text" id="questionText">월요일 아침, 출근길에 드는 생각은?</h3>
+                <div class="options-container" id="optionsContainer">
+                    <!-- 옵션들이 동적으로 생성됨 -->
+                </div>
             </div>
-            <div class="options" id="optionsContainer"></div>
         </div>
     </div>
 
     <!-- 쿠팡 화면 -->
-    <div id="coupangScreen" class="screen center-screen">
-        <div class="coupang-content">
-            <h2 class="coupang-title">잠시만요!</h2>
-            <p class="coupang-desc">
-                결과를 보기 전에<br>
-                마음의 안정을 위한 추천 상품들을<br>
-                확인해보시겠어요?
-            </p>
-            <div class="coupang-box">
-                <p style="margin-bottom: 1rem;">
-                    스트레스 해소와 마음 치유를 위한<br>
-                    특별한 아이템들을 준비했어요
+    <div id="coupangScreen" class="screen">
+        <div class="content-wrapper">
+            <div class="coupang-content">
+                <h2 class="intro-title">잠시만요!</h2>
+                <p class="intro-text">
+                    결과를 보기 전에<br>
+                    마음의 안정을 위한 추천 상품들을<br>
+                    확인해보시겠어요?
                 </p>
-                <a href="https://link.coupang.com/a/bVXXXX" class="coupang-link" target="_blank">
-                    추천 상품 보러가기
-                </a>
-                <p style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 1rem;">
-                    * 쿠팡 파트너스 활동의 일환으로 수수료를 제공받을 수 있습니다
-                </p>
+                <div class="coupang-box">
+                    <p style="margin-bottom: 1.5rem;">
+                        스트레스 해소와 마음 치유를 위한<br>
+                        특별한 아이템들을 준비했어요
+                    </p>
+                    <a href="https://link.coupang.com/a/bVXXXX" class="coupang-link" target="_blank">
+                        추천 상품 보러가기
+                    </a>
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 1rem;">
+                        * 쿠팡 파트너스 활동의 일환으로 수수료를 제공받을 수 있습니다
+                    </p>
+                </div>
+                <button class="btn skip-btn" onclick="showResult()">결과 보러가기</button>
             </div>
-            <button class="nav-button" onclick="showResult()">결과 보러가기</button>
         </div>
     </div>
 
     <!-- 결과 화면 -->
-    <div id="resultScreen" class="screen scroll-screen">
+    <div id="resultScreen" class="screen">
         <div class="result-container">
             <div class="result-header">
-                <h2 class="result-type" id="resultType">심해의 진주</h2>
-                <p id="resultSubtitle" style="color: rgba(255,255,255,0.7); margin-bottom: 2rem;">
-                    가장 깊은 곳까지 내려간 내면의 탐험가
-                </p>
+                <h2 class="result-title" id="resultTitle">심해의 진주</h2>
+                <p class="result-subtitle" id="resultSubtitle">가장 깊은 곳까지 내려간 내면의 탐험가</p>
             </div>
 
-            <div class="personality-cards" id="personalityCards">
+            <div class="result-visual">
+                <div class="visual-bg"></div>
+                <div class="visual-icon" id="resultIcon">🦪</div>
+            </div>
+
+            <div class="result-cards" id="resultCards">
                 <!-- 카드들이 동적으로 생성됨 -->
             </div>
 
-            <div class="detail-section">
-                <h3 class="section-title">🌊 당신의 마음 상태</h3>
-                <div class="section-content" id="currentState">
+            <div class="result-section">
+                <h3 class="section-title">
+                    <span>🌊</span>
+                    <span>당신의 마음 상태</span>
+                </h3>
+                <div class="section-content" id="mindState">
                     <!-- 내용이 동적으로 채워짐 -->
                 </div>
             </div>
 
-            <div class="detail-section">
-                <h3 class="section-title">💫 당신만의 특별함</h3>
-                <div class="section-content" id="uniqueTraits">
+            <div class="result-section">
+                <h3 class="section-title">
+                    <span>💫</span>
+                    <span>당신만의 특별함</span>
+                </h3>
+                <div class="section-content" id="uniqueness">
                     <!-- 내용이 동적으로 채워짐 -->
                 </div>
             </div>
 
-            <div class="detail-section">
-                <h3 class="section-title">💝 당신에게 전하는 메시지</h3>
-                <div class="section-content" id="personalMessage">
+            <div class="result-section">
+                <h3 class="section-title">
+                    <span>💌</span>
+                    <span>당신에게 전하는 메시지</span>
+                </h3>
+                <div class="section-content" id="message">
                     <!-- 내용이 동적으로 채워짐 -->
                 </div>
             </div>
 
             <div class="action-buttons">
-                <button class="nav-button" onclick="restart()">다시 측정하기</button>
-                <button class="nav-button" onclick="shareResult()">결과 공유하기</button>
+                <button class="btn" onclick="restart()">다시 측정하기</button>
+                <button class="btn" onclick="share()">결과 공유하기</button>
             </div>
         </div>
     </div>
@@ -564,12 +699,12 @@
         // 전역 변수
         let currentQuestion = 0;
         let answers = [];
+        let currentScreen = 'start';
         
         // 설문 데이터
-        const surveyData = [
+        const questions = [
             {
-                depth: "수심 10m",
-                question: "월요일 아침, 출근길에 드는 생각은?",
+                text: "월요일 아침, 출근길에 드는 생각은?",
                 options: [
                     "오늘 하루도 무사히 지나가길",
                     "이번 주에는 뭔가 달라질 거야",
@@ -578,8 +713,7 @@
                 ]
             },
             {
-                depth: "수심 20m",
-                question: "친구가 갑자기 연락이 없어졌을 때",
+                text: "친구가 갑자기 연락이 없어졌을 때",
                 options: [
                     "내가 뭘 잘못했나 돌아봐요",
                     "바쁜가보다 하고 기다려요",
@@ -588,8 +722,7 @@
                 ]
             },
             {
-                depth: "수심 35m",
-                question: "SNS에서 행복해 보이는 사람들을 볼 때",
+                text: "SNS에서 행복해 보이는 사람들을 볼 때",
                 options: [
                     "나도 저렇게 살고 싶다",
                     "겉모습일 뿐이야",
@@ -598,8 +731,7 @@
                 ]
             },
             {
-                depth: "수심 50m",
-                question: "중요한 선택을 앞두고 있을 때",
+                text: "중요한 선택을 앞두고 있을 때",
                 options: [
                     "안전한 길을 선택해요",
                     "하고 싶은 걸 선택해요",
@@ -608,8 +740,7 @@
                 ]
             },
             {
-                depth: "수심 70m",
-                question: "일이 너무 많아서 버거울 때",
+                text: "일이 너무 많아서 버거울 때",
                 options: [
                     "하나씩 차근차근 해결해요",
                     "도움을 요청해요",
@@ -618,8 +749,7 @@
                 ]
             },
             {
-                depth: "수심 90m",
-                question: "혼자 있는 금요일 밤",
+                text: "혼자 있는 금요일 밤",
                 options: [
                     "나만의 시간을 즐겨요",
                     "누군가와 함께하고 싶어요",
@@ -628,8 +758,7 @@
                 ]
             },
             {
-                depth: "수심 110m",
-                question: "5년 후 나의 모습을 상상할 때",
+                text: "5년 후 나의 모습을 상상할 때",
                 options: [
                     "구체적인 계획이 있어요",
                     "막연히 더 나아지겠지",
@@ -638,8 +767,7 @@
                 ]
             },
             {
-                depth: "수심 130m",
-                question: "과거의 실수가 떠오를 때",
+                text: "과거의 실수가 떠오를 때",
                 options: [
                     "그때는 최선이었다고 생각해요",
                     "왜 그랬을까 후회해요",
@@ -648,8 +776,7 @@
                 ]
             },
             {
-                depth: "수심 150m",
-                question: "거울 속 나를 볼 때",
+                text: "거울 속 나를 볼 때",
                 options: [
                     "만족스러워요",
                     "더 나아질 수 있어요",
@@ -658,8 +785,7 @@
                 ]
             },
             {
-                depth: "수심 180m",
-                question: "정말 힘든 날, 가장 먼저 떠오르는 것은?",
+                text: "정말 힘든 날, 가장 먼저 떠오르는 것은?",
                 options: [
                     "날 위로해줄 누군가",
                     "혼자만의 안전한 공간",
@@ -669,169 +795,252 @@
             }
         ];
 
-        // 결과 데이터
-        const resultTypes = {
-            type1: {
+        // 결과 타입
+        const resultTypes = [
+            {
                 title: "심해의 진주",
                 subtitle: "가장 깊은 곳까지 내려간 내면의 탐험가",
+                icon: "🦪",
                 cards: [
-                    { icon: "🌌", title: "무한한 내면", desc: "당신의 마음은 우주처럼 넓고 깊어요. 남들이 놓치는 작은 의미들을 발견합니다." },
-                    { icon: "💎", title: "압력의 보석", desc: "깊은 곳의 압력이 진주를 만들듯, 당신의 고민이 당신을 빛나게 만들어요." },
-                    { icon: "🔮", title: "직관의 눈", desc: "논리를 넘어선 직관으로 본질을 꿰뚫어보는 능력이 있어요." }
+                    {
+                        icon: "🌌",
+                        title: "무한한 내면",
+                        text: "당신의 마음은 우주처럼 넓고 깊어요. 남들이 놓치는 작은 의미들을 발견하고, 침묵 속에서도 많은 것을 느낍니다."
+                    },
+                    {
+                        icon: "💎",
+                        title: "압력의 보석",
+                        text: "깊은 곳의 압력이 진주를 만들듯, 당신의 고민과 성찰이 당신을 더욱 빛나게 만들었어요."
+                    },
+                    {
+                        icon: "🔮",
+                        title: "직관의 눈",
+                        text: "논리를 넘어선 직관으로 본질을 꿰뚫어보는 능력. 당신은 보이지 않는 것들을 느낄 수 있어요."
+                    }
                 ],
-                state: "당신은 지금 깊은 사색의 시기를 보내고 있어요. 겉으로는 잔잔해 보이지만, 내면에서는 수많은 질문과 대답이 오가고 있죠.",
-                unique: "당신의 가장 특별한 점은 '깊이 있는 이해력'이에요. 복잡한 상황의 본질을 꿰뚫어보고, 말하지 않은 감정을 읽어내는 섬세함이 있어요.",
-                message: "가장 깊은 바다까지 잠수한 당신에게, 당신의 깊이가 때로는 무거운 짐처럼 느껴질 수도 있어요. 하지만 이 세상에는 당신 같은 사람이 꼭 필요해요. 계속해서 깊이 잠수하세요. 당신은 이미 충분히 아름다운 진주예요."
+                state: "당신은 지금 깊은 사색의 시기를 보내고 있어요. 겉으로는 잔잔해 보이지만, 내면에서는 수많은 질문과 대답이 오가고 있죠. '나는 누구인가', '어떻게 살아야 하는가' 같은 근본적인 물음들이 당신을 깊은 곳으로 이끌고 있어요.",
+                uniqueness: "당신의 가장 특별한 점은 '깊이 있는 이해력'이에요. 복잡한 상황의 본질을 꿰뚫어보고, 말하지 않은 감정을 읽어내는 섬세함이 있어요. 당신과 대화를 나누면 사람들은 자신도 몰랐던 내면을 발견하게 돼요.",
+                message: "가장 깊은 바다까지 잠수한 당신에게,<br><br>당신의 깊이가 때로는 무거운 짐처럼 느껴질 수도 있어요. 남들은 쉽게 웃고 떠들 때, 당신은 그 이면의 의미를 생각하느라 지칠 때도 있겠죠.<br><br>하지만 알아주세요. 이 세상에는 당신 같은 사람이 꼭 필요해요. 표면만 보는 세상에서 깊이를 아는 사람, 소음 속에서 침묵의 가치를 아는 사람.<br><br>당신의 고독은 외로움이 아니라 충만함이에요. 계속해서 깊이 잠수하세요. 당신은 이미 충분히 아름다운 진주예요."
             },
-            type2: {
+            {
                 title: "자유로운 돌고래",
                 subtitle: "파도를 타며 춤추는 자유로운 영혼",
+                icon: "🐬",
                 cards: [
-                    { icon: "🌈", title: "무지개 에너지", desc: "어떤 상황에서도 긍정적인 면을 찾아내는 당신은 주변에 활력을 전달해요." },
-                    { icon: "🎪", title: "인생은 놀이터", desc: "새로운 경험을 두려워하지 않고 즐기는 모험가예요." },
-                    { icon: "🤹", title: "균형의 달인", desc: "일과 놀이, 진지함과 유머 사이에서 절묘한 균형을 유지해요." }
+                    {
+                        icon: "🌈",
+                        title: "무지개 에너지",
+                        text: "어떤 상황에서도 긍정적인 면을 찾아내는 당신. 주변 사람들에게 활력을 전달하는 에너지 뱅크예요."
+                    },
+                    {
+                        icon: "🎪",
+                        title: "인생은 놀이터",
+                        text: "새로운 경험을 두려워하지 않고 즐기는 모험가. 실패도 하나의 재미있는 이야기로 만들어요."
+                    },
+                    {
+                        icon: "🤹",
+                        title: "균형의 달인",
+                        text: "일과 놀이, 혼자와 함께, 진지함과 유머 사이에서 절묘한 균형을 유지하는 능력이 있어요."
+                    }
                 ],
-                state: "당신은 지금 인생의 파도를 즐기며 살아가고 있어요. 이것은 얕다는 의미가 아니라, 삶을 있는 그대로 즐길 줄 안다는 뜻이에요.",
-                unique: "당신의 가장 특별한 점은 '긍정의 마법사'라는 거예요. 어떤 상황도 즐겁게 만드는 유머 감각과 변화를 두려워하지 않는 모험심이 있어요.",
-                message: "자유로운 돌고래 같은 당신에게, 당신의 웃음소리가 얼마나 많은 사람들을 구원했는지 아시나요? 계속해서 자유롭게 헤엄치세요. 당신의 물결이 세상을 더 아름답게 만들고 있어요."
+                state: "당신은 지금 인생의 파도를 즐기며 살아가고 있어요. 깊이 잠수하기보다는 수면 위를 자유롭게 헤엄치는 것을 선호하는 당신. 이것은 얕다는 의미가 아니라, 삶을 있는 그대로 즐길 줄 안다는 뜻이에요.",
+                uniqueness: "당신의 가장 특별한 점은 '긍정의 마법사'라는 거예요. 어떤 상황도 즐겁게 만드는 유머 감각과 실패를 성장의 기회로 바꾸는 긍정성이 있어요. 당신이 있는 곳은 언제나 웃음소리가 끊이지 않아요.",
+                message: "자유로운 돌고래 같은 당신에게,<br><br>당신의 웃음소리가 얼마나 많은 사람들을 구원했는지 아시나요? 무거운 일상에 지친 사람들에게 당신은 한 줄기 시원한 바람 같은 존재예요.<br><br>가끔은 '너무 가볍다', '진지하지 못하다'는 말을 듣기도 하죠? 하지만 그것은 당신을 이해하지 못하는 사람들의 편견일 뿐이에요.<br><br>세상은 당신 같은 사람이 필요해요. 계속해서 자유롭게 헤엄치세요. 당신의 물결이 세상을 더 아름답게 만들고 있어요."
+            },
+            {
+                title: "빛나는 산호초",
+                subtitle: "상처를 아름다움으로 바꾸는 치유자",
+                icon: "🪸",
+                cards: [
+                    {
+                        icon: "🌸",
+                        title: "섬세한 감성",
+                        text: "미세한 감정의 변화까지 느끼는 당신. 이 예민함은 약점이 아니라 세상을 더 풍부하게 경험하는 능력이에요."
+                    },
+                    {
+                        icon: "💖",
+                        title: "치유의 손길",
+                        text: "당신의 따뜻한 말 한마디가 누군가의 하루를 바꿔요. 상처받은 마음을 어루만지는 특별한 재능이 있어요."
+                    },
+                    {
+                        icon: "🎨",
+                        title: "감성의 팔레트",
+                        text: "평범한 일상도 당신의 눈에는 특별하게 보여요. 이 세상의 아름다움을 발견하고 표현하는 예술가예요."
+                    }
+                ],
+                state: "당신은 지금 회복과 성장의 시기를 지나고 있어요. 과거의 상처들이 아직 완전히 아물지는 않았지만, 그 상처들이 당신을 더 강하고 아름답게 만들고 있어요. 마치 부서진 산호초가 더 화려하게 재생하듯이요.",
+                uniqueness: "당신의 가장 특별한 점은 '감정의 연금술사'라는 거예요. 아픔을 예술로 승화시키는 창조력과 누구보다 깊이 공감하는 따뜻한 마음이 있어요. 당신이 있는 곳은 언제나 조금 더 따뜻하고 부드러워져요.",
+                message: "아름다운 산호초 같은 당신에게,<br><br>얼마나 많은 파도를 견뎌왔나요. 부서지고 다시 자라기를 반복하면서도, 여전히 아름다운 빛을 잃지 않는 당신이 대단해요.<br><br>예민한 것은 잘못이 아니에요. 남들보다 더 많이 느끼고, 더 깊이 아파하는 것은 그만큼 살아있다는 증거입니다.<br><br>상처받을까 두려워 숨지 마세요. 당신은 생각보다 훨씬 강한 사람입니다. 그 강함을 믿어주세요."
+            },
+            {
+                title: "깊은 바다의 등대",
+                subtitle: "어둠 속에서 빛을 비추는 안내자",
+                icon: "🏮",
+                cards: [
+                    {
+                        icon: "💡",
+                        title: "어둠 속의 빛",
+                        text: "가장 어두운 순간에도 희망을 잃지 않는 당신. 그 빛으로 많은 사람들이 길을 찾아요."
+                    },
+                    {
+                        icon: "🧭",
+                        title: "영혼의 나침반",
+                        text: "혼란스러운 상황에서도 올바른 방향을 제시하는 지혜. 당신은 천성적인 멘토예요."
+                    },
+                    {
+                        icon: "⚓",
+                        title: "변치 않는 가치",
+                        text: "시대가 변해도 흔들리지 않는 신념. 당신의 일관성이 많은 이들에게 안정감을 줘요."
+                    }
+                ],
+                state: "당신은 지금 많은 이들의 빛이 되고 있어요. 스스로는 인식하지 못할 수도 있지만, 당신의 존재는 주변 사람들에게 큰 영향을 미치고 있어요. 어려운 시기를 겪으면서도 희망을 잃지 않는 당신의 모습이 많은 이들에게 용기를 줍니다.",
+                uniqueness: "당신의 가장 특별한 점은 '희망의 전달자'라는 거예요. 절망적인 상황에서도 가능성을 보는 눈과 복잡한 문제의 본질을 꿰뚫는 통찰력이 있어요. 당신이 비춘 빛은 시간이 지나도 사람들의 마음속에 남아있어요.",
+                message: "깊은 바다의 등대 같은 당신에게,<br><br>얼마나 오랜 시간 그 자리를 지켜왔나요. 폭풍이 몰아쳐도, 안개가 자욱해도, 당신은 계속해서 빛을 비추고 있었어요.<br><br>당신 덕분에 길을 찾은 사람이 얼마나 많은지 아시나요? 당신의 한마디가, 당신의 침묵이, 당신의 존재 자체가 누군가에게는 삶의 이정표가 되었어요.<br><br>하지만 이제는 당신도 쉬어가도 돼요. 계속해서 빛나세요. 하지만 당신 자신도 비추는 것을 잊지 마세요."
             }
-        };
+        ];
 
         // 초기화
-        window.onload = function() {
+        window.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.getElementById('loadingScreen').classList.add('hide');
-                createBubbles();
-            }, 1500);
-        };
-
-        // 물방울 생성
-        function createBubbles() {
-            setInterval(() => {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                bubble.style.left = Math.random() * 100 + '%';
-                bubble.style.width = bubble.style.height = Math.random() * 30 + 10 + 'px';
-                bubble.style.animationDuration = Math.random() * 5 + 10 + 's';
-                document.getElementById('oceanElements').appendChild(bubble);
-                setTimeout(() => bubble.remove(), 15000);
             }, 2000);
-        }
+        });
 
-        // 화면 전환
-        function showScreen(screenId) {
+        // 화면 전환 함수
+        function changeScreen(targetScreen) {
             const screens = document.querySelectorAll('.screen');
             screens.forEach(screen => {
                 screen.classList.remove('active');
             });
             
             setTimeout(() => {
-                document.getElementById(screenId).classList.add('active');
-            }, 100);
+                document.getElementById(targetScreen).classList.add('active');
+                currentScreen = targetScreen.replace('Screen', '');
+            }, 300);
         }
 
-        // 인트로로 이동
-        function goToIntro() {
-            showScreen('introScreen');
+        // 인트로 화면으로
+        function showIntro() {
+            changeScreen('introScreen');
         }
 
         // 설문 시작
-        function startSurvey() {
+        function startDive() {
             currentQuestion = 0;
             answers = [];
-            document.getElementById('progressContainer').classList.add('show');
+            document.getElementById('progressBar').classList.add('show');
             showQuestion();
-            showScreen('surveyScreen');
+            changeScreen('surveyScreen');
         }
 
         // 질문 표시
         function showQuestion() {
-            const data = surveyData[currentQuestion];
-            document.getElementById('questionDepth').textContent = data.depth;
-            document.getElementById('questionTitle').textContent = data.question;
+            const question = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `질문 ${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('questionText').textContent = question.text;
             
-            const progress = ((currentQuestion + 1) / surveyData.length) * 100;
+            // 진행률 업데이트
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
-            document.getElementById('progressText').textContent = `${currentQuestion + 1} / ${surveyData.length}`;
             
+            // 옵션 생성
             const container = document.getElementById('optionsContainer');
             container.innerHTML = '';
             
-            data.options.forEach((option, index) => {
-                const button = document.createElement('button');
-                button.className = 'option-button';
-                button.textContent = option;
-                button.onclick = () => selectAnswer(index);
-                container.appendChild(button);
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                container.appendChild(optionDiv);
             });
         }
 
-        // 답변 선택
-        function selectAnswer(index) {
+        // 옵션 선택
+        function selectOption(index) {
             answers.push(index);
             
-            if (currentQuestion < surveyData.length - 1) {
+            if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
                 showQuestion();
             } else {
-                document.getElementById('progressContainer').classList.remove('show');
-                showScreen('coupangScreen');
+                document.getElementById('progressBar').classList.remove('show');
+                changeScreen('coupangScreen');
             }
         }
 
-        // 결과 표시
+        // 결과 계산 및 표시
         function showResult() {
-            // 간단한 결과 계산 (답변 합계 기반)
+            // 답변 패턴에 따른 결과 타입 결정
+            let typeIndex = 0;
             const sum = answers.reduce((a, b) => a + b, 0);
-            const resultKey = sum < 20 ? 'type1' : 'type2';
-            const result = resultTypes[resultKey];
+            
+            if (sum <= 10) {
+                typeIndex = 0; // 심해의 진주
+            } else if (sum <= 20) {
+                typeIndex = 1; // 자유로운 돌고래
+            } else if (sum <= 30) {
+                typeIndex = 2; // 빛나는 산호초
+            } else {
+                typeIndex = 3; // 깊은 바다의 등대
+            }
+            
+            const result = resultTypes[typeIndex];
             
             // 결과 화면 업데이트
-            document.getElementById('resultType').textContent = result.title;
+            document.getElementById('resultTitle').textContent = result.title;
             document.getElementById('resultSubtitle').textContent = result.subtitle;
+            document.getElementById('resultIcon').textContent = result.icon;
             
-            // 성격 카드 생성
-            const cardsContainer = document.getElementById('personalityCards');
+            // 카드 생성
+            const cardsContainer = document.getElementById('resultCards');
             cardsContainer.innerHTML = '';
             result.cards.forEach(card => {
                 const cardDiv = document.createElement('div');
-                cardDiv.className = 'personality-card';
+                cardDiv.className = 'result-card';
                 cardDiv.innerHTML = `
                     <div class="card-icon">${card.icon}</div>
                     <div class="card-title">${card.title}</div>
-                    <div class="card-description">${card.desc}</div>
+                    <div class="card-text">${card.text}</div>
                 `;
                 cardsContainer.appendChild(cardDiv);
             });
             
             // 상세 내용 업데이트
-            document.getElementById('currentState').textContent = result.state;
-            document.getElementById('uniqueTraits').textContent = result.unique;
-            document.getElementById('personalMessage').textContent = result.message;
+            document.getElementById('mindState').textContent = result.state;
+            document.getElementById('uniqueness').textContent = result.uniqueness;
+            document.getElementById('message').innerHTML = result.message;
             
-            showScreen('resultScreen');
+            changeScreen('resultScreen');
         }
 
         // 다시 시작
         function restart() {
             currentQuestion = 0;
             answers = [];
-            showScreen('startScreen');
+            changeScreen('startScreen');
         }
 
-        // 결과 공유
-        function shareResult() {
-            const resultType = document.getElementById('resultType').textContent;
-            const text = `나의 마음 유형은 "${resultType}"!\nMIND DIVE에서 당신의 마음 깊이도 측정해보세요.`;
+        // 공유하기
+        function share() {
+            const resultTitle = document.getElementById('resultTitle').textContent;
+            const text = `나의 마음 유형은 "${resultTitle}"!\n\nMIND DIVE에서 당신의 마음 깊이도 측정해보세요.`;
             
             if (navigator.share) {
                 navigator.share({
                     title: 'MIND DIVE - 마음 깊이 측정 결과',
                     text: text,
                     url: window.location.href
-                }).catch(err => console.log('공유 취소'));
+                }).catch(() => {});
             } else {
-                navigator.clipboard.writeText(text + '\n' + window.location.href);
+                // 클립보드에 복사
+                const textarea = document.createElement('textarea');
+                textarea.value = text + '\n' + window.location.href;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
                 alert('결과가 클립보드에 복사되었습니다!');
             }
         }
